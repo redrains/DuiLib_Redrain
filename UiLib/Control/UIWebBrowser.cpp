@@ -33,8 +33,10 @@ bool UiLib::CWebBrowserUI::DoCreateControl()
 
 void UiLib::CWebBrowserUI::ReleaseControl()
 {
+	ASSERT(NULL != this->GetManager());
+
 	m_bCreated=false;
-	GetManager()->RemoveTranslateAccelerator(this);
+	this->GetManager()->RemoveTranslateAccelerator(this);
 	RegisterEventHandler(FALSE);
 }
 

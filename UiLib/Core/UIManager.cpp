@@ -2809,7 +2809,10 @@ namespace UiLib {
 		{
 			bool bHandled = false;
 			LRESULT lResult = static_cast<ITranslateAccelerator *>(m_aTranslateAccelerator[i])->TranslateAccelerator(pMsg);
-			return lResult == S_OK;
+			if (S_OK == lResult)
+				return true;
+			else
+				continue;
 		}
 		return false;
 	}

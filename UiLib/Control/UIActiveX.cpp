@@ -746,10 +746,14 @@ STDMETHODIMP CActiveXCtrl::ParseDisplayName(IBindCtx *pbc, LPOLESTR pszDisplayNa
 
 HRESULT CActiveXCtrl::CreateActiveXWnd()
 {
-    if( m_pWindow != NULL ) return S_OK;
+	ASSERT(NULL != m_pOwner->GetManager());
+    if( m_pWindow != NULL ) 
+		return S_OK;
     m_pWindow = new CActiveXWnd;
-    if( m_pWindow == NULL ) return E_OUTOFMEMORY;
-    m_pOwner->m_hwndHost = m_pWindow->Init(this, m_pOwner->GetManager()->GetPaintWindow());
+    if( m_pWindow == NULL ) 
+		return E_OUTOFMEMORY;
+	m_pOwner->m_hwndHost = m_pWindow->Init(this, m_pOwner->GetManager()->GetPaintWindow());
+
     return S_OK;
 }
 
