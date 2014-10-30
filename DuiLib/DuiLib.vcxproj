@@ -97,7 +97,7 @@
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'" />
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">libsql</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">Duilib_u</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">Duilib_ud</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Duilib</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Duilib_u</TargetName>
@@ -259,7 +259,7 @@
       <Culture>0x0406</Culture>
     </ResourceCompile>
     <Link>
-      <OutputFile>../bin/libsql.dll</OutputFile>
+      <OutputFile>../bin/Duilib_u.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
