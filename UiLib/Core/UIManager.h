@@ -11,6 +11,7 @@ namespace UiLib {
 #define WM_RELOADSTYLE	WM_USER+1681
 
 class CControlUI;
+class CRichEditUI;
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -674,6 +675,13 @@ public:
     void SetBackgroundTransparent(bool bTrans);
     bool IsShowUpdateRect() const;
     void SetShowUpdateRect(bool show);
+	//redrain
+	bool IsBackgroundTransparent();
+	bool ShowCaret(bool bShow);
+	bool SetCaretPos(CRichEditUI* obj, int x, int y);
+	CRichEditUI* GetCurrentCaretObject();
+	bool CreateCaret(HBITMAP hBmp, int nWidth, int nHeight);
+	void DrawCaret(HDC hDC, const RECT& rcPaint);
 
     static HINSTANCE GetInstance();
     static CDuiString GetInstancePath();
@@ -887,6 +895,11 @@ private:
     HWND m_hwndTooltip;
     TOOLINFO m_ToolTip;
     bool m_bShowUpdateRect;
+	//redrain
+	RECT m_rtCaret;
+	bool m_bCaretActive;
+	bool m_bCaretShowing;
+	CRichEditUI* m_currentCaretObject;
 	//
 	CDuiTrayIcon mDuiTray;
     //

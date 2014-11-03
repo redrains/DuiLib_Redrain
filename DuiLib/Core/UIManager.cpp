@@ -63,7 +63,7 @@ short CPaintManagerUI::m_S = 100;
 short CPaintManagerUI::m_L = 100;
 CStdPtrArray CPaintManagerUI::m_aPreMessages;
 CStdPtrArray CPaintManagerUI::m_aPlugins;
-
+const UINT kCaretTimerID = 0xF1;
 
 CPaintManagerUI::CPaintManagerUI() :
 m_hWndPaint(NULL),
@@ -90,7 +90,10 @@ m_bAlphaBackground(false),
 m_bUsedVirtualWnd(false),
 m_nOpacity(255),
 m_pParentResourcePM(NULL),
-m_pBmpBackgroundBits(NULL)
+m_pBmpBackgroundBits(NULL),
+m_bCaretActive(false),
+m_bCaretShowing(false),
+m_currentCaretObject(NULL)
 {
     m_dwDefaultDisabledColor = 0xFFA7A6AA;
     m_dwDefaultFontColor = 0xFF000001;
@@ -100,6 +103,7 @@ m_pBmpBackgroundBits(NULL)
     LOGFONT lf = { 0 };
     ::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
     lf.lfCharSet = DEFAULT_CHARSET;
+
 	if (CPaintManagerUI::m_pStrDefaultFontName.GetLength()>0)
 	{
 		_tcscpy_s(lf.lfFaceName, LF_FACESIZE, CPaintManagerUI::m_pStrDefaultFontName.GetData());
@@ -129,6 +133,7 @@ m_pBmpBackgroundBits(NULL)
     m_szRoundCorner.cx = m_szRoundCorner.cy = 0;
     ::ZeroMemory(&m_rcSizeBox, sizeof(m_rcSizeBox));
     ::ZeroMemory(&m_rcCaption, sizeof(m_rcCaption));
+	::ZeroMemory(&m_rtCaret, sizeof(m_rtCaret));
     m_ptLastMousePos.x = m_ptLastMousePos.y = -1;
 }
 
@@ -452,6 +457,11 @@ void CPaintManagerUI::SetBackgroundTransparent(bool bTrans)
     m_bAlphaBackground = bTrans;
 }
 
+bool CPaintManagerUI::IsBackgroundTransparent()
+{
+	return m_bAlphaBackground;
+}
+
 bool CPaintManagerUI::IsShowUpdateRect() const
 {
 	return m_bShowUpdateRect;
@@ -460,6 +470,89 @@ bool CPaintManagerUI::IsShowUpdateRect() const
 void CPaintManagerUI::SetShowUpdateRect(bool show)
 {
     m_bShowUpdateRect = show;
+}
+
+bool CPaintManagerUI::ShowCaret(bool bShow)
+{
+	if(m_bCaretShowing == bShow)
+		return true;
+
+	m_bCaretShowing = bShow;
+	if(!bShow)
+	{	
+		::KillTimer(m_hWndPaint, kCaretTimerID);
+		if(m_bCaretActive)
+		{
+			Invalidate(m_rtCaret);
+		}
+		m_bCaretActive = false;
+	}
+	else
+	{
+		::SetTimer(m_hWndPaint, kCaretTimerID, ::GetCaretBlinkTime(), NULL);
+		if(!m_bCaretActive)
+		{
+			Invalidate(m_rtCaret);
+			m_bCaretActive = true;
+		}
+	}
+
+	return true;
+}
+
+bool CPaintManagerUI::SetCaretPos(CRichEditUI* obj, int x, int y)
+{
+	if(!::SetCaretPos(x, y)) 
+		return false;
+
+	m_currentCaretObject = obj;
+	RECT tempRt = m_rtCaret;
+	int w = m_rtCaret.right - m_rtCaret.left;
+	int h = m_rtCaret.bottom - m_rtCaret.top;
+	m_rtCaret.left = x;
+	m_rtCaret.top = y;
+	m_rtCaret.right = x + w;
+	m_rtCaret.bottom = y + h;
+	Invalidate(tempRt);
+	Invalidate(m_rtCaret);
+
+	return true;
+}
+
+CRichEditUI* CPaintManagerUI::GetCurrentCaretObject()
+{
+	return m_currentCaretObject;
+}
+
+bool CPaintManagerUI::CreateCaret(HBITMAP hBmp, int nWidth, int nHeight)
+{
+	::CreateCaret(m_hWndPaint, hBmp, nWidth, nHeight);
+	//TODO hBmp处理位图光标
+	m_rtCaret.right = m_rtCaret.left + nWidth;
+	m_rtCaret.bottom = m_rtCaret.top + nHeight;
+	return true;
+}
+
+void CPaintManagerUI::DrawCaret(HDC hDC, const RECT& rcPaint)
+{
+	if(m_currentCaretObject && (!m_currentCaretObject->IsFocused()))
+	{
+		//TODO 不应该在这里关掉，duilib窗口非激活与激活状态变化时也没处理
+		::KillTimer(m_hWndPaint, kCaretTimerID);
+		return;
+	}
+
+	if(m_bCaretActive && m_bCaretShowing && m_currentCaretObject)
+	{
+		RECT temp = {};
+		if(::IntersectRect(&temp, &rcPaint, &m_rtCaret))
+		{
+			DWORD dwColor = m_currentCaretObject->GetTextColor();
+			if(dwColor == 0)
+				dwColor = m_dwDefaultFontColor;
+			CRenderEngine::DrawColor(hDC, temp, dwColor);
+		}
+	}
 }
 
 bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& /*lRes*/)
@@ -713,267 +806,482 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
     //        ::InvalidateRect(m_hWndPaint, NULL, FALSE);
     //    }
     //    return true;
-	case WM_PAINT:
-		{
-			// Should we paint?
-			RECT rcPaint = { 0 };
-			if( !::GetUpdateRect(m_hWndPaint, &rcPaint, FALSE) ) return true;
-			if( m_pRoot == NULL ) {
-				PAINTSTRUCT ps = { 0 };
-				::BeginPaint(m_hWndPaint, &ps);
-				::EndPaint(m_hWndPaint, &ps);
-				return true;
-			}
-
-			if( m_bAlphaBackground)
-			{
-				DWORD dwExStyle=GetWindowLong(m_hWndPaint,GWL_EXSTYLE);
-				if((dwExStyle&WS_EX_LAYERED)!=0x80000)
-					SetWindowLong(m_hWndPaint,GWL_EXSTYLE,dwExStyle^WS_EX_LAYERED);
-
-				RECT rcClient = { 0 };
-				::GetClientRect(m_hWndPaint, &rcClient);
-
-				PAINTSTRUCT ps = { 0 };
-				::BeginPaint(m_hWndPaint, &ps);
-
-				//if( m_hDcBackground != NULL ) ::DeleteDC(m_hDcBackground);
-				//if( m_hbmpBackground != NULL ) ::DeleteObject(m_hbmpBackground);
-				//m_hDcBackground = NULL;
-				//m_hbmpBackground = NULL;
-				if( m_bUpdateNeeded )
-				{
-					m_bUpdateNeeded = false;
-					if( !::IsRectEmpty(&rcClient) )
-					{
-						if( m_pRoot->IsUpdateNeeded() )
-						{
-							if( !::IsIconic(m_hWndPaint))  //redrain修复bug
-								m_pRoot->SetPos(rcClient);	
-							if( m_hDcBackground != NULL ) ::DeleteDC(m_hDcBackground);
-							if( m_hbmpBackground != NULL ) ::DeleteObject(m_hbmpBackground);
-							m_hDcBackground = NULL;
-							m_hbmpBackground = NULL;
-							m_pBmpBackgroundBits = NULL;
-						}
-						else
-						{
-							CControlUI* pControl = NULL;
-							while( pControl = m_pRoot->FindControl(__FindControlFromUpdate, NULL, UIFIND_VISIBLE | UIFIND_ME_FIRST) )
-							{
-								pControl->SetPos( pControl->GetPos() );
-							}
-						}
-
-						if( m_bFirstLayout )
-						{
-							m_bFirstLayout = false;
-							SendNotify(m_pRoot, _T("windowinit"),  0, 0, false);
-						}
-					}
-				}
-
-				if( m_bFocusNeeded )
-				{
-					SetNextTabControl();
-				}
-
-				int width = rcClient.right - rcClient.left;
-				int height = rcClient.bottom - rcClient.top;
-				if(m_bOffscreenPaint && m_hbmpBackground == NULL)
-				{
-					m_hDcBackground = ::CreateCompatibleDC(m_hDcPaint);
-					BITMAPINFO bmi;
-					::ZeroMemory(&bmi, sizeof(BITMAPINFO));
-					bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-					bmi.bmiHeader.biWidth = width;
-					bmi.bmiHeader.biHeight = height;
-					bmi.bmiHeader.biPlanes = 1;
-					bmi.bmiHeader.biBitCount = 32;
-					bmi.bmiHeader.biCompression = BI_RGB;
-					bmi.bmiHeader.biSizeImage = width * height * 4;
-					bmi.bmiHeader.biClrUsed = 0;   
-					m_hbmpBackground = ::CreateDIBSection(m_hDcPaint, &bmi, DIB_RGB_COLORS, 
-						(void**)&m_pBmpBackgroundBits, NULL, 0);
-
-					ASSERT(m_hDcBackground);
-					ASSERT(m_hbmpBackground);
-				}
-
-				int mirrorTop = height - rcPaint.bottom;
-				int mirrorBottom = height - rcPaint.top;
-				int morrorLeft = rcPaint.left;
-				int morrorRight = rcPaint.right;
-				for(int i = mirrorTop; i < mirrorBottom; ++i)
-					for(int j = morrorLeft; j < morrorRight; ++j)
-					{
-						int x = (i*width + j)*4;
-						m_pBmpBackgroundBits[x + 0] = 0;
-						m_pBmpBackgroundBits[x + 1] = 0;
-						m_pBmpBackgroundBits[x + 2] = 0;
-						m_pBmpBackgroundBits[x + 3] = 0;
-					}
 
 
-					::SelectObject(m_hDcBackground,m_hbmpBackground);
-					//m_pRoot->DoPaint(m_hDcBackground, rcClient);
-					m_pRoot->DoPaint(m_hDcBackground, rcPaint);
+// 	case WM_PAINT:
+// 		{
+// 			// Should we paint?
+// 			RECT rcPaint = { 0 };
+// 			if( !::GetUpdateRect(m_hWndPaint, &rcPaint, FALSE) ) return true;
+// 			if( m_pRoot == NULL ) {
+// 				PAINTSTRUCT ps = { 0 };
+// 				::BeginPaint(m_hWndPaint, &ps);
+// 				::EndPaint(m_hWndPaint, &ps);
+// 				return true;
+// 			}
+// 
+// 			if( m_bAlphaBackground)
+// 			{
+// 				DWORD dwExStyle=GetWindowLong(m_hWndPaint,GWL_EXSTYLE);
+// 				if((dwExStyle&WS_EX_LAYERED)!=0x80000)
+// 					SetWindowLong(m_hWndPaint,GWL_EXSTYLE,dwExStyle^WS_EX_LAYERED);
+// 
+// 				RECT rcClient = { 0 };
+// 				::GetClientRect(m_hWndPaint, &rcClient);
+// 
+// 				PAINTSTRUCT ps = { 0 };
+// 				::BeginPaint(m_hWndPaint, &ps);
+// 
+// 				//if( m_hDcBackground != NULL ) ::DeleteDC(m_hDcBackground);
+// 				//if( m_hbmpBackground != NULL ) ::DeleteObject(m_hbmpBackground);
+// 				//m_hDcBackground = NULL;
+// 				//m_hbmpBackground = NULL;
+// 				if( m_bUpdateNeeded )
+// 				{
+// 					m_bUpdateNeeded = false;
+// 					if( !::IsRectEmpty(&rcClient) )
+// 					{
+// 						if( m_pRoot->IsUpdateNeeded() )
+// 						{
+// 							if( !::IsIconic(m_hWndPaint))  //redrain修复bug
+// 								m_pRoot->SetPos(rcClient);	
+// 							if( m_hDcBackground != NULL ) ::DeleteDC(m_hDcBackground);
+// 							if( m_hbmpBackground != NULL ) ::DeleteObject(m_hbmpBackground);
+// 							m_hDcBackground = NULL;
+// 							m_hbmpBackground = NULL;
+// 							m_pBmpBackgroundBits = NULL;
+// 						}
+// 						else
+// 						{
+// 							CControlUI* pControl = NULL;
+// 							while( pControl = m_pRoot->FindControl(__FindControlFromUpdate, NULL, UIFIND_VISIBLE | UIFIND_ME_FIRST) )
+// 							{
+// 								pControl->SetPos( pControl->GetPos() );
+// 							}
+// 						}
+// 
+// 						if( m_bFirstLayout )
+// 						{
+// 							m_bFirstLayout = false;
+// 							SendNotify(m_pRoot, _T("windowinit"),  0, 0, false);
+// 						}
+// 					}
+// 				}
+// 
+// 				if( m_bFocusNeeded )
+// 				{
+// 					SetNextTabControl();
+// 				}
+// 
+// 				int width = rcClient.right - rcClient.left;
+// 				int height = rcClient.bottom - rcClient.top;
+// 				if(m_bOffscreenPaint && m_hbmpBackground == NULL)
+// 				{
+// 					m_hDcBackground = ::CreateCompatibleDC(m_hDcPaint);
+// 					BITMAPINFO bmi;
+// 					::ZeroMemory(&bmi, sizeof(BITMAPINFO));
+// 					bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+// 					bmi.bmiHeader.biWidth = width;
+// 					bmi.bmiHeader.biHeight = height;
+// 					bmi.bmiHeader.biPlanes = 1;
+// 					bmi.bmiHeader.biBitCount = 32;
+// 					bmi.bmiHeader.biCompression = BI_RGB;
+// 					bmi.bmiHeader.biSizeImage = width * height * 4;
+// 					bmi.bmiHeader.biClrUsed = 0;   
+// 					m_hbmpBackground = ::CreateDIBSection(m_hDcPaint, &bmi, DIB_RGB_COLORS, 
+// 						(void**)&m_pBmpBackgroundBits, NULL, 0);
+// 
+// 					ASSERT(m_hDcBackground);
+// 					ASSERT(m_hbmpBackground);
+// 				}
+// 
+// 				int mirrorTop = height - rcPaint.bottom;
+// 				int mirrorBottom = height - rcPaint.top;
+// 				int morrorLeft = rcPaint.left;
+// 				int morrorRight = rcPaint.right;
+// 				for(int i = mirrorTop; i < mirrorBottom; ++i)
+// 					for(int j = morrorLeft; j < morrorRight; ++j)
+// 					{
+// 						int x = (i*width + j)*4;
+// 						m_pBmpBackgroundBits[x + 0] = 0;
+// 						m_pBmpBackgroundBits[x + 1] = 0;
+// 						m_pBmpBackgroundBits[x + 2] = 0;
+// 						m_pBmpBackgroundBits[x + 3] = 0;
+// 					}
+// 
+// 
+// 					::SelectObject(m_hDcBackground,m_hbmpBackground);
+// 					//m_pRoot->DoPaint(m_hDcBackground, rcClient);
+// 					m_pRoot->DoPaint(m_hDcBackground, rcPaint);
+// 					DrawCaret(m_hDcBackground, rcPaint);
+// 					//由于GDI的绘制函数比如DrawText会导致透明层变为0，所以这里专门手动设置成255；
+// 					//为了区分原本正常的透明部分和绘制后的文字部分，这里根据颜色值判断，
+// 					//颜色值为纯黑色，认为是原本正常的透明层，否则认为是绘制后的文字部分
+// 					//所以这里要求文字不能为纯黑色，在绘制文字等地方会做手脚，
+// 					//如果进来的颜色值为纯黑色，就自动修改为1,1,1，接近纯黑色。
+// 					for(int i = mirrorTop; i < mirrorBottom; ++i)
+// 						for(int j = morrorLeft; j < morrorRight; ++j)
+// 						{
+// 							int x = (i*width + j)*4;
+// 							if (m_pBmpBackgroundBits[x + 3] == 0
+// 								&& (m_pBmpBackgroundBits[x + 0] != 0 
+// 								|| m_pBmpBackgroundBits[x + 1] !=0 
+// 								|| m_pBmpBackgroundBits[x + 2] != 0))
+// 							{
+// 								m_pBmpBackgroundBits[x + 3] = 255;
+// 							}
+// 						}
+// 
+// 
+// 						RECT rcWnd={0};
+// 						::GetWindowRect(m_hWndPaint, &rcWnd);
+// 						POINT pt = {rcWnd.left,rcWnd.top};
+// 						SIZE szWindow = {rcClient.right - rcClient.left,rcClient.bottom - rcClient.top};
+// 						POINT ptSrc = {0, 0};
+// 						BLENDFUNCTION blendPixelFunction= { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
+// 						::UpdateLayeredWindow(m_hWndPaint,NULL,&pt,&szWindow,m_hDcBackground,&ptSrc,0,&blendPixelFunction,ULW_ALPHA);
+// 						::EndPaint(m_hWndPaint, &ps);
+// 
+// 						return true;
+// 			}
+// 
+// 			// Do we need to resize anything?
+// 			// This is the time where we layout the controls on the form.
+// 			// We delay this even from the WM_SIZE messages since resizing can be
+// 			// a very expensize operation.
+// 			if( m_bUpdateNeeded )
+// 			{
+// 				m_bUpdateNeeded = false;
+// 				RECT rcClient = { 0 };
+// 				::GetClientRect(m_hWndPaint, &rcClient);
+// 				if( !::IsRectEmpty(&rcClient) )
+// 				{
+// 					if( m_pRoot->IsUpdateNeeded() )
+// 					{
+// 						if( !::IsIconic(m_hWndPaint))  //redrain修复bug
+// 							m_pRoot->SetPos(rcClient);
+// 						if( m_hDcOffscreen != NULL ) ::DeleteDC(m_hDcOffscreen);
+// 						if( m_hbmpOffscreen != NULL ) ::DeleteObject(m_hbmpOffscreen); 
+// 						m_hDcOffscreen = NULL; 
+// 						m_hbmpOffscreen = NULL;
+// 
+// 					}
+// 					else
+// 					{
+// 						CControlUI* pControl = NULL;
+// 						while( pControl = m_pRoot->FindControl(__FindControlFromUpdate, NULL, UIFIND_VISIBLE | UIFIND_ME_FIRST) )
+// 						{
+// 							pControl->SetPos( pControl->GetPos() );
+// 						}
+// 					}
+// 					// We'll want to notify the window when it is first initialized
+// 					// with the correct layout. The window form would take the time
+// 					// to submit swipes/animations.
+// 					if( m_bFirstLayout )
+// 					{
+// 						m_bFirstLayout = false;
+// 						SendNotify(m_pRoot, _T("windowinit"),  0, 0, false);
+// 					}
+// 				}
+// 			}
+// 			// Set focus to first control?
+// 			if( m_bFocusNeeded )
+// 			{
+// 				SetNextTabControl();
+// 			}
+// 			//
+// 			// Render screen
+// 			//
+// 			// Prepare offscreen bitmap?
+// 			if( m_bOffscreenPaint && m_hbmpOffscreen == NULL )
+// 			{
+// 				RECT rcClient = { 0 };
+// 				::GetClientRect(m_hWndPaint, &rcClient);
+// 				m_hDcOffscreen = ::CreateCompatibleDC(m_hDcPaint);
+// 				m_hbmpOffscreen = ::CreateCompatibleBitmap(m_hDcPaint, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top); 
+// 				ASSERT(m_hDcOffscreen);
+// 				ASSERT(m_hbmpOffscreen);
+// 			}
+// 			// Begin Windows paint
+// 			PAINTSTRUCT ps = { 0 };
+// 			::BeginPaint(m_hWndPaint, &ps);
+// 			if( m_bOffscreenPaint )
+// 			{
+// 				HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(m_hDcOffscreen, m_hbmpOffscreen);
+// 				int iSaveDC = ::SaveDC(m_hDcOffscreen);
+// 				m_pRoot->DoPaint(m_hDcOffscreen, ps.rcPaint);
+// 				for( int i = 0; i < m_aPostPaintControls.GetSize(); i++ ) {
+// 					DrawCaret(m_hDcOffscreen, ps.rcPaint);
+// 					CControlUI* pPostPaintControl = static_cast<CControlUI*>(m_aPostPaintControls[i]);
+// 					pPostPaintControl->DoPostPaint(m_hDcOffscreen, ps.rcPaint);
+// 				}
+// 				::RestoreDC(m_hDcOffscreen, iSaveDC);
+// 				::BitBlt(ps.hdc, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
+// 					ps.rcPaint.bottom - ps.rcPaint.top, m_hDcOffscreen, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
+// 				::SelectObject(m_hDcOffscreen, hOldBitmap);
+// 
+// 				if( m_bShowUpdateRect ) {
+// 					HPEN hOldPen = (HPEN)::SelectObject(ps.hdc, m_hUpdateRectPen);
+// 					::SelectObject(ps.hdc, ::GetStockObject(HOLLOW_BRUSH));
+// 					::Rectangle(ps.hdc, rcPaint.left, rcPaint.top, rcPaint.right, rcPaint.bottom);
+// 					::SelectObject(ps.hdc, hOldPen);
+// 				}
+// 			}
+// 			else
+// 			{
+// 				// A standard paint job
+// 				int iSaveDC = ::SaveDC(ps.hdc);
+// 				m_pRoot->DoPaint(ps.hdc, ps.rcPaint);
+// 				DrawCaret(ps.hdc, ps.rcPaint);
+// 				::RestoreDC(ps.hdc, iSaveDC);
+// 			}
+// 			// All Done!
+// 			::EndPaint(m_hWndPaint, &ps);
+// 		}
+// 		// If any of the painting requested a resize again, we'll need
+// 		// to invalidate the entire window once more.
+// 		if( m_bUpdateNeeded ) {
+// 			::InvalidateRect(m_hWndPaint, NULL, FALSE);
+// 		}
+// 		return true;
+//     case WM_PRINTCLIENT:
+//         {
+//             RECT rcClient;
+//             ::GetClientRect(m_hWndPaint, &rcClient);
+//             HDC hDC = (HDC) wParam;
+//             int save = ::SaveDC(hDC);
+//             m_pRoot->DoPaint(hDC, rcClient);
+//             // Check for traversing children. The crux is that WM_PRINT will assume
+//             // that the DC is positioned at frame coordinates and will paint the child
+//             // control at the wrong position. We'll simulate the entire thing instead.
+//             if( (lParam & PRF_CHILDREN) != 0 ) {
+//                 HWND hWndChild = ::GetWindow(m_hWndPaint, GW_CHILD);
+//                 while( hWndChild != NULL ) {
+//                     RECT rcPos = { 0 };
+//                     ::GetWindowRect(hWndChild, &rcPos);
+//                     ::MapWindowPoints(HWND_DESKTOP, m_hWndPaint, reinterpret_cast<LPPOINT>(&rcPos), 2);
+//                     ::SetWindowOrgEx(hDC, -rcPos.left, -rcPos.top, NULL);
+//                     // NOTE: We use WM_PRINT here rather than the expected WM_PRINTCLIENT
+//                     //       since the latter will not print the nonclient correctly for
+//                     //       EDIT controls.
+//                     ::SendMessage(hWndChild, WM_PRINT, wParam, lParam | PRF_NONCLIENT);
+//                     hWndChild = ::GetWindow(hWndChild, GW_HWNDNEXT);
+//                 }
+//             }
+//             ::RestoreDC(hDC, save);
+//         }
+//         break;
 
-					//由于GDI的绘制函数比如DrawText会导致透明层变为0，所以这里专门手动设置成255；
-					//为了区分原本正常的透明部分和绘制后的文字部分，这里根据颜色值判断，
-					//颜色值为纯黑色，认为是原本正常的透明层，否则认为是绘制后的文字部分
-					//所以这里要求文字不能为纯黑色，在绘制文字等地方会做手脚，
-					//如果进来的颜色值为纯黑色，就自动修改为1,1,1，接近纯黑色。
-					for(int i = mirrorTop; i < mirrorBottom; ++i)
-						for(int j = morrorLeft; j < morrorRight; ++j)
-						{
-							int x = (i*width + j)*4;
-							if (m_pBmpBackgroundBits[x + 3] == 0
-								&& (m_pBmpBackgroundBits[x + 0] != 0 
-								|| m_pBmpBackgroundBits[x + 1] !=0 
-								|| m_pBmpBackgroundBits[x + 2] != 0))
-							{
-								m_pBmpBackgroundBits[x + 3] = 255;
-							}
-						}
+   case WM_PAINT:
+	   {
+		   // Should we paint?
+		   RECT rcPaint = {0};
+		   if(!::GetUpdateRect(m_hWndPaint, &rcPaint, FALSE)) return true;
+		   if(m_pRoot == NULL)
+		   {
+			   PAINTSTRUCT ps = {0};
+			   ::BeginPaint(m_hWndPaint, &ps);
+			   ::EndPaint(m_hWndPaint, &ps);
+			   return true;
+		   }
 
+		   if(m_bAlphaBackground)
+		   {
+			   DWORD dwExStyle = GetWindowLong(m_hWndPaint, GWL_EXSTYLE);
+			   if((dwExStyle&WS_EX_LAYERED) != 0x80000)
+				   SetWindowLong(m_hWndPaint, GWL_EXSTYLE, dwExStyle^WS_EX_LAYERED);
 
-						RECT rcWnd={0};
-						::GetWindowRect(m_hWndPaint, &rcWnd);
-						POINT pt = {rcWnd.left,rcWnd.top};
-						SIZE szWindow = {rcClient.right - rcClient.left,rcClient.bottom - rcClient.top};
-						POINT ptSrc = {0, 0};
-						BLENDFUNCTION blendPixelFunction= { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-						::UpdateLayeredWindow(m_hWndPaint,NULL,&pt,&szWindow,m_hDcBackground,&ptSrc,0,&blendPixelFunction,ULW_ALPHA);
-						::EndPaint(m_hWndPaint, &ps);
+			   RECT rcClient = {0};
+			   ::GetClientRect(m_hWndPaint, &rcClient);
 
-						return true;
-			}
+			   PAINTSTRUCT ps = {0};
+			   ::BeginPaint(m_hWndPaint, &ps);
+			   if(m_bUpdateNeeded)
+			   {
+				   m_bUpdateNeeded = false;
+				   if(!::IsRectEmpty(&rcClient))
+				   {
+					   if(m_pRoot->IsUpdateNeeded())
+					   {
+ 						   if( !::IsIconic(m_hWndPaint))  //redrain修复bug
+								m_pRoot->SetPos(rcClient);
+						   if(m_hDcBackground != NULL) ::DeleteDC(m_hDcBackground);
+						   if(m_hbmpBackground != NULL) ::DeleteObject(m_hbmpBackground);
+						   m_hDcBackground = NULL;
+						   m_hbmpBackground = NULL;
+						   m_pBmpBackgroundBits = NULL;
+					   }
+					   else
+					   {
+						   CControlUI* pControl = NULL;
+						   while(pControl = m_pRoot->FindControl(__FindControlFromUpdate, NULL, UIFIND_VISIBLE | UIFIND_ME_FIRST))
+						   {
+							   pControl->SetPos(pControl->GetPos());
+						   }
+					   }
 
-			// Do we need to resize anything?
-			// This is the time where we layout the controls on the form.
-			// We delay this even from the WM_SIZE messages since resizing can be
-			// a very expensize operation.
-			if( m_bUpdateNeeded )
-			{
-				m_bUpdateNeeded = false;
-				RECT rcClient = { 0 };
-				::GetClientRect(m_hWndPaint, &rcClient);
-				if( !::IsRectEmpty(&rcClient) )
-				{
-					if( m_pRoot->IsUpdateNeeded() )
-					{
-						if( !::IsIconic(m_hWndPaint))  //redrain修复bug
-							m_pRoot->SetPos(rcClient);
-						if( m_hDcOffscreen != NULL ) ::DeleteDC(m_hDcOffscreen);
-						if( m_hbmpOffscreen != NULL ) ::DeleteObject(m_hbmpOffscreen); 
-						m_hDcOffscreen = NULL; 
-						m_hbmpOffscreen = NULL;
+					   if(m_bFirstLayout)
+					   {
+						   m_bFirstLayout = false;
+						   SendNotify(m_pRoot, _T("windowinit"), 0, 0, false);
+					   }
+				   }
+			   }
 
-					}
-					else
-					{
-						CControlUI* pControl = NULL;
-						while( pControl = m_pRoot->FindControl(__FindControlFromUpdate, NULL, UIFIND_VISIBLE | UIFIND_ME_FIRST) )
-						{
-							pControl->SetPos( pControl->GetPos() );
-						}
-					}
-					// We'll want to notify the window when it is first initialized
-					// with the correct layout. The window form would take the time
-					// to submit swipes/animations.
-					if( m_bFirstLayout )
-					{
-						m_bFirstLayout = false;
-						SendNotify(m_pRoot, _T("windowinit"),  0, 0, false);
-					}
-				}
-			}
-			// Set focus to first control?
-			if( m_bFocusNeeded )
-			{
-				SetNextTabControl();
-			}
-			//
-			// Render screen
-			//
-			// Prepare offscreen bitmap?
-			if( m_bOffscreenPaint && m_hbmpOffscreen == NULL )
-			{
-				RECT rcClient = { 0 };
-				::GetClientRect(m_hWndPaint, &rcClient);
-				m_hDcOffscreen = ::CreateCompatibleDC(m_hDcPaint);
-				m_hbmpOffscreen = ::CreateCompatibleBitmap(m_hDcPaint, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top); 
-				ASSERT(m_hDcOffscreen);
-				ASSERT(m_hbmpOffscreen);
-			}
-			// Begin Windows paint
-			PAINTSTRUCT ps = { 0 };
-			::BeginPaint(m_hWndPaint, &ps);
-			if( m_bOffscreenPaint )
-			{
-				HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(m_hDcOffscreen, m_hbmpOffscreen);
-				int iSaveDC = ::SaveDC(m_hDcOffscreen);
-				m_pRoot->DoPaint(m_hDcOffscreen, ps.rcPaint);
-				for( int i = 0; i < m_aPostPaintControls.GetSize(); i++ ) {
-					CControlUI* pPostPaintControl = static_cast<CControlUI*>(m_aPostPaintControls[i]);
-					pPostPaintControl->DoPostPaint(m_hDcOffscreen, ps.rcPaint);
-				}
-				::RestoreDC(m_hDcOffscreen, iSaveDC);
-				::BitBlt(ps.hdc, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
-					ps.rcPaint.bottom - ps.rcPaint.top, m_hDcOffscreen, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
-				::SelectObject(m_hDcOffscreen, hOldBitmap);
+			   if(m_bFocusNeeded)
+			   {
+				   SetNextTabControl();
+			   }
 
-				if( m_bShowUpdateRect ) {
-					HPEN hOldPen = (HPEN)::SelectObject(ps.hdc, m_hUpdateRectPen);
-					::SelectObject(ps.hdc, ::GetStockObject(HOLLOW_BRUSH));
-					::Rectangle(ps.hdc, rcPaint.left, rcPaint.top, rcPaint.right, rcPaint.bottom);
-					::SelectObject(ps.hdc, hOldPen);
-				}
-			}
-			else
-			{
-				// A standard paint job
-				int iSaveDC = ::SaveDC(ps.hdc);
-				m_pRoot->DoPaint(ps.hdc, ps.rcPaint);
-				::RestoreDC(ps.hdc, iSaveDC);
-			}
-			// All Done!
-			::EndPaint(m_hWndPaint, &ps);
-		}
-		// If any of the painting requested a resize again, we'll need
-		// to invalidate the entire window once more.
-		if( m_bUpdateNeeded ) {
-			::InvalidateRect(m_hWndPaint, NULL, FALSE);
-		}
-		return true;
-    case WM_PRINTCLIENT:
-        {
-            RECT rcClient;
-            ::GetClientRect(m_hWndPaint, &rcClient);
-            HDC hDC = (HDC) wParam;
-            int save = ::SaveDC(hDC);
-            m_pRoot->DoPaint(hDC, rcClient);
-            // Check for traversing children. The crux is that WM_PRINT will assume
-            // that the DC is positioned at frame coordinates and will paint the child
-            // control at the wrong position. We'll simulate the entire thing instead.
-            if( (lParam & PRF_CHILDREN) != 0 ) {
-                HWND hWndChild = ::GetWindow(m_hWndPaint, GW_CHILD);
-                while( hWndChild != NULL ) {
-                    RECT rcPos = { 0 };
-                    ::GetWindowRect(hWndChild, &rcPos);
-                    ::MapWindowPoints(HWND_DESKTOP, m_hWndPaint, reinterpret_cast<LPPOINT>(&rcPos), 2);
-                    ::SetWindowOrgEx(hDC, -rcPos.left, -rcPos.top, NULL);
-                    // NOTE: We use WM_PRINT here rather than the expected WM_PRINTCLIENT
-                    //       since the latter will not print the nonclient correctly for
-                    //       EDIT controls.
-                    ::SendMessage(hWndChild, WM_PRINT, wParam, lParam | PRF_NONCLIENT);
-                    hWndChild = ::GetWindow(hWndChild, GW_HWNDNEXT);
-                }
-            }
-            ::RestoreDC(hDC, save);
-        }
-        break;
+			   int width = rcClient.right - rcClient.left;
+			   int height = rcClient.bottom - rcClient.top;
+			   if(m_bOffscreenPaint && m_hbmpBackground == NULL)
+			   {
+				   m_hDcBackground = ::CreateCompatibleDC(m_hDcPaint);
+				   BITMAPINFO bmi;
+				   ::ZeroMemory(&bmi, sizeof(BITMAPINFO));
+				   bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+				   bmi.bmiHeader.biWidth = width;
+				   bmi.bmiHeader.biHeight = height;
+				   bmi.bmiHeader.biPlanes = 1;
+				   bmi.bmiHeader.biBitCount = 32;
+				   bmi.bmiHeader.biCompression = BI_RGB;
+				   bmi.bmiHeader.biSizeImage = width * height * 4;
+				   bmi.bmiHeader.biClrUsed = 0;
+				   m_hbmpBackground = ::CreateDIBSection(m_hDcPaint, &bmi, DIB_RGB_COLORS,
+					   (void**)&m_pBmpBackgroundBits, NULL, 0);
+
+				   ASSERT(m_hDcBackground);
+				   ASSERT(m_hbmpBackground);
+			   }
+
+			   int mirrorTop = height - rcPaint.bottom;
+			   int mirrorBottom = height - rcPaint.top;
+			   int morrorLeft = rcPaint.left;
+			   int morrorRight = rcPaint.right;
+			   CRenderEngine::ClearAalphaPixel(m_pBmpBackgroundBits, width, morrorLeft,
+				   mirrorTop, morrorRight, mirrorBottom);
+			   ::SelectObject(m_hDcBackground, m_hbmpBackground);
+			   m_pRoot->DoPaint(m_hDcBackground, rcPaint);
+			   DrawCaret(m_hDcBackground, rcPaint);
+			   CRenderEngine::RestoreAalphaColor(m_pBmpBackgroundBits, width, morrorLeft, 
+				   mirrorTop, morrorRight, mirrorBottom);
+
+			   RECT rcWnd = {0};
+			   ::GetWindowRect(m_hWndPaint, &rcWnd);
+			   POINT pt = {rcWnd.left, rcWnd.top};
+			   SIZE szWindow = {rcClient.right - rcClient.left, rcClient.bottom - rcClient.top};
+			   POINT ptSrc = {0, 0};
+			   BLENDFUNCTION blendPixelFunction = {AC_SRC_OVER, 0, 255, AC_SRC_ALPHA};
+			   ::UpdateLayeredWindow(m_hWndPaint, NULL, &pt, &szWindow, m_hDcBackground, 
+				   &ptSrc, 0, &blendPixelFunction, ULW_ALPHA);
+			   ::EndPaint(m_hWndPaint, &ps);
+
+			   return true;
+		   }
+
+		   // Do we need to resize anything?
+		   // This is the time where we layout the controls on the form.
+		   // We delay this even from the WM_SIZE messages since resizing can be
+		   // a very expensize operation.
+		   if(m_bUpdateNeeded)
+		   {
+			   m_bUpdateNeeded = false;
+			   RECT rcClient = {0};
+			   ::GetClientRect(m_hWndPaint, &rcClient);
+			   if(!::IsRectEmpty(&rcClient))
+			   {
+				   if(m_pRoot->IsUpdateNeeded())
+				   {
+					   if( !::IsIconic(m_hWndPaint))  //redrain修复bug
+						   m_pRoot->SetPos(rcClient);
+					   if(m_hDcOffscreen != NULL) ::DeleteDC(m_hDcOffscreen);
+					   if(m_hbmpOffscreen != NULL) ::DeleteObject(m_hbmpOffscreen);
+					   m_hDcOffscreen = NULL;
+					   m_hbmpOffscreen = NULL;
+
+				   }
+				   else
+				   {
+					   CControlUI* pControl = NULL;
+					   while(pControl = m_pRoot->FindControl(__FindControlFromUpdate, NULL, UIFIND_VISIBLE | UIFIND_ME_FIRST))
+					   {
+						   pControl->SetPos(pControl->GetPos());
+					   }
+				   }
+				   // We'll want to notify the window when it is first initialized
+				   // with the correct layout. The window form would take the time
+				   // to submit swipes/animations.
+				   if(m_bFirstLayout)
+				   {
+					   m_bFirstLayout = false;
+					   SendNotify(m_pRoot, _T("windowinit"), 0, 0, false);
+				   }
+			   }
+		   }
+		   // Set focus to first control?
+		   if(m_bFocusNeeded)
+		   {
+			   SetNextTabControl();
+		   }
+		   //
+		   // Render screen
+		   //
+		   // Prepare offscreen bitmap?
+		   if(m_bOffscreenPaint && m_hbmpOffscreen == NULL)
+		   {
+			   RECT rcClient = {0};
+			   ::GetClientRect(m_hWndPaint, &rcClient);
+			   m_hDcOffscreen = ::CreateCompatibleDC(m_hDcPaint);
+			   m_hbmpOffscreen = ::CreateCompatibleBitmap(m_hDcPaint, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top);
+			   ASSERT(m_hDcOffscreen);
+			   ASSERT(m_hbmpOffscreen);
+		   }
+		   // Begin Windows paint
+		   PAINTSTRUCT ps = {0};
+		   ::BeginPaint(m_hWndPaint, &ps);
+		   if(m_bOffscreenPaint)
+		   {
+			   HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(m_hDcOffscreen, m_hbmpOffscreen);
+			   int iSaveDC = ::SaveDC(m_hDcOffscreen);
+			   m_pRoot->DoPaint(m_hDcOffscreen, ps.rcPaint);
+			   DrawCaret(m_hDcOffscreen, ps.rcPaint);
+			   for(int i = 0; i < m_aPostPaintControls.GetSize(); i++)
+			   {
+				   CControlUI* pPostPaintControl = static_cast<CControlUI*>(m_aPostPaintControls[i]);
+				   pPostPaintControl->DoPostPaint(m_hDcOffscreen, ps.rcPaint);
+			   }
+			   ::RestoreDC(m_hDcOffscreen, iSaveDC);
+			   ::BitBlt(ps.hdc, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
+				   ps.rcPaint.bottom - ps.rcPaint.top, m_hDcOffscreen, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
+			   ::SelectObject(m_hDcOffscreen, hOldBitmap);
+
+			   if(m_bShowUpdateRect)
+			   {
+				   HPEN hOldPen = (HPEN)::SelectObject(ps.hdc, m_hUpdateRectPen);
+				   ::SelectObject(ps.hdc, ::GetStockObject(HOLLOW_BRUSH));
+				   ::Rectangle(ps.hdc, rcPaint.left, rcPaint.top, rcPaint.right, rcPaint.bottom);
+				   ::SelectObject(ps.hdc, hOldPen);
+			   }
+		   }
+		   else
+		   {
+			   // A standard paint job
+			   int iSaveDC = ::SaveDC(ps.hdc);
+			   m_pRoot->DoPaint(ps.hdc, ps.rcPaint);
+			   DrawCaret(ps.hdc, ps.rcPaint);
+			   ::RestoreDC(ps.hdc, iSaveDC);
+		   }
+		   // All Done!
+		   ::EndPaint(m_hWndPaint, &ps);
+	   }
+	   // If any of the painting requested a resize again, we'll need
+	   // to invalidate the entire window once more.
+	   if(m_bUpdateNeeded)
+	   {
+		   ::InvalidateRect(m_hWndPaint, NULL, FALSE);
+	   }
+	   return true;
     case WM_GETMINMAXINFO:
         {
             LPMINMAXINFO lpMMI = (LPMINMAXINFO) lParam;
@@ -995,22 +1303,33 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             if( m_pRoot != NULL ) m_pRoot->NeedUpdate();
         }
         return true;
-    case WM_TIMER:
-        {
-            for( int i = 0; i < m_aTimers.GetSize(); i++ ) {
-                const TIMERINFO* pTimer = static_cast<TIMERINFO*>(m_aTimers[i]);
-                if( pTimer->hWnd == m_hWndPaint && pTimer->uWinTimer == LOWORD(wParam) && pTimer->bKilled == false) {
-                    TEventUI event = { 0 };
-                    event.Type = UIEVENT_TIMER;
-                    event.pSender = pTimer->pSender;
-                    event.wParam = pTimer->nLocalID;
-                    event.dwTimestamp = ::GetTickCount();
-                    pTimer->pSender->Event(event);
-                    break;
-                }
-            }
-        }
-        break;
+	case WM_TIMER:
+		{
+			if(kCaretTimerID == LOWORD(wParam)){
+				//DUI__Trace(_T("WM_TIMER:%d (%d,%d)"), m_bCaretActive, m_rtCaret.left, m_rtCaret.top);
+				Invalidate(m_rtCaret);
+				m_bCaretActive = !m_bCaretActive;
+			}
+			else{
+				for( int i = 0; i < m_aTimers.GetSize(); i++ ) {
+					const TIMERINFO* pTimer = static_cast<TIMERINFO*>(m_aTimers[i]);
+					if(pTimer->hWnd == m_hWndPaint && 
+						pTimer->uWinTimer == LOWORD(wParam) && 
+						pTimer->bKilled == false)
+					{
+						TEventUI event = { 0 };
+						event.Type = UIEVENT_TIMER;
+						event.pSender = pTimer->pSender;
+						event.wParam = pTimer->nLocalID;
+						event.dwTimestamp = ::GetTickCount();
+						pTimer->pSender->Event(event);
+						break;
+					}
+				}
+			}
+
+		}
+		break;
     case WM_MOUSEHOVER:
         {
             m_bMouseTracking = false;
@@ -1552,7 +1871,7 @@ bool CPaintManagerUI::SetTimer(CControlUI* pControl, UINT nTimerID, UINT uElapse
         }
     }
 
-    m_uTimerID = (++m_uTimerID) % 0xFF;
+    m_uTimerID = (++m_uTimerID) % 0xF0; //0xf1-0xfe特殊用途
     if( !::SetTimer(m_hWndPaint, m_uTimerID, uElapse, NULL) ) return FALSE;
     TIMERINFO* pTimer = new TIMERINFO;
     if( pTimer == NULL ) return FALSE;

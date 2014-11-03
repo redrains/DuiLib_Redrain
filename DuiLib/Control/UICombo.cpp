@@ -253,7 +253,7 @@ int CComboUI::GetCurSel() const
 
 bool CComboUI::SelectItem(int iIndex, bool bTakeFocus)
 {
-//    if( m_pWindow != NULL ) m_pWindow->Close();
+//    if( m_pWindow != NULL ) m_pWindow->Close();  //coed by Redrain 2014.10.30  导致鼠标滚动时自动关闭
     if( iIndex == m_iCurSel ) return true;
     int iOldSel = m_iCurSel;
     if( m_iCurSel >= 0 ) {

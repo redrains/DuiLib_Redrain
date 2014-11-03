@@ -8,12 +8,13 @@
 #pragma once
 
 // \Utils\Flash11.tlb 为Flash11接口文件，部分方法在低版本不存在，使用需注意
-#import "PROGID:ShockwaveFlash.ShockwaveFlash"  \
-     raw_interfaces_only,       /* Don't add raw_ to method names */ \
- 	named_guids,           /* Named guids and declspecs */    \
- 	rename("IDispatchEx","IMyDispatchEx")	/* fix conflicting with IDispatchEx ant dispex.h */  
-using namespace ShockwaveFlashObjects;
+// #import "PROGID:ShockwaveFlash.ShockwaveFlash"  \
+//      raw_interfaces_only,       /* Don't add raw_ to method names */ \
+//  	named_guids,           /* Named guids and declspecs */    \
+//  	rename("IDispatchEx","IMyDispatchEx")	/* fix conflicting with IDispatchEx ant dispex.h */  
+// using namespace ShockwaveFlashObjects;
 #include "Utils/FlashEventHandler.h"
+#include "Utils/flash11.tlh"
 
 class CActiveXCtrl;
 

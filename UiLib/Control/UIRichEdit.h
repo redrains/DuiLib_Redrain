@@ -2,6 +2,8 @@
 #define __UIRICHEDIT_H__
 
 #pragma once
+#include <Imm.h>
+#pragma comment(lib,"imm32.lib")
 
 namespace UiLib {
 
@@ -91,6 +93,8 @@ public:
     UINT SetUndoLimit(UINT nLimit);
     long StreamIn(int nFormat, EDITSTREAM &es);
     long StreamOut(int nFormat, EDITSTREAM &es);
+	void SetAccumulateDBCMode(bool bDBCMode);
+	bool IsAccumulateDBCMode();
 
     void DoInit();
     // 注意：TxSendMessage和SendMessage是有区别的，TxSendMessage没有multibyte和unicode自动转换的功能，
@@ -118,8 +122,7 @@ public:
     SIZE EstimateSize(SIZE szAvailable);
     void SetPos(RECT rc);
     void DoEvent(TEventUI& event);
-	void DoPaint(HDC hDC, const RECT& rcPaint);
-	void PaintBkColor(HDC hDC);
+    void DoPaint(HDC hDC, const RECT& rcPaint);
 
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
@@ -139,8 +142,11 @@ protected:
     int m_iLimitText;
     LONG m_lTwhStyle;
 	bool m_bInited;
+	bool  m_fAccumulateDBC ; // TRUE - need to cumulate ytes from 2 WM_CHAR msgs
+	// we are in this mode when we receive VK_PROCESSKEY
+	UINT m_chLeadByte; // use when we are in _fAccumulateDBC mode
 };
 
-} // namespace UiLib
+} // namespace DuiLib
 
 #endif // __UIRICHEDIT_H__

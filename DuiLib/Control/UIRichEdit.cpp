@@ -178,6 +178,10 @@ HRESULT InitDefaultCharFormat(CRichEditUI* re, CHARFORMAT2W* pcf, HFONT hfont)
     ::GetObject(hfont, sizeof(LOGFONT), &lf);
 
     DWORD dwColor = re->GetTextColor();
+	if(re->GetManager()->IsBackgroundTransparent())
+	{
+		CRenderEngine::CheckAalphaColor(dwColor);
+	}
     pcf->cbSize = sizeof(CHARFORMAT2W);
     pcf->crTextColor = RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor));
     LONG yPixPerInch = GetDeviceCaps(re->GetManager()->GetPaintDC(), LOGPIXELSY);
@@ -501,20 +505,34 @@ void CTxtWinHost::TxViewChange(BOOL fUpdate)
 
 BOOL CTxtWinHost::TxCreateCaret(HBITMAP hbmp, INT xWidth, INT yHeight)
 {
-    return ::CreateCaret(m_re->GetManager()->GetPaintWindow(), hbmp, xWidth, yHeight);
+    //return ::CreateCaret(m_re->GetManager()->GetPaintWindow(), hbmp, xWidth, yHeight);
+	return m_re->GetManager()->CreateCaret(hbmp, xWidth, yHeight);
 }
 
 BOOL CTxtWinHost::TxShowCaret(BOOL fShow)
 {
-    if(fShow)
-        return ::ShowCaret(m_re->GetManager()->GetPaintWindow());
-    else
-        return ::HideCaret(m_re->GetManager()->GetPaintWindow());
+    //if(fShow)
+    //    return ::ShowCaret(m_re->GetManager()->GetPaintWindow());
+    //else
+    //    return ::HideCaret(m_re->GetManager()->GetPaintWindow());
+	
+	if(m_re->GetManager()->GetCurrentCaretObject() == m_re)
+	{
+		if((m_re->IsReadOnly() || !m_re->Activate()))
+		{
+			m_re->GetManager()->ShowCaret(false);
+			return TRUE;
+		}
+	}
+	
+	return m_re->GetManager()->ShowCaret(fShow == TRUE);
 }
 
 BOOL CTxtWinHost::TxSetCaretPos(INT x, INT y)
 {
-    return ::SetCaretPos(x, y);
+   // return ::SetCaretPos(x, y);
+	m_re->GetManager()->SetCaretPos(m_re, x, y);
+	return true;
 }
 
 BOOL CTxtWinHost::TxSetTimer(UINT idTimer, UINT uTimeout)
@@ -598,7 +616,9 @@ HRESULT CTxtWinHost::TxGetParaFormat(const PARAFORMAT **ppPF)
 
 COLORREF CTxtWinHost::TxGetSysColor(int nIndex) 
 {
-    return ::GetSysColor(nIndex);
+	DWORD dwColor = ::GetSysColor(nIndex);
+	CRenderEngine::CheckAalphaColor(dwColor);
+    return dwColor;
 }
 
 HRESULT CTxtWinHost::TxGetBackStyle(TXTBACKSTYLE *pstyle)
@@ -781,6 +801,7 @@ void CTxtWinHost::SetFont(HFONT hFont)
 
 void CTxtWinHost::SetColor(DWORD dwColor)
 {
+	CRenderEngine::CheckAalphaColor(dwColor);
     cf.crTextColor = RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor));
     pserv->OnTxPropertyBitsChange(TXTBIT_CHARFORMATCHANGE, 
         TXTBIT_CHARFORMATCHANGE);
@@ -1026,7 +1047,6 @@ CRichEditUI::CRichEditUI() : m_pTwh(NULL), m_bVScrollBarFixing(false), m_bWantTa
     m_bWantCtrlReturn(true), m_bRich(true), m_bReadOnly(false), m_bWordWrap(false), m_dwTextColor(0), m_iFont(-1), 
     m_iLimitText(cInitTextMax), m_lTwhStyle(ES_MULTILINE), m_bInited(false), m_chLeadByte(0)
 {
-
 #ifndef _UNICODE
 	m_fAccumulateDBC =true;
 #else
@@ -1457,6 +1477,11 @@ DWORD CRichEditUI::GetSelectionCharFormat(CHARFORMAT2 &cf) const
 
 bool CRichEditUI::SetSelectionCharFormat(CHARFORMAT2 &cf)
 {
+	if(m_pManager->IsBackgroundTransparent())
+	{
+		CRenderEngine::CheckAalphaColor(cf.crTextColor);
+		CRenderEngine::CheckAalphaColor(cf.crBackColor);
+	}
     if( !m_pTwh ) return false;
     cf.cbSize = sizeof(CHARFORMAT2);
     LRESULT lResult;

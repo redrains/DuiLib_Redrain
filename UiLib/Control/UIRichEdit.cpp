@@ -5,7 +5,6 @@
 
 namespace UiLib {
 
-
 const LONG cInitTextMax = (32 * 1024) - 1;
 
 EXTERN_C const IID IID_ITextServices = { // 8d33f740-cf58-11ce-a89d-00aa006cadc5
@@ -179,6 +178,10 @@ HRESULT InitDefaultCharFormat(CRichEditUI* re, CHARFORMAT2W* pcf, HFONT hfont)
     ::GetObject(hfont, sizeof(LOGFONT), &lf);
 
     DWORD dwColor = re->GetTextColor();
+	if(re->GetManager()->IsBackgroundTransparent())
+	{
+		CRenderEngine::CheckAalphaColor(dwColor);
+	}
     pcf->cbSize = sizeof(CHARFORMAT2W);
     pcf->crTextColor = RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor));
     LONG yPixPerInch = GetDeviceCaps(re->GetManager()->GetPaintDC(), LOGPIXELSY);
@@ -301,8 +304,9 @@ BOOL CTxtWinHost::Init(CRichEditUI *re, const CREATESTRUCT *pcs)
     fInplaceActive = TRUE;
 
     // Create Text Services component
-    // if(FAILED(CreateTextServices(NULL, this, &pUnk)))
-    //     goto err;
+    //if(FAILED(CreateTextServices(NULL, this, &pUnk)))
+    //    goto err;
+
 	PCreateTextServices TextServicesProc;
 	HMODULE hmod = LoadLibrary(_T("msftedit.dll"));
 	if (hmod)
@@ -501,20 +505,34 @@ void CTxtWinHost::TxViewChange(BOOL fUpdate)
 
 BOOL CTxtWinHost::TxCreateCaret(HBITMAP hbmp, INT xWidth, INT yHeight)
 {
-    return ::CreateCaret(m_re->GetManager()->GetPaintWindow(), hbmp, xWidth, yHeight);
+    //return ::CreateCaret(m_re->GetManager()->GetPaintWindow(), hbmp, xWidth, yHeight);
+	return m_re->GetManager()->CreateCaret(hbmp, xWidth, yHeight);
 }
 
 BOOL CTxtWinHost::TxShowCaret(BOOL fShow)
 {
-    if(fShow)
-        return ::ShowCaret(m_re->GetManager()->GetPaintWindow());
-    else
-        return ::HideCaret(m_re->GetManager()->GetPaintWindow());
+    //if(fShow)
+    //    return ::ShowCaret(m_re->GetManager()->GetPaintWindow());
+    //else
+    //    return ::HideCaret(m_re->GetManager()->GetPaintWindow());
+	
+	if(m_re->GetManager()->GetCurrentCaretObject() == m_re)
+	{
+		if((m_re->IsReadOnly() || !m_re->Activate()))
+		{
+			m_re->GetManager()->ShowCaret(false);
+			return TRUE;
+		}
+	}
+	
+	return m_re->GetManager()->ShowCaret(fShow == TRUE);
 }
 
 BOOL CTxtWinHost::TxSetCaretPos(INT x, INT y)
 {
-    return ::SetCaretPos(x, y);
+   // return ::SetCaretPos(x, y);
+	m_re->GetManager()->SetCaretPos(m_re, x, y);
+	return true;
 }
 
 BOOL CTxtWinHost::TxSetTimer(UINT idTimer, UINT uTimeout)
@@ -598,7 +616,9 @@ HRESULT CTxtWinHost::TxGetParaFormat(const PARAFORMAT **ppPF)
 
 COLORREF CTxtWinHost::TxGetSysColor(int nIndex) 
 {
-    return ::GetSysColor(nIndex);
+	DWORD dwColor = ::GetSysColor(nIndex);
+	CRenderEngine::CheckAalphaColor(dwColor);
+    return dwColor;
 }
 
 HRESULT CTxtWinHost::TxGetBackStyle(TXTBACKSTYLE *pstyle)
@@ -781,6 +801,7 @@ void CTxtWinHost::SetFont(HFONT hFont)
 
 void CTxtWinHost::SetColor(DWORD dwColor)
 {
+	CRenderEngine::CheckAalphaColor(dwColor);
     cf.crTextColor = RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor));
     pserv->OnTxPropertyBitsChange(TXTBIT_CHARFORMATCHANGE, 
         TXTBIT_CHARFORMATCHANGE);
@@ -1024,8 +1045,13 @@ void CTxtWinHost::SetParaFormat(PARAFORMAT2 &p)
 
 CRichEditUI::CRichEditUI() : m_pTwh(NULL), m_bVScrollBarFixing(false), m_bWantTab(true), m_bWantReturn(true), 
     m_bWantCtrlReturn(true), m_bRich(true), m_bReadOnly(false), m_bWordWrap(false), m_dwTextColor(0), m_iFont(-1), 
-    m_iLimitText(cInitTextMax), m_lTwhStyle(ES_MULTILINE), m_bInited(false)
+    m_iLimitText(cInitTextMax), m_lTwhStyle(ES_MULTILINE), m_bInited(false), m_chLeadByte(0)
 {
+#ifndef _UNICODE
+	m_fAccumulateDBC =true;
+#else
+	m_fAccumulateDBC= false;
+#endif
 }
 
 CRichEditUI::~CRichEditUI()
@@ -1135,7 +1161,7 @@ void CRichEditUI::SetFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnd
     if( m_pTwh ) {
         LOGFONT lf = { 0 };
         ::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
-        _tcscpy(lf.lfFaceName, pStrFontName);
+        _tcsncpy(lf.lfFaceName, pStrFontName, LF_FACESIZE);
         lf.lfCharSet = DEFAULT_CHARSET;
         lf.lfHeight = -nSize;
         if( bBold ) lf.lfWeight += FW_BOLD;
@@ -1451,6 +1477,11 @@ DWORD CRichEditUI::GetSelectionCharFormat(CHARFORMAT2 &cf) const
 
 bool CRichEditUI::SetSelectionCharFormat(CHARFORMAT2 &cf)
 {
+	if(m_pManager->IsBackgroundTransparent())
+	{
+		CRenderEngine::CheckAalphaColor(cf.crTextColor);
+		CRenderEngine::CheckAalphaColor(cf.crBackColor);
+	}
     if( !m_pTwh ) return false;
     cf.cbSize = sizeof(CHARFORMAT2);
     LRESULT lResult;
@@ -2060,14 +2091,6 @@ void CRichEditUI::DoPaint(HDC hDC, const RECT& rcPaint)
     }
 }
 
-void CRichEditUI::PaintBkColor( HDC hDC )
-{
-	if(!IsEnabled() || IsReadOnly())
-		CRenderEngine::DrawColor(hDC, m_rcItem, GetAdjustColor(m_dwDisabledBkColor));
-	else 
-		CContainerUI::PaintBkColor(hDC);
-}
-
 void CRichEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if( _tcscmp(pstrName, _T("vscrollbar")) == 0 ) {
@@ -2134,6 +2157,27 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
     if( !IsMouseEnabled() && uMsg >= WM_MOUSEFIRST && uMsg <= WM_MOUSELAST ) return 0;
     if( uMsg == WM_MOUSEWHEEL && (LOWORD(wParam) & MK_CONTROL) == 0 ) return 0;
 
+	if (uMsg == WM_IME_COMPOSITION)
+	{
+		// 解决微软输入法位置异常的问题
+		HIMC hIMC = ImmGetContext(GetManager()->GetPaintWindow());
+		if (hIMC) 
+		{
+			// Set composition window position near caret position
+			POINT point;
+			GetCaretPos(&point);
+
+			COMPOSITIONFORM Composition;
+			Composition.dwStyle = CFS_POINT;
+			Composition.ptCurrentPos.x = point.x;
+			Composition.ptCurrentPos.y = point.y;
+			ImmSetCompositionWindow(hIMC, &Composition);
+
+			ImmReleaseContext(GetManager()->GetPaintWindow(),hIMC);
+		}
+		return 0;
+	}
+
     bool bWasHandled = true;
     if( (uMsg >= WM_MOUSEFIRST && uMsg <= WM_MOUSELAST) || uMsg == WM_SETCURSOR ) {
         if( !m_pTwh->IsCaptured() ) {
@@ -2195,6 +2239,51 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
             return 0;
         }
     }
+
+	if(WM_CHAR == uMsg)
+	{
+#ifndef _UNICODE
+		// check if we are waiting for 2 consecutive WM_CHAR messages
+		if ( IsAccumulateDBCMode() )
+		{
+			if ( (GetKeyState(VK_KANA) & 0x1) )
+			{
+				// turn off accumulate mode
+				SetAccumulateDBCMode ( false );
+				m_chLeadByte = 0;
+			}
+			else
+			{
+				if ( !m_chLeadByte )
+				{
+					// This is the first WM_CHAR message, 
+					// accumulate it if this is a LeadByte.  Otherwise, fall thru to
+					// regular WM_CHAR processing.
+					if ( IsDBCSLeadByte ( (WORD)wParam ) )
+					{
+						// save the Lead Byte and don't process this message
+						m_chLeadByte = (WORD)wParam << 8 ;
+
+						//TCHAR a = (WORD)wParam << 8 ;
+						return 0;
+					}
+				}
+				else
+				{
+					// This is the second WM_CHAR message,
+					// combine the current byte with previous byte.
+					// This DBC will be handled as WM_IME_CHAR.
+					wParam |= m_chLeadByte;
+					uMsg = WM_IME_CHAR;
+
+					// setup to accumulate more WM_CHAR
+					m_chLeadByte = 0; 
+				}
+			}
+		}
+#endif
+	}
+
     LRESULT lResult = 0;
     HRESULT Hr = TxSendMessage(uMsg, wParam, lParam, &lResult);
     if( Hr == S_OK ) bHandled = bWasHandled;
@@ -2206,6 +2295,16 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
     return lResult;
 }
 
+void CRichEditUI::SetAccumulateDBCMode( bool bDBCMode )
+{
+	m_fAccumulateDBC = bDBCMode;
+}
+
+bool CRichEditUI::IsAccumulateDBCMode()
+{
+	return m_fAccumulateDBC;
+}
 
 
-} // namespace UiLib
+
+} // namespace DuiLib

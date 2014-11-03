@@ -49,6 +49,11 @@ public:
     static void DrawHtmlText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTSTR pstrText, 
         DWORD dwTextColor, RECT* pLinks, CDuiString* sLinks, int& nLinkRects, UINT uStyle);
     static HBITMAP GenerateBitmap(CPaintManagerUI* pManager, CControlUI* pControl, RECT rc);
+
+	//alpha utilities
+	static void CheckAalphaColor(DWORD& dwColor);
+	static void ClearAalphaPixel(LPBYTE pBits, int bitsWidth, int left, int top, int right, int bottom);
+	static void RestoreAalphaColor(LPBYTE pBits, int bitsWidth, int left, int top, int right, int bottom);
 };
 
 } // namespace UiLib

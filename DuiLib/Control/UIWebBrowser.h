@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <MsHTML.h>
 #include "Utils/WebBrowserEventHandler.h"
 #include <ExDisp.h>
 
