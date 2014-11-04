@@ -1,0 +1,163 @@
+﻿/*****CSS各项框架定义*****/
+*{
+margin:0;
+padding:0;
+}
+ul,li,ol{ 
+list-style:none;
+}
+img,a img{ 
+border:none;
+}
+table{ 
+border-collapse:collapse;
+ border-spacing:0;
+}
+em,i,u{ 
+font-style:normal;
+}
+a{ 
+text-decoration:none;
+color:#434343;
+}
+a:hover{
+text-decoration:underline;
+color:#ff4000;
+}
+body{
+font-size:12px;
+font-family:"宋体";
+color:#434343;
+}
+.clear{
+clear:both;
+ font-size:0;
+overflow:hidden;
+height:0;
+}
+.blank10{
+clear:both;
+ font-size:0;
+overflow:hidden;
+height:10px;
+}
+.blank{
+clear:both;
+font-size:0;
+overflow:hidden;
+height:10px;
+background:#FFF;
+}
+body{	
+background-color:#F8C56B;
+margin:0px auto;
+padding:0px;
+}
+#back{
+position:relative;
+top:0px;
+width:1024px;
+height:768px;
+margin:0px auto;
+}
+
+#divbackgroung{
+position:absolute;
+left:0px;
+top:0px;
+width:1023px;
+height:768px;
+}
+
+#music_{
+position:absolute;
+left:500px;
+top:28px;
+width:150px;
+height:50px;
+}
+
+#navig-01_ {
+position:absolute;
+left:688px;
+top:138px;
+width:112px;
+height:47px;
+}
+
+
+#navig-02_ {
+position:absolute;
+left:683px;
+top:185px;
+width:112px;
+height:42px;
+}
+
+#navig-03_ {
+position:absolute;
+left:722px;
+top:227px;
+width:89px;
+height:50px;
+}
+
+
+#navig-04_ {
+position:absolute;
+left:710px;
+top:286px;
+width:92px;
+height:46px;
+}
+
+#navig-05_ {
+position:absolute;
+left:703px;
+top:336px;
+width:98px;
+height:41px;
+}
+
+
+
+/*****幻灯片框架定义*******/
+.slide_frame{
+width:1023px; 
+height:768px; 
+float:left; 
+position:relative; 
+overflow:hidden; 
+border:1px solid #cccccc;
+border:none;
+}
+.slide_frame img{
+border:none; 
+width:1023px; 
+height:768px;
+}
+#slideimg{
+position:relative; 
+width:1023px; 
+height:768px; 
+overflow:hidden;
+}
+#slideimg div{
+width:100000px; 
+margin-left:-4px;
+}
+#slideimg dl{
+width:1023px; 
+height:768px; 
+position:relative; 
+overflow:hidden; 
+float:left;
+}
+#slideimg dt{
+width:1023px; 
+height:768px; 
+position:absolute; 
+left:0px; 
+top:0px;
+}
+

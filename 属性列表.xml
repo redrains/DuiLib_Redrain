@@ -989,6 +989,11 @@
 		<Attribute name="align" default="left" type="STRING" comment="文字对齐方式,取值left、right、cente，如(center)"/>
 		<Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>
 		<Attribute name="textcolor" default="0xFF000000" type="DWORD" comment="字体颜色，如(0xFFFF0000)"/>
+		<Attribute name="normalimage" default="" type="STRING" comment="普通状态图片"/>
+		<Attribute name="hotimage" default="" type="STRING" comment="鼠标悬浮状态图片"/>
+		<Attribute name="focusedimage" default="" type="STRING" comment="获得焦点状态图片"/>
+		<Attribute name="disabledimage" default="" type="STRING" comment="禁用状态图片"/>
+		<Attribute name="textpadding" default="0,0,0,0" type="RECT" comment="文字显示的边距,如(2,2,2,2)"/>
 	</RichEdit>
 	<TreeView parent="List" notifies="selectchanged setfocus killfocus timer menu itemselect windowinit(root)">
 		<Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>

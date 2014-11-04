@@ -1045,13 +1045,14 @@ void CTxtWinHost::SetParaFormat(PARAFORMAT2 &p)
 
 CRichEditUI::CRichEditUI() : m_pTwh(NULL), m_bVScrollBarFixing(false), m_bWantTab(true), m_bWantReturn(true), 
     m_bWantCtrlReturn(true), m_bRich(true), m_bReadOnly(false), m_bWordWrap(false), m_dwTextColor(0), m_iFont(-1), 
-    m_iLimitText(cInitTextMax), m_lTwhStyle(ES_MULTILINE), m_bInited(false), m_chLeadByte(0)
+    m_iLimitText(cInitTextMax), m_lTwhStyle(ES_MULTILINE), m_bInited(false), m_chLeadByte(0),m_uButtonState(0)
 {
 #ifndef _UNICODE
 	m_fAccumulateDBC =true;
 #else
 	m_fAccumulateDBC= false;
 #endif
+	::ZeroMemory(&m_rcTextPadding, sizeof(m_rcTextPadding));
 }
 
 CRichEditUI::~CRichEditUI()
@@ -1902,14 +1903,22 @@ void CRichEditUI::DoEvent(TEventUI& event)
     {
         return;
     }
-    if( event.Type == UIEVENT_MOUSEENTER )
-    {
-        return;
-    }
-    if( event.Type == UIEVENT_MOUSELEAVE )
-    {
-        return;
-    }
+	if( event.Type == UIEVENT_MOUSEENTER )
+	{
+		if( IsEnabled() ) {
+			m_uButtonState |= UISTATE_HOT;
+			Invalidate();
+		}
+		return;
+	}
+	if( event.Type == UIEVENT_MOUSELEAVE )
+	{
+		if( IsEnabled() ) {
+			m_uButtonState &= ~UISTATE_HOT;
+			Invalidate();
+		}
+		return;
+	}
     if( event.Type > UIEVENT__KEYBEGIN && event.Type < UIEVENT__KEYEND )
     {
         return;
@@ -1917,6 +1926,93 @@ void CRichEditUI::DoEvent(TEventUI& event)
     CContainerUI::DoEvent(event);
 }
 
+
+LPCTSTR CRichEditUI::GetNormalImage()
+{
+	return m_sNormalImage;
+}
+
+void CRichEditUI::SetNormalImage(LPCTSTR pStrImage)
+{
+	m_sNormalImage = pStrImage;
+	Invalidate();
+}
+
+LPCTSTR CRichEditUI::GetHotImage()
+{
+	return m_sHotImage;
+}
+
+void CRichEditUI::SetHotImage(LPCTSTR pStrImage)
+{
+	m_sHotImage = pStrImage;
+	Invalidate();
+}
+
+LPCTSTR CRichEditUI::GetFocusedImage()
+{
+	return m_sFocusedImage;
+}
+
+void CRichEditUI::SetFocusedImage(LPCTSTR pStrImage)
+{
+	m_sFocusedImage = pStrImage;
+	Invalidate();
+}
+
+LPCTSTR CRichEditUI::GetDisabledImage()
+{
+	return m_sDisabledImage;
+}
+
+void CRichEditUI::SetDisabledImage(LPCTSTR pStrImage)
+{
+	m_sDisabledImage = pStrImage;
+	Invalidate();
+}
+
+RECT CRichEditUI::GetTextPadding() const
+{
+	return m_rcTextPadding;
+}
+
+void CRichEditUI::SetTextPadding(RECT rc)
+{
+	m_rcTextPadding = rc;
+	Invalidate();
+}
+
+void CRichEditUI::PaintStatusImage(HDC hDC)
+{
+	if( IsFocused() ) m_uButtonState |= UISTATE_FOCUSED;
+	else m_uButtonState &= ~ UISTATE_FOCUSED;
+	if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
+	else m_uButtonState &= ~ UISTATE_DISABLED;
+
+	if( (m_uButtonState & UISTATE_DISABLED) != 0 ) {
+		if( !m_sDisabledImage.IsEmpty() ) {
+			if( !DrawImage(hDC, (LPCTSTR)m_sDisabledImage) ) m_sDisabledImage.Empty();
+			else return;
+		}
+	}
+	else if( (m_uButtonState & UISTATE_FOCUSED) != 0 ) {
+		if( !m_sFocusedImage.IsEmpty() ) {
+			if( !DrawImage(hDC, (LPCTSTR)m_sFocusedImage) ) m_sFocusedImage.Empty();
+			else return;
+		}
+	}
+	else if( (m_uButtonState & UISTATE_HOT) != 0 ) {
+		if( !m_sHotImage.IsEmpty() ) {
+			if( !DrawImage(hDC, (LPCTSTR)m_sHotImage) ) m_sHotImage.Empty();
+			else return;
+		}
+	}
+
+	if( !m_sNormalImage.IsEmpty() ) {
+		if( !DrawImage(hDC, (LPCTSTR)m_sNormalImage) ) m_sNormalImage.Empty();
+		else return;
+	}
+}
 SIZE CRichEditUI::EstimateSize(SIZE szAvailable)
 {
     //return CSize(m_rcItem); // 这种方式在第一次设置大小之后就大小不变了
@@ -1941,34 +2037,39 @@ void CRichEditUI::SetPos(RECT rc)
         rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
     }
 
-    if( m_pTwh ) {
-        m_pTwh->SetClientRect(&rc);
-        if( bVScrollBarVisiable && (!m_pVerticalScrollBar->IsVisible() || m_bVScrollBarFixing) ) {
-            LONG lWidth = rc.right - rc.left + m_pVerticalScrollBar->GetFixedWidth();
-            LONG lHeight = 0;
-            SIZEL szExtent = { -1, -1 };
-            m_pTwh->GetTextServices()->TxGetNaturalSize(
-                DVASPECT_CONTENT, 
-                GetManager()->GetPaintDC(), 
-                NULL,
-                NULL,
-                TXTNS_FITTOCONTENT,
-                &szExtent,
-                &lWidth,
-                &lHeight);
-            if( lHeight > rc.bottom - rc.top ) {
-                m_pVerticalScrollBar->SetVisible(true);
-                m_pVerticalScrollBar->SetScrollPos(0);
-                m_bVScrollBarFixing = true;
-            }
-            else {
-                if( m_bVScrollBarFixing ) {
-                    m_pVerticalScrollBar->SetVisible(false);
-                    m_bVScrollBarFixing = false;
-                }
-            }
-        }
-    }
+	if( m_pTwh ) {
+		RECT rcRich = rc;
+		rcRich.left += m_rcTextPadding.left;
+		rcRich.right -= m_rcTextPadding.right;
+		rcRich.top += m_rcTextPadding.top;
+		rcRich.bottom -= m_rcTextPadding.bottom;
+		m_pTwh->SetClientRect(&rcRich);
+		if( bVScrollBarVisiable && (!m_pVerticalScrollBar->IsVisible() || m_bVScrollBarFixing) ) {
+			LONG lWidth = rcRich.right - rcRich.left + m_pVerticalScrollBar->GetFixedWidth();
+			LONG lHeight = 0;
+			SIZEL szExtent = { -1, -1 };
+			m_pTwh->GetTextServices()->TxGetNaturalSize(
+				DVASPECT_CONTENT, 
+				GetManager()->GetPaintDC(), 
+				NULL,
+				NULL,
+				TXTNS_FITTOCONTENT,
+				&szExtent,
+				&lWidth,
+				&lHeight);
+			if( lHeight > rcRich.bottom - rcRich.top ) {
+				m_pVerticalScrollBar->SetVisible(true);
+				m_pVerticalScrollBar->SetScrollPos(0);
+				m_bVScrollBarFixing = true;
+			}
+			else {
+				if( m_bVScrollBarFixing ) {
+					m_pVerticalScrollBar->SetVisible(false);
+					m_bVScrollBarFixing = false;
+				}
+			}
+		}
+	}
 
     if( m_pVerticalScrollBar != NULL && m_pVerticalScrollBar->IsVisible() ) {
         RECT rcScrollBarPos = { rc.right, rc.top, rc.right + m_pVerticalScrollBar->GetFixedWidth(), rc.bottom};
@@ -1979,16 +2080,117 @@ void CRichEditUI::SetPos(RECT rc)
         m_pHorizontalScrollBar->SetPos(rcScrollBarPos);
     }
 
-    for( int it = 0; it < m_items.GetSize(); it++ ) {
-        CControlUI* pControl = static_cast<CControlUI*>(m_items[it]);
-        if( !pControl->IsVisible() ) continue;
-        if( pControl->IsFloat() ) {
-            SetFloatPos(it);
-        }
-        else {
-            pControl->SetPos(rc); // 所有非float子控件放大到整个客户区
-        }
-    }
+	//     for( int it = 0; it < m_items.GetSize(); it++ ) {
+	//         CControlUI* pControl = static_cast<CControlUI*>(m_items[it]);
+	//         if( !pControl->IsVisible() ) continue;
+	//         if( pControl->IsFloat() ) {
+	//             SetFloatPos(it);
+	//         }
+	//         else {
+	//             pControl->SetPos(rc); // 所有非float子控件放大到整个客户区
+	//         }
+	//     }
+	// Determine the width of elements that are sizeable
+	SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
+	if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) 
+		szAvailable.cx += m_pHorizontalScrollBar->GetScrollRange();
+
+	int nAdjustables = 0;
+	int cxFixed = 0;
+	int nEstimateNum = 0;
+	for( int it1 = 0; it1 < m_items.GetSize(); it1++ ) {
+		CControlUI* pControl = static_cast<CControlUI*>(m_items[it1]);
+		if( !pControl->IsVisible() ) continue;
+		if( pControl->IsFloat() ) continue;
+		SIZE sz = pControl->EstimateSize(szAvailable);
+		if( sz.cx == 0 ) {
+			nAdjustables++;
+		}
+		else {
+			if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
+			if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
+		}
+		cxFixed += sz.cx +  pControl->GetPadding().left + pControl->GetPadding().right;
+		nEstimateNum++;
+	}
+	cxFixed += (nEstimateNum - 1) * m_iChildPadding;
+
+	int cxExpand = 0;
+	int cxNeeded = 0;
+	if( nAdjustables > 0 ) cxExpand = MAX(0, (szAvailable.cx - cxFixed) / nAdjustables);
+	// Position the elements
+	SIZE szRemaining = szAvailable;
+	int iPosX = rc.left;
+	if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) {
+		iPosX -= m_pHorizontalScrollBar->GetScrollPos();
+	}
+	int iAdjustable = 0;
+	int cxFixedRemaining = cxFixed;
+	for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
+		CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
+		if( !pControl->IsVisible() ) continue;
+		if( pControl->IsFloat() ) {
+			SetFloatPos(it2);
+			continue;
+		}
+		RECT rcPadding = pControl->GetPadding();
+		szRemaining.cx -= rcPadding.left;
+		SIZE sz = pControl->EstimateSize(szRemaining);
+		if( sz.cx == 0 ) {
+			iAdjustable++;
+			sz.cx = cxExpand;
+			// Distribute remaining to last element (usually round-off left-overs)
+			if( iAdjustable == nAdjustables ) {
+				sz.cx = MAX(0, szRemaining.cx - rcPadding.right - cxFixedRemaining);
+			}
+			if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
+			if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
+		}
+		else {
+			if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
+			if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
+
+			cxFixedRemaining -= sz.cx;
+		}
+
+		sz.cy = pControl->GetFixedHeight();
+		if( sz.cy == 0 ) sz.cy = rc.bottom - rc.top - rcPadding.top - rcPadding.bottom;
+		if( sz.cy < 0 ) sz.cy = 0;
+		if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
+		if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
+
+		RECT rcCtrl = { iPosX + rcPadding.left, rc.top + rcPadding.top, iPosX + sz.cx + rcPadding.left + rcPadding.right, rc.top + rcPadding.top + sz.cy};
+		pControl->SetPos(rcCtrl);
+		iPosX += sz.cx + m_iChildPadding + rcPadding.left + rcPadding.right;
+		cxNeeded += sz.cx + rcPadding.left + rcPadding.right;
+		szRemaining.cx -= sz.cx + m_iChildPadding + rcPadding.right;
+	}
+	cxNeeded += (nEstimateNum - 1) * m_iChildPadding;
+	//reddrain
+	if( m_pHorizontalScrollBar != NULL ) {
+		if( cxNeeded > rc.right - rc.left ) {
+			if( m_pHorizontalScrollBar->IsVisible() ) {
+				m_pHorizontalScrollBar->SetScrollRange(cxNeeded - (rc.right - rc.left));
+			}
+			else {
+				m_pHorizontalScrollBar->SetVisible(true);
+				m_pHorizontalScrollBar->SetScrollRange(cxNeeded - (rc.right - rc.left));
+				m_pHorizontalScrollBar->SetScrollPos(0);
+				rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
+			}
+		}
+		else {
+			if( m_pHorizontalScrollBar->IsVisible() ) {
+				m_pHorizontalScrollBar->SetVisible(false);
+				m_pHorizontalScrollBar->SetScrollRange(0);
+				m_pHorizontalScrollBar->SetScrollPos(0);
+				rc.bottom += m_pHorizontalScrollBar->GetFixedHeight();
+			}
+		}
+	}
+	//redrain
+	// Process the scrollbar
+	ProcessScrollBar(rc, cxNeeded, 0);
 }
 
 void CRichEditUI::DoPaint(HDC hDC, const RECT& rcPaint)
@@ -2148,6 +2350,19 @@ void CRichEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetTextColor(clrColor);
     }
+	else if( _tcscmp(pstrName, _T("normalimage")) == 0 ) SetNormalImage(pstrValue);
+	else if( _tcscmp(pstrName, _T("hotimage")) == 0 ) SetHotImage(pstrValue);
+	else if( _tcscmp(pstrName, _T("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
+	else if( _tcscmp(pstrName, _T("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
+	else if( _tcscmp(pstrName, _T("textpadding")) == 0 ) {
+		RECT rcTextPadding = { 0 };
+		LPTSTR pstr = NULL;
+		rcTextPadding.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
+		rcTextPadding.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
+		rcTextPadding.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
+		rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
+		SetTextPadding(rcTextPadding);
+	}
     else CContainerUI::SetAttribute(pstrName, pstrValue);
 }
 

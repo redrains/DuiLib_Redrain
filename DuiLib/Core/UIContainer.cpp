@@ -267,7 +267,7 @@ namespace DuiLib
 				}
 			}
 		}
-		else if( m_pHorizontalScrollBar != NULL && m_pHorizontalScrollBar->IsVisible() && m_pHorizontalScrollBar->IsEnabled() ) {
+		if( m_pHorizontalScrollBar != NULL && m_pHorizontalScrollBar->IsVisible() && m_pHorizontalScrollBar->IsEnabled() ) {
 			if( event.Type == UIEVENT_KEYDOWN ) 
 			{
 				switch( event.chKey ) {

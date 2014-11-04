@@ -124,6 +124,18 @@ public:
     void DoEvent(TEventUI& event);
     void DoPaint(HDC hDC, const RECT& rcPaint);
 
+	LPCTSTR GetNormalImage();
+	void SetNormalImage(LPCTSTR pStrImage);
+	LPCTSTR GetHotImage();
+	void SetHotImage(LPCTSTR pStrImage);
+	LPCTSTR GetFocusedImage();
+	void SetFocusedImage(LPCTSTR pStrImage);
+	LPCTSTR GetDisabledImage();
+	void SetDisabledImage(LPCTSTR pStrImage);
+	void PaintStatusImage(HDC hDC);
+	RECT GetTextPadding() const;
+	void SetTextPadding(RECT rc);
+
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
     LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled);
@@ -145,6 +157,13 @@ protected:
 	bool  m_fAccumulateDBC ; // TRUE - need to cumulate ytes from 2 WM_CHAR msgs
 	// we are in this mode when we receive VK_PROCESSKEY
 	UINT m_chLeadByte; // use when we are in _fAccumulateDBC mode
+
+	UINT m_uButtonState;
+	CDuiString m_sNormalImage;
+	CDuiString m_sHotImage;
+	CDuiString m_sFocusedImage;
+	CDuiString m_sDisabledImage;
+	RECT m_rcTextPadding;
 };
 
 } // namespace DuiLib

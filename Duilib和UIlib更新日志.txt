@@ -1,0 +1,236 @@
+2014-11-4
+richedit 容器布局从Container改为HorizontalLayout，可以支持相对布局来完成richedit内嵌复杂的布局
+richedit 增加textpadding属性，方便布局，控制文字范围，而不需要用原来的inset属性
+
+2014-11-3
+richedit增加四种状态的图片，normal、hot、focus、disable
+
+2014-10-30
+修复combo无法用滚轮的bug
+修复ListContainElementUI横向滚动错位的bug
+
+2014-10-29
+修复relativepos属性在窗体最小化并恢复后导致控制位移的bug
+
+2014-8-25
+修复Option状态不足的bug
+
+2014-8-24
+增加窗体透明，修改了字体的初始化颜色值，修改Edit的创建样式
+
+2014-8-12
+修复CControlUI m_hRgn造成gdi泄漏
+
+2014-08-10
+修复duilib ActiveXUI控件bug，导致flash无法使用透明效果（即无法启动无窗模式）
+
+2014-8-8
+修复了TreeView  TreeNode的addat的bug，展开和收缩存在逻辑错误，添加项目后自动展开
+
+2014-7-28
+修复duilib库UISlider控件的4个bug
+
+2014-07-26
+CEditUI的bug
+
+2014-7-14
+修复了TreeView  TreeNode的addat的bug，导致无法动态添加
+修复了SliderUI的bug
+修复relativepos属性错位bug
+
+2014-6-17
+修复横向布局滚动条bug
+
+2012-12-21
++ 增加托盘图标类
++ XML解析增加直接支持对托盘图标的定义
++ UiLib Demo增加类似QQ消息闪烁托盘图标的控制演示
+* 事件绑定的相关代码规范化及提高可读性的调整
+* 同步并生成最新UiLib Demo
+* 同步至Duilib 367 并修正FlashUI 在VS2012编译器下的一些编译错误
+
+2012-12-19
+* 移除UICalendar类中无用到的代码
++ 增加CEditUI自动完成接口类
+
+2012-12-12
+* 修正UiLib扩展后的属性新特性.xml 文件浏览器打开解析失败的BUG
+
+2012-12-09
+* 调整Button按钮的日历绑定事件的通知
+
+2012-12-06
+* 调整List 相关消息参数
+* 修正定向边框绘制计算
+* IWindowBase 调整 Atl+F4 的消息转为关闭按钮的click消息
++ IWindowBase 对嵌入资源加载的支持
++ IWindowBase 增加UI资源解析失败提示
++ TreeView 增加itemrclick事件
+
+2012-12-03
++ 新增 List 支持表格横向和纵向的线条显示控制，XML属性为 showvline showhline
+* 修正List 的 showvline showhline 属性与 itemshowhtml 属性冲突问题
+
+2012-12-02
++增加Style对XML的默认元素名的样式化
+-移除一些无用的注释代码
+*修正Button弹窗日历引起的异常
+
+2012-11-29
+* 调整Edit maxchar默认长度为-1，即系统支持的最大长度
+* 修复Edit的焦点设置BUG
+
+
+2012-11-27
++Button 增加calendardestname属性
++DUITRACE 增加换行符
+*修复日历控件的上月与下月日期的选择BUG，并调整默认配色样式
+*调整窗口基类收到ESC键后的退出返回值
+
+2012-11-26
++Control 增加bordersize对RECT值的边框定向宽度设置的支持。以支持对边框bordersize="1,1,1,1" 等效于bordersize="1"
+*修正CStdDuilib的GetStringA()和GetStringW() 在空值下返回异常的BUG
+*消除DLL方式编译UILabel的一些警告提示
+
+2012-11-24
++增加一个DUITRACE 的DEBUG输出宏。
++增加 headerwidthchanged 事件，ListHeaderItem列宽修改后触发
++CDuiString 增加 GetStringW()  GetStringA() 两个方法
+*调整VS2012在2008 2010 2012的编译器下的属性设置。
+*调整基类对模态状况关闭时的返回值由原来IDOK 改成 IDCLOSE
+*增加一个智能指针类
+*并修复一个WM_* 事件的绑定BUG
+*修复 DUITRACE 宏的访问内存越界BUG
+
+2012-11-22
++增加GetManager().m_aCustomEvents属性，可以绑定WM_* 系统事件的支持，备注：这个函数只允许绑定TEvent的回调方法
++增加定时器类，支持对OnTimer的调用绑定以及自定义参数的传递
++增加XML属性控制动画，支持动画控制的属性值类型为 int、size、rect、color、image
++增加ActionScript AGroup Property 标签，以实现对控件动画的模版定义
++控件增加 action 属性，可指定预先定义好的动作样式名称，如：action="动作样式A|动作样式B|动作样式C"
++增加消息绑定的自定义参数传递
+*UiLib Demo工程增加新特效的演示
+*调整项目的编译输出，
+#分离XML中UiLib扩展部分的新特性与区别的描述，
+
+2012-11-13
+*重构控件消息路由机制~，以支持控件对指定消息（包括自定义）或通知（包括自定义通知）的绑定操作。
+*更新Demo工程，以消息绑定方式处理按钮事件
+
+2012-11-11
+#同步UiLib 至 Duilib R358
+#修复UITabLayout移除控件时的显示Bug
++TreeView 增加Item文本的状态颜色定义，分别为itemtextcolor、itemhottextcolor、selitemtextcolor、sel
+itemhottextcolor
+
+2012-11-07
++对RichEdit和Edit分别增加disabledbkcolor属性。为禁用状态时的背景色。
+
+2012-11-06
+#同步UiLib 至 Duilib R355
+#UIWebBrowser更新 By:huhangscu@gmail.com
+#1.解决了Tab、Ctrl+C不能正常使用、不能选中文字的问题
+#2.修复了几个内存泄露
++新增所有控件支持自动匹配样式，应用顺序为，全局Default 、当前Styles 、Control 将逐层覆盖。属性应用优先级则反序。
+*修正Styles 未指定缺省样式时的bug
+*优化Styles代码并修正2处内存泄露
+*更新Demo工程，以及相关功能的完善。
+
+2012-10-05
++Control 控件基类增加borderstyle属性，以实现所有控件支持边框样式的设置。
++Control 控件基类增加定向边框属性分别为 leftbordersize/topbordersize/rightbordersize/bottombordersize ，以实现指定方向的边框绘制
+
+2012-10-02
+#增加Duilib命名空间别名的支持，增加后编译出来的DLL完全兼容Duilib现有的Demo
+
+2012-10-28
+*修正UITreeView最后一个节点对象动态添加子节点失败的BUG
+*修正树控件动态插入子节点无法展开的BUG，以及其它相关BUG隐患的修正。
++增加树控件的无限级动态添加与删除的Demo示例
++增加UIEdit提示文字的缺省颜色
+
+2012-10-27
+*修正TreeNode没有子节点时无法添加的BUG
+
+2010-10-26
+#同步UiLib 至 Duilib 350
+#*修复Web窗口非焦点响应加速键
++拓展CStdPtrArray增加TStdPtrArray模版类
++拓展CStdValArray增加TStdValArray模版类
++拓展CStdStringPtrMap增加TStdStringPtrMap模版类
+
+2012-10-25 
+#同步UiLib 至 Duilib 349
+*修复WebBrowser默认首页地址拼写错误Bug
+*修复CDuiString部分方法处理参数为NULL的Bug By：125308142@qq.com
+
+2012-10-22
+#同步UiLib 至 Duilib 347
+#完善树控件的动态添加与插入功能
+*修正Edit 的删除键无效的 BUG
+*移除Edit 的独立定时器，使用Dui自带的定时器代替
+*SetStyleName增加指定CPaintManagerUI的参数，用在new出来的控件的样式设置
++增加RadioBox控件
++增加动态添加和删除树节点的演示
+
+2012-10-10
+#同步UiLib 至 Duilib 335
+*修复FadeButton 相关BUG
++增加FadeButton 演示
+
+2012-10-09
++增加Styles和Style两个XML元素，以支持控件的样式定义，避免过多重复的属性定义
+#Styles支持样式继承
++Button 增加style属性，用于设置定义好的样式名称
+
+2012-10-07
+*同步 UiLib 至 Duilib R331
++增加模拟MFC消息映射宏
+
+2012-10-06
+*Button控件增加OnSelectDate事件，该事件在日期选择完毕时触发
+*UiLib-Demos 增加文本框定时器的使用演示
+
+2012-10-06
+*修复DX动画导致的异常崩溃
+*完善TreeView控件，已支持XML方式配置无限级节点，节点支持自定义增加控件
++Option控件增加selectedhotimage属性
+*UiLib_Demos 增加TreeView树控件演示
+
+2012-09-27
++Button 新增TabLayout绑定功能，可直接绑定标签页控件索引，使点击Button时直接选择绑定的索引页
+
+2012-09-26
++Label 新增文字特效支持
++Button 新增日历选择开关及若干XML属性
+*其它功能的完善
+
+2012-09-20
++新增日历控件，XML标签为 Calendar
++OPtion 控件增加 selectedbkcolor 属性。
+
+2012-09-18
++新增GIF标签 GifAnim 以支持GIF图片
+*更新UiLib_Demos工程 增加GIF演示
+
+2012-09-17
++新增特效样式定义标签 EffectsStyles EffectsStyle 支持从样式文件加载
++Control 增加若干个动画特效设置的属性，查看属性表获取更多说明
++Button 增加动画特效事件的设置
++新增UiLib_Demos工程
+
+2012-09-15
++List 新增收录 ListImageTextElement 元素，可以让List支持复选框、多选、Item图标等
+
+2012-09-14
++TreeView：
+ 新增树控件，支持无限级嵌套
+
++FadeButton
+ 新增收录动画按钮控件
+
+*Edit：
+ 输入框支持正则校验。Edit属性增加正则匹配等相关性
+ 增加文本框默认提示信息，获取焦点时提示信息消失
+ 增加文本框的定时取值消息推送，避免实时输入时每按一下发送一个消息Key消息。
+ 增加文本框事件 editTimer editRegex

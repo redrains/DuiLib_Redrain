@@ -182,7 +182,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\dll\</OutDir>
     <IntDir>..\Temp\Debug_u\</IntDir>
-    <TargetName>ULlib_ud</TargetName>
+    <TargetName>UiLib_ud</TargetName>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Debug_2008|Win32'">
