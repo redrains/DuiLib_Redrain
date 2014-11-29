@@ -1,3 +1,6 @@
+2014-11-28
+修复弹出窗体中CEditUI和CWebBrowserUI无法切换焦点的bug
+
 2014-11-4
 richedit 容器布局从Container改为HorizontalLayout，可以支持相对布局来完成richedit内嵌复杂的布局
 richedit 增加textpadding属性，方便布局，控制文字范围，而不需要用原来的inset属性

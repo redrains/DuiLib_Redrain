@@ -3198,10 +3198,11 @@ namespace UiLib {
 						if (pT->TranslateAccelerator(pMsg))
 							return true;
 
-						if( pT->PreMessageHandler(pMsg->message, pMsg->wParam, pMsg->lParam, lRes) ) 
-							return true;
-
-						return false;
+						pT->PreMessageHandler(pMsg->message, pMsg->wParam, pMsg->lParam, lRes);
+						// 					if( pT->PreMessageHandler(pMsg->message, pMsg->wParam, pMsg->lParam, lRes) ) 
+						// 						return true;
+						// 
+						// 					return false;  //code by redrain
 					}
 					hTempParent = GetParent(hTempParent);
 				}
