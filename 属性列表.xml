@@ -653,6 +653,9 @@
 		<Attribute name="focusedimage" default="" type="STRING" comment="获得焦点状态图片"/>
 		<Attribute name="disabledimage" default="" type="STRING" comment="禁用状态图片"/>
 		<Attribute name="nativebkcolor" default="0x00000000" type="DWORD" comment="windows原生edit控件的背景颜色,如(0xFFFFFFFF)"/>
+		<Attribute name="nativetextcolor" default="0x00000000" type="DWORD" comment="windows原生edit控件的文字颜色,如(0xFFFFFFFF)"/>
+		<Attribute name="tipvalue" default="" type="STRING" comment="文本框内提示文字，当文本框text为空时显示并失去焦点时显示"/>
+		<Attribute name="tipvaluecolor" default="0xFFBAC0C5" type="DWORD" comment="文本框内提示文字的颜色"/>
 		<Attribute name="trans" default="false" type="BOOL" comment="启此属性设置为true可支持透明窗体效果，不需要透明效果请不要开启"/>
 	</Edit>
 	<ScrollBar parent="Control" notifies="timer menu scrolled windowinit(root)">

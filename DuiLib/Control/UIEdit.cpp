@@ -66,6 +66,7 @@ namespace DuiLib
 		SendMessage(EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELPARAM(0, 0));
 		Edit_Enable(m_hWnd, m_pOwner->IsEnabled() == true);
 		Edit_SetReadOnly(m_hWnd, m_pOwner->IsReadOnly() == true);
+
 		//Styls
 		LONG styleValue = ::GetWindowLong(m_hWnd, GWL_STYLE);
 		styleValue |= pOwner->GetWindowStyls();
@@ -123,13 +124,21 @@ namespace DuiLib
 				::InvalidateRect(m_hWnd, &rcClient, FALSE);
 			}
 		}
-		else if( uMsg == WM_KEYDOWN && TCHAR(wParam) == VK_RETURN ) {
+		else if( uMsg == WM_KEYDOWN && TCHAR(wParam) == VK_RETURN ){
+
 			m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_RETURN);
+
 		}
 		else if( uMsg == OCM__BASE + WM_CTLCOLOREDIT  || uMsg == OCM__BASE + WM_CTLCOLORSTATIC ) {
 			if( m_pOwner->GetNativeEditBkColor() == 0xFFFFFFFF ) return NULL;
 			::SetBkMode((HDC)wParam, TRANSPARENT);
-			DWORD dwTextColor = m_pOwner->GetTextColor();
+
+			DWORD dwTextColor;
+			if (m_pOwner->GetNativeEditTextColor() != 0x000000)
+				dwTextColor = m_pOwner->GetNativeEditTextColor();
+			else
+				dwTextColor = m_pOwner->GetTextColor();
+
 			::SetTextColor((HDC)wParam, RGB(GetBValue(dwTextColor),GetGValue(dwTextColor),GetRValue(dwTextColor)));
 			if( m_hBkBrush == NULL ) {
 				DWORD clrColor = m_pOwner->GetNativeEditBkColor();
@@ -138,6 +147,7 @@ namespace DuiLib
 			return (LRESULT)m_hBkBrush;
 		}
 		else bHandled = FALSE;
+
 		if( !bHandled ) return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 		return lRes;
 	}
@@ -171,7 +181,7 @@ namespace DuiLib
 
 	CEditUI::CEditUI() : m_pWindow(NULL), m_uMaxChar(255), m_bReadOnly(false), 
 		m_bPasswordMode(false), m_cPasswordChar(_T('*')), m_uButtonState(0), 
-		m_dwEditbkColor(0xFFFFFFFF), m_iWindowStyls(0),m_bTrans(false)
+		m_dwEditbkColor(0xFFFFFFFF), m_dwEditTextColor(0x00000000), m_iWindowStyls(0),m_bTrans(false),m_sTipValueColor(0xFFBAC0C5)
 	{
 		SetTextPadding(CDuiRect(4, 3, 4, 3));
 		SetBkColor(0xFFFFFFFF);
@@ -437,6 +447,20 @@ namespace DuiLib
 		return m_dwEditbkColor;
 	}
 
+	void CEditUI::SetNativeEditTextColor( LPCTSTR pStrColor )
+	{
+		if( *pStrColor == _T('#')) pStrColor = ::CharNext(pStrColor);
+		LPTSTR pstr = NULL;
+		DWORD clrColor = _tcstoul(pStrColor, &pstr, 16);
+
+		m_dwEditTextColor = clrColor;
+	}
+
+	DWORD CEditUI::GetNativeEditTextColor() const
+	{
+		return m_dwEditTextColor;
+	}
+
 	void CEditUI::SetSel(long nStartChar, long nEndChar)
 	{
 		if( m_pWindow != NULL ) Edit_SetSel(*m_pWindow, nStartChar,nEndChar);
@@ -450,6 +474,38 @@ namespace DuiLib
 	void CEditUI::SetReplaceSel(LPCTSTR lpszReplace)
 	{
 		if( m_pWindow != NULL ) Edit_ReplaceSel(*m_pWindow, lpszReplace);
+	}
+
+	void CEditUI::SetTipValue( LPCTSTR pStrTipValue )
+	{
+		if(m_sText != _T(""))
+			m_sText = pStrTipValue;
+		m_sSrcTipValue	= pStrTipValue;
+		m_sTipValue		= CDuiString(_T("__IsTipValue__"))+pStrTipValue;
+	}
+
+	void CEditUI::SetTipValueColor( LPCTSTR pStrColor )
+	{
+		if( *pStrColor == _T('#')) pStrColor = ::CharNext(pStrColor);
+		LPTSTR pstr = NULL;
+		DWORD clrColor = _tcstoul(pStrColor, &pstr, 16);
+
+		m_sTipValueColor = clrColor;
+	}
+
+	DWORD CEditUI::GetTipValueColor()
+	{
+		return m_sTipValueColor;
+	}
+
+	CDuiString CEditUI::GetTipValue()
+	{
+		return m_sTipValue;
+	}
+
+	LPCTSTR CEditUI::GetSrcTipValue()
+	{
+		return m_sSrcTipValue.GetData();
 	}
 
 	void CEditUI::SetPos(RECT rc)
@@ -494,11 +550,15 @@ namespace DuiLib
 		if( _tcscmp(pstrName, _T("readonly")) == 0 ) SetReadOnly(_tcscmp(pstrValue, _T("true")) == 0);
 		else if( _tcscmp(pstrName, _T("numberonly")) == 0 ) SetNumberOnly(_tcscmp(pstrValue, _T("true")) == 0);
 		else if( _tcscmp(pstrName, _T("password")) == 0 ) SetPasswordMode(_tcscmp(pstrValue, _T("true")) == 0);
+		else if( _tcscmp(pstrName, _T("passwordchar")) == 0 ) SetPasswordChar(*pstrValue);
 		else if( _tcscmp(pstrName, _T("maxchar")) == 0 ) SetMaxChar(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("normalimage")) == 0 ) SetNormalImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("hotimage")) == 0 ) SetHotImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
+		else if( _tcscmp(pstrName, _T("tipvalue")) == 0 ) SetTipValue(pstrValue);
+		else if( _tcscmp(pstrName, _T("tipvaluecolor")) == 0 ) SetTipValueColor(pstrValue);
+		else if( _tcscmp(pstrName, _T("nativetextcolor")) == 0 ) SetNativeEditTextColor(pstrValue);
 		else if( _tcscmp(pstrName, _T("nativebkcolor")) == 0 ) {
 			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
 			LPTSTR pstr = NULL;
@@ -543,12 +603,18 @@ namespace DuiLib
 
 	void CEditUI::PaintText(HDC hDC)
 	{
-		if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
+		DWORD mCurTextColor = m_dwTextColor;
+
+		if( m_dwTextColor == 0 ) mCurTextColor = m_dwTextColor = m_pManager->GetDefaultFontColor();
+		if(GetText() == m_sSrcTipValue || GetText() == _T(""))	mCurTextColor = m_sTipValueColor;
 		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
 
-		if( m_sText.IsEmpty() ) return;
+		CDuiString sText;
+		if( m_sText.IsEmpty() ) 
+			sText = m_sSrcTipValue;
+		else 
+			sText = m_sText;
 
-		CDuiString sText = m_sText;
 		if( m_bPasswordMode ) {
 			sText.Empty();
 			LPCTSTR p = m_sText.GetData();
@@ -564,13 +630,12 @@ namespace DuiLib
 		rc.top += m_rcTextPadding.top;
 		rc.bottom -= m_rcTextPadding.bottom;
 		if( IsEnabled() ) {
-			CRenderEngine::DrawText(hDC, m_pManager, rc, sText, m_dwTextColor, \
+			CRenderEngine::DrawText(hDC, m_pManager, rc, sText, mCurTextColor, \
 				m_iFont, DT_SINGLELINE | m_uTextStyle);
 		}
 		else {
 			CRenderEngine::DrawText(hDC, m_pManager, rc, sText, m_dwDisabledTextColor, \
 				m_iFont, DT_SINGLELINE | m_uTextStyle);
-
 		}
 	}
 }

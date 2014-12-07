@@ -53,7 +53,7 @@ public:
 
 	static void WkeWebkit_Init();
 	static void WkeWebkit_Shutdown();
-	
+
 	LPCTSTR	GetClass() const;
 	LPVOID	GetInterface(LPCTSTR pstrName);
 

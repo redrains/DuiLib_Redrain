@@ -181,7 +181,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Debug_2010|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\dll\</OutDir>
-    <IntDir>..\Temp\Debug_u\</IntDir>
+    <IntDir>..\Temp\UiDebug_u\</IntDir>
     <TargetName>UiLib_ud</TargetName>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
@@ -218,7 +218,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release_2010|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\dll\</OutDir>
-    <IntDir>..\Temp\Release_u\</IntDir>
+    <IntDir>..\Temp\UiRelease_u\</IntDir>
     <TargetName>UiLib_u</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release_2008|Win32'">

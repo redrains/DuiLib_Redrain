@@ -152,7 +152,13 @@ namespace UiLib
 		if( uMsg == OCM__BASE + WM_CTLCOLOREDIT  || uMsg == OCM__BASE + WM_CTLCOLORSTATIC ) {
 			if( m_pOwner->GetNativeEditBkColor() == 0xFFFFFFFF && !m_pOwner->IsReadOnly() ) return NULL;
 			::SetBkMode((HDC)wParam, TRANSPARENT);
-			DWORD dwTextColor = m_pOwner->GetTextColor();
+
+			DWORD dwTextColor;
+			if (m_pOwner->GetNativeEditTextColor() != 0x000000)
+				dwTextColor = m_pOwner->GetNativeEditTextColor();
+			else
+				dwTextColor = m_pOwner->GetTextColor();
+
 			::SetTextColor((HDC)wParam, RGB(GetBValue(dwTextColor),GetGValue(dwTextColor),GetRValue(dwTextColor)));
 			if( m_hBkBrush == NULL ) {
 				DWORD clrColor = !m_pOwner->IsReadOnly()?m_pOwner->GetNativeEditBkColor():m_pOwner->GetDisabledBkColor();
@@ -197,7 +203,7 @@ namespace UiLib
 
 	CEditUI::CEditUI() : m_pWindow(NULL), m_uMaxChar(-1), m_bReadOnly(false), 
 		m_bPasswordMode(false), m_cPasswordChar(_T('*')), m_uButtonState(0), 
-		m_dwEditbkColor(0xFFFFFFFF), m_iWindowStyls(0),m_sTipValueColor(0xFFBAC0C5),m_bTrans(false)
+		m_dwEditbkColor(0xFFFFFFFF), m_dwEditTextColor(0x00000000), m_iWindowStyls(0),m_sTipValueColor(0xFFBAC0C5),m_bTrans(false)
 	{
 		SetBorderSize(1);
 		SetBorderColor(0xFFBAC0C5);
@@ -480,6 +486,20 @@ namespace UiLib
 		return m_dwEditbkColor;
 	}
 
+	void CEditUI::SetNativeEditTextColor( LPCTSTR pStrColor )
+	{
+		if( *pStrColor == _T('#')) pStrColor = ::CharNext(pStrColor);
+		LPTSTR pstr = NULL;
+		DWORD clrColor = _tcstoul(pStrColor, &pstr, 16);
+
+		m_dwEditTextColor = clrColor;
+	}
+
+	DWORD CEditUI::GetNativeEditTextColor() const
+	{
+		return m_dwEditTextColor;
+	}
+
 	void CEditUI::SetSel(long nStartChar, long nEndChar)
 	{
 		if( m_pWindow != NULL ) Edit_SetSel(*m_pWindow, nStartChar,nEndChar);
@@ -590,6 +610,8 @@ MatchFailed:
 
 	void CEditUI::SetTipValue( LPCTSTR pStrTipValue )
 	{
+		if(m_sText != _T(""))
+			m_sText = pStrTipValue;
 		m_sSrcTipValue	= pStrTipValue;
 		m_sTipValue		= CDuiString(_T("__IsTipValue__"))+pStrTipValue;
 	}
@@ -672,6 +694,7 @@ MatchFailed:
 		else if( _tcscmp(pstrName, _T("timerdelay")) == 0) SetTimerDelay(_tcstoul(pstrValue,NULL,10));
 		else if( _tcscmp(pstrName, _T("regularcheck")) == 0) SetRegularCheck(pstrValue);
 		else if( _tcscmp(pstrName, _T("regulartip")) == 0) SetRegularTip(pstrValue);
+		else if( _tcscmp(pstrName, _T("nativetextcolor")) == 0 ) SetNativeEditTextColor(pstrValue);
 		else if( _tcscmp(pstrName, _T("nativebkcolor")) == 0 ) {
 			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
 			LPTSTR pstr = NULL;
@@ -727,12 +750,14 @@ MatchFailed:
 		DWORD mCurTextColor = m_dwTextColor;
 
 		if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
-		if(GetText() == m_sSrcTipValue)	mCurTextColor = m_sTipValueColor;
+		if(GetText() == m_sSrcTipValue || GetText() == _T(""))	mCurTextColor = m_sTipValueColor;
 		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
 
-		if( m_sText.IsEmpty() ) return;
-
-		CDuiString sText = m_sText;
+		CDuiString sText;
+		if( m_sText.IsEmpty() ) 
+			sText = m_sSrcTipValue;
+		else 
+			sText = m_sText;
 
 		if( m_bPasswordMode ) {
 			sText.Empty();

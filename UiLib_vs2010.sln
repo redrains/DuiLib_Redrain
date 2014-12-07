@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UiLib", "UiLib\UiLib.vcxproj", "{8F14DEA1-BE9F-4F17-A5E5-15B4191200EF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UiLib_Demos", "UiLib_Demos\UiLib_Demos\UiLib_Demos.vcxproj", "{4E91DAC9-51FA-4554-A6CC-D04C6E90F733}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		DLL_Debug_2010|Win32 = DLL_Debug_2010|Win32
@@ -19,6 +21,14 @@ Global
 		{8F14DEA1-BE9F-4F17-A5E5-15B4191200EF}.Static_Debug_2010|Win32.Build.0 = Static_Debug_2010|Win32
 		{8F14DEA1-BE9F-4F17-A5E5-15B4191200EF}.Static_Release_2010|Win32.ActiveCfg = Static_Release_2010|Win32
 		{8F14DEA1-BE9F-4F17-A5E5-15B4191200EF}.Static_Release_2010|Win32.Build.0 = Static_Release_2010|Win32
+		{4E91DAC9-51FA-4554-A6CC-D04C6E90F733}.DLL_Debug_2010|Win32.ActiveCfg = DLL_Debug_2010|Win32
+		{4E91DAC9-51FA-4554-A6CC-D04C6E90F733}.DLL_Debug_2010|Win32.Build.0 = DLL_Debug_2010|Win32
+		{4E91DAC9-51FA-4554-A6CC-D04C6E90F733}.DLL_Release_2010|Win32.ActiveCfg = DLL_Release_2010|Win32
+		{4E91DAC9-51FA-4554-A6CC-D04C6E90F733}.DLL_Release_2010|Win32.Build.0 = DLL_Release_2010|Win32
+		{4E91DAC9-51FA-4554-A6CC-D04C6E90F733}.Static_Debug_2010|Win32.ActiveCfg = Static_Debug_2010|Win32
+		{4E91DAC9-51FA-4554-A6CC-D04C6E90F733}.Static_Debug_2010|Win32.Build.0 = Static_Debug_2010|Win32
+		{4E91DAC9-51FA-4554-A6CC-D04C6E90F733}.Static_Release_2010|Win32.ActiveCfg = Static_Release_2010|Win32
+		{4E91DAC9-51FA-4554-A6CC-D04C6E90F733}.Static_Release_2010|Win32.Build.0 = Static_Release_2010|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

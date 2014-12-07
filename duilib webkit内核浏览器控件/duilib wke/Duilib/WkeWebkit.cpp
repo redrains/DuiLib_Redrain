@@ -34,7 +34,7 @@ void CWkeWebkitWnd::Init(CWkeWebkitUI* pOwner)
 	{
 		RECT rcPos = m_pOwner->GetPos();
 		UINT uStyle = UI_WNDSTYLE_CHILD;
-//	HWND   hWnd = CreateWindow(_T("#32770"), _T("WndMediaDisplay"), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_PaintManager.GetPaintWindow(), (HMENU)0, NULL, NULL);
+		//	HWND   hWnd = CreateWindow(_T("#32770"), _T("WndMediaDisplay"), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_PaintManager.GetPaintWindow(), (HMENU)0, NULL, NULL);
 		Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos);
 	}
 }
@@ -70,7 +70,7 @@ LRESULT CWkeWebkitWnd::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
 	RECT rcClient;
 	::GetClientRect(m_hWnd, &rcClient);
-	
+
 	RECT rcInvalid;
 	::IntersectRect(&rcInvalid, &rcClip,&rcClient);
 
@@ -96,9 +96,9 @@ LRESULT CWkeWebkitWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
 	m_pWebView->setBufHandler(this);
 
-// 	hander.onTitleChanged = onTitleChanged;   //默认关闭了通知标题改变的回调函数
-// 	hander.onURLChanged = onURLChanged;
-// 	m_pWebView->setClientHandler(&hander);
+	// 	hander.onTitleChanged = onTitleChanged;   //默认关闭了通知标题改变的回调函数
+	// 	hander.onURLChanged = onURLChanged;
+	// 	m_pWebView->setClientHandler(&hander);
 
 	SetTimer(m_hWnd, TM_TICKER,50 ,NULL);
 
@@ -112,7 +112,7 @@ LRESULT CWkeWebkitWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
 	m_pWebView->resize(rcWnd.GetWidth(), rcWnd.GetHeight());
 	m_pWebView->tick();
-	
+
 	::InvalidateRect(m_hWnd, NULL, FALSE);
 	return 0;
 }
@@ -252,7 +252,7 @@ LRESULT CWkeWebkitWnd::OnImeStartComposition(UINT uMsg, WPARAM wParam,LPARAM lPa
 LRESULT CWkeWebkitWnd::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	m_pWebView->focus();
-//	bHandled = TRUE;
+	//	bHandled = TRUE;
 	return 0;
 }
 
@@ -342,13 +342,19 @@ LRESULT CWkeWebkitWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 //////////////
 //////////////
 
-CWkeWebkitUI::CWkeWebkitUI(void)
+CWkeWebkitUI::CWkeWebkitUI(void):
+m_pWindow(NULL)
 {
+
 }
 
 
 CWkeWebkitUI::~CWkeWebkitUI(void)
 {	
+	if (m_pWindow != NULL)
+	{
+		m_pWindow->Close();
+	}
 }
 
 void CWkeWebkitUI::WkeWebkit_Init()
@@ -361,10 +367,12 @@ void CWkeWebkitUI::WkeWebkit_Shutdown()
 	wkeShutdown();
 }
 
+
 void CWkeWebkitUI::SetInternVisible(bool bVisible)
 {
 	CControlUI::SetInternVisible(bVisible);
-	::ShowWindow(m_pWindow->GetHWND(), bVisible?SW_SHOW:SW_HIDE); 
+	if (m_pWindow != NULL)
+		::ShowWindow(m_pWindow->GetHWND(), bVisible?SW_SHOW:SW_HIDE); 
 }
 
 void CWkeWebkitUI::DoInit()
@@ -396,7 +404,7 @@ void CWkeWebkitUI::DoEvent(TEventUI& event)
 		::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)));
 		return;
 	}
-		CControlUI::DoEvent(event);
+	CControlUI::DoEvent(event);
 }
 
 void CWkeWebkitUI::SetPos(RECT rc)
@@ -408,10 +416,6 @@ void CWkeWebkitUI::SetPos(RECT rc)
 
 void CWkeWebkitUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-	if (_tcsicmp(pstrName, _T("URL")) == 0)
-	{
-		SetURL(pstrValue);
-	}
 	CControlUI::SetAttribute(pstrName,pstrValue);
 }
 

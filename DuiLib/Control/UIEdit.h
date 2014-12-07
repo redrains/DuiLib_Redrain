@@ -41,6 +41,8 @@ namespace DuiLib
 		void SetDisabledImage(LPCTSTR pStrImage);
 		void SetNativeEditBkColor(DWORD dwBkColor);
 		DWORD GetNativeEditBkColor() const;
+		void SetNativeEditTextColor( LPCTSTR pStrColor );
+		DWORD GetNativeEditTextColor() const;
 
 		void SetSel(long nStartChar, long nEndChar);
 		void SetSelAll();
@@ -48,6 +50,12 @@ namespace DuiLib
 
 		void SetTransMode(bool bTrans);  //Add by Redrain 20114.8.24
 		bool GetTransMode() const;
+
+		void SetTipValue(LPCTSTR pStrTipValue);
+		void SetTipValueColor(LPCTSTR pStrColor);
+		DWORD GetTipValueColor();
+		CDuiString GetTipValue();
+		LPCTSTR GetSrcTipValue();
 
 		void SetPos(RECT rc);
 		void SetVisible(bool bVisible = true);
@@ -71,7 +79,11 @@ namespace DuiLib
 		CDuiString m_sHotImage;
 		CDuiString m_sFocusedImage;
 		CDuiString m_sDisabledImage;
+		CDuiString m_sTipValue;
+		CDuiString m_sSrcTipValue;
+		DWORD m_sTipValueColor;
 		DWORD m_dwEditbkColor;
+		DWORD m_dwEditTextColor;
 		int m_iWindowStyls;
 		bool m_bTrans; //Add by Redrain 20114.8.24
 	};
