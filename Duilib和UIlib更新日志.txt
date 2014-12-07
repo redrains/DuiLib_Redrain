@@ -1,3 +1,6 @@
+2014.12.7
+为edit控件增加了nativetextcolor、tipvalue、tipvaluecolor属性
+
 2014-11-28
 修复弹出窗体中CEditUI和CWebBrowserUI无法切换焦点的bug
 
