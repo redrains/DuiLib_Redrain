@@ -220,7 +220,8 @@ void CListUI::RemoveAll()
 
 void CListUI::SetPos(RECT rc)
 {
-    CVerticalLayoutUI::SetPos(rc);
+	CVerticalLayoutUI::SetPos(rc);
+
     if( m_pHeader == NULL ) return;
     // Determine general list information and the size of header columns
     m_ListInfo.nColumns = MIN(m_pHeader->GetCount(), UILIST_MAX_COLUMNS);
@@ -252,6 +253,8 @@ void CListUI::SetPos(RECT rc)
             static_cast<CControlUI*>(m_pHeader->GetItemAt(it))->SetInternVisible(false);
         }
     }
+	m_pList->SetPos(m_pList->GetPos());
+
 }
 
 void CListUI::DoEvent(TEventUI& event)
@@ -939,6 +942,35 @@ void CListBodyUI::SetScrollPos(SIZE szPos)
 
     if( cx == 0 && cy == 0 ) return;
 
+	if( cx != 0 && m_pOwner ) {
+		CListHeaderUI* pHeader = m_pOwner->GetHeader();
+		if( pHeader == NULL ) return;
+		TListInfoUI* pInfo = m_pOwner->GetListInfo();
+		pInfo->nColumns = MIN(pHeader->GetCount(), UILIST_MAX_COLUMNS);
+
+		if( !pHeader->IsVisible() ) {
+			for( int it = 0; it < pHeader->GetCount(); it++ ) {
+				static_cast<CControlUI*>(pHeader->GetItemAt(it))->SetInternVisible(true);
+			}
+		}
+		for( int i = 0; i < pInfo->nColumns; i++ ) {
+			CControlUI* pControl = static_cast<CControlUI*>(pHeader->GetItemAt(i));
+			if( !pControl->IsVisible() ) continue;
+			if( pControl->IsFloat() ) continue;
+
+			RECT rcPos = pControl->GetPos();
+			rcPos.left -= cx;
+			rcPos.right -= cx;
+			pControl->SetPos(rcPos);
+			pInfo->rcColumn[i] = pControl->GetPos();
+		}
+		if( !pHeader->IsVisible() ) {
+			for( int it = 0; it < pHeader->GetCount(); it++ ) {
+				static_cast<CControlUI*>(pHeader->GetItemAt(it))->SetInternVisible(false);
+			}
+		}
+	}
+
     RECT rcPos;
     for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
         CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
@@ -955,34 +987,7 @@ void CListBodyUI::SetScrollPos(SIZE szPos)
 
     Invalidate();
 
-    if( cx != 0 && m_pOwner ) {
-        CListHeaderUI* pHeader = m_pOwner->GetHeader();
-        if( pHeader == NULL ) return;
-        TListInfoUI* pInfo = m_pOwner->GetListInfo();
-        pInfo->nColumns = MIN(pHeader->GetCount(), UILIST_MAX_COLUMNS);
 
-        if( !pHeader->IsVisible() ) {
-            for( int it = 0; it < pHeader->GetCount(); it++ ) {
-                static_cast<CControlUI*>(pHeader->GetItemAt(it))->SetInternVisible(true);
-            }
-        }
-        for( int i = 0; i < pInfo->nColumns; i++ ) {
-            CControlUI* pControl = static_cast<CControlUI*>(pHeader->GetItemAt(i));
-            if( !pControl->IsVisible() ) continue;
-            if( pControl->IsFloat() ) continue;
-
-            RECT rcPos = pControl->GetPos();
-            rcPos.left -= cx;
-            rcPos.right -= cx;
-            pControl->SetPos(rcPos);
-            pInfo->rcColumn[i] = pControl->GetPos();
-        }
-        if( !pHeader->IsVisible() ) {
-            for( int it = 0; it < pHeader->GetCount(); it++ ) {
-                static_cast<CControlUI*>(pHeader->GetItemAt(it))->SetInternVisible(false);
-            }
-        }
-    }
 }
 
 void CListBodyUI::SetPos(RECT rc)
@@ -2113,8 +2118,7 @@ CListContainerElementUI::CListContainerElementUI() :
 m_iIndex(-1),
 m_pOwner(NULL), 
 m_bSelected(false),
-m_uButtonState(0),
-m_nOldCxPos(0)
+m_uButtonState(0)
 {
 }
 
@@ -2405,25 +2409,29 @@ void CListContainerElementUI::SetPos(RECT rc)
 	CListUI* pList = static_cast<CListUI*>(m_pOwner);
 	if (pList == NULL) return;
 
-	TListInfoUI* pInfo = pList->GetListInfo();	
-	int nNewCxPos = pList->GetScrollPos().cx;
-
-	int nExcursion = nNewCxPos - m_nOldCxPos;
-
+	CListHeaderUI *pHeader = pList->GetHeader();
+	if (pHeader == NULL || !pHeader->IsVisible())
+		return;
+	
 	int nCount = m_items.GetSize();
 	for (int i = 0; i < nCount; i++)
 	{
 		CControlUI *pListItem = static_cast<CControlUI*>(m_items[i]);
 
-		if (pListItem != NULL && pInfo->rcColumn[i].left != 0 && pInfo->rcColumn[i].right != 0)
+		CControlUI *pHeaderItem = pHeader->GetItemAt(i);
+		if (pHeaderItem == NULL)
+			return;
+
+		RECT rcHeaderItem = pHeaderItem->GetPos();
+		if (pListItem != NULL && !(rcHeaderItem.left ==0 && rcHeaderItem.right ==0) )
 		{
 			RECT rt = pListItem->GetPos();
-			rt.left = pInfo->rcColumn[i].left - nExcursion;
-			rt.right = pInfo->rcColumn[i].right - nExcursion;
+			rt.left =rcHeaderItem.left;
+			rt.right = rcHeaderItem.right;
 			pListItem->SetPos(rt);
 		}
+
 	}
 
-	m_nOldCxPos = nNewCxPos;
 }
 } // namespace DuiLib

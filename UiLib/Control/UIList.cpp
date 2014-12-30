@@ -247,6 +247,8 @@ namespace UiLib {
 				static_cast<CControlUI*>(m_pHeader->GetItemAt(it))->SetInternVisible(false);
 			}
 		}
+
+		m_pList->SetPos(m_pList->GetPos());
 	}
 
 	int CListUI::GetMinSelItemIndex()
@@ -1150,22 +1152,6 @@ namespace UiLib {
 
 		if( cx == 0 && cy == 0 ) return;
 
-		RECT rcPos;
-		for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
-			CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
-			if( !pControl->IsVisible() ) continue;
-			if( pControl->IsFloat() ) continue;
-
-			rcPos = pControl->GetPos();
-			rcPos.left -= cx;
-			rcPos.right -= cx;
-			rcPos.top -= cy;
-			rcPos.bottom -= cy;
-			pControl->SetPos(rcPos);
-		}
-
-		Invalidate();
-
 		if( cx != 0 && m_pOwner ) {
 			CListHeaderUI* pHeader = m_pOwner->GetHeader();
 			if( pHeader == NULL ) return;
@@ -1194,6 +1180,24 @@ namespace UiLib {
 				}
 			}
 		}
+
+		RECT rcPos;
+		for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
+			CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
+			if( !pControl->IsVisible() ) continue;
+			if( pControl->IsFloat() ) continue;
+
+			rcPos = pControl->GetPos();
+			rcPos.left -= cx;
+			rcPos.right -= cx;
+			rcPos.top -= cy;
+			rcPos.bottom -= cy;
+			pControl->SetPos(rcPos);
+		}
+
+		Invalidate();
+
+
 	}
 
 	void CListBodyUI::SetPos(RECT rc)
@@ -2839,8 +2843,7 @@ namespace UiLib {
 		m_iIndex(-1),
 		m_pOwner(NULL), 
 		m_bSelected(false),
-		m_uButtonState(0),
-		m_nOldCxPos(0)
+		m_uButtonState(0)
 	{
 	}
 
@@ -3131,25 +3134,28 @@ namespace UiLib {
 		CListUI* pList = static_cast<CListUI*>(m_pOwner);
 		if (pList == NULL) return;
 
-		TListInfoUI* pInfo = pList->GetListInfo();	
-		int nNewCxPos = pList->GetScrollPos().cx;
-
-		int nExcursion = nNewCxPos - m_nOldCxPos;
+		CListHeaderUI *pHeader = pList->GetHeader();
+		if (pHeader == NULL || !pHeader->IsVisible())
+			return;
 
 		int nCount = m_items.GetSize();
 		for (int i = 0; i < nCount; i++)
 		{
 			CControlUI *pListItem = static_cast<CControlUI*>(m_items[i]);
 
-			if (pListItem != NULL && pInfo->rcColumn[i].left != 0 && pInfo->rcColumn[i].right != 0)
+			CControlUI *pHeaderItem = pHeader->GetItemAt(i);
+			if (pHeaderItem == NULL)
+				return;
+
+			RECT rcHeaderItem = pHeaderItem->GetPos();
+			if (pListItem != NULL && !(rcHeaderItem.left ==0 && rcHeaderItem.right ==0) )
 			{
 				RECT rt = pListItem->GetPos();
-				rt.left = pInfo->rcColumn[i].left - nExcursion;
-				rt.right = pInfo->rcColumn[i].right - nExcursion;
+				rt.left =rcHeaderItem.left;
+				rt.right = rcHeaderItem.right;
 				pListItem->SetPos(rt);
 			}
-		}
 
-		m_nOldCxPos = nNewCxPos;
+		}
 	}
 } // namespace UiLib
