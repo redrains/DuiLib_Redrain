@@ -33,6 +33,13 @@ namespace DuiLib
 		LPCTSTR GetHotForeImage();
 		void SetHotForeImage(LPCTSTR pStrImage);
 
+		void BindTabIndex(int _BindTabIndex);
+		void BindTabLayoutName(LPCTSTR _TabLayoutName);
+		void BindTriggerTabSel(int _SetSelectIndex = -1);
+		void RemoveBindTabIndex();
+		int	 GetBindTabLayoutIndex();
+		CDuiString GetBindTabLayoutName();
+
 		void SetHotBkColor(DWORD dwColor);
 		DWORD GetHotBkColor() const;
 		void SetHotTextColor(DWORD dwColor);
@@ -49,7 +56,6 @@ namespace DuiLib
 
 	protected:
 		UINT m_uButtonState;
-		bool m_bButtonDBState;
 
 		DWORD m_dwHotBkColor;
 		DWORD m_dwHotTextColor;
@@ -63,6 +69,9 @@ namespace DuiLib
 		CDuiString m_sPushedForeImage;
 		CDuiString m_sFocusedImage;
 		CDuiString m_sDisabledImage;
+
+		int			m_iBindTabIndex;
+		CDuiString	m_sBindTabLayoutName;
 	};
 
 }	// namespace DuiLib

@@ -65,7 +65,7 @@ namespace DuiLib
 
 	void COptionUI::Selected(bool bSelected)
 	{
-		if( m_bSelected == bSelected ) return;
+//		if( m_bSelected == bSelected ) return;
 		m_bSelected = bSelected;
 		if( m_bSelected ) m_uButtonState |= UISTATE_SELECTED;
 		else m_uButtonState &= ~UISTATE_SELECTED;
@@ -174,6 +174,17 @@ namespace DuiLib
 		Invalidate();
 	}
 
+	LPCTSTR COptionUI::GetSelectedForedImage()
+	{
+		return m_sSelectedForeImage;
+	}
+
+	void COptionUI::SetSelectedForedImage(LPCTSTR pStrImage)
+	{
+		m_sSelectedForeImage = pStrImage;
+		Invalidate();
+	}
+
 	SIZE COptionUI::EstimateSize(SIZE szAvailable)
 	{
 		if( m_cxyFixed.cy == 0 ) return CSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
@@ -188,6 +199,7 @@ namespace DuiLib
 		else if( _tcscmp(pstrName, _T("selectedhotimage")) == 0 ) SetSelectedHotImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("selectedpushedimage")) == 0 ) SetSelectedPushedImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("foreimage")) == 0 ) SetForeImage(pstrValue);
+		else if( _tcscmp(pstrName, _T("selectedforeimage")) == 0 ) SetSelectedForedImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("selectedbkcolor")) == 0 ) {
 			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
 			LPTSTR pstr = NULL;
@@ -230,7 +242,12 @@ namespace DuiLib
 		CButtonUI::PaintStatusImage(hDC);
 
 Label_ForeImage:
-		if( !m_sForeImage.IsEmpty() ) {
+		if ( IsSelected() && !m_sSelectedForeImage.IsEmpty())
+		{
+			if( !DrawImage(hDC, (LPCTSTR)m_sSelectedForeImage) ) m_sSelectedForeImage.Empty();
+		}
+		else if(  !m_sForeImage.IsEmpty() ) 
+		{
 			if( !DrawImage(hDC, (LPCTSTR)m_sForeImage) ) m_sForeImage.Empty();
 		}
 

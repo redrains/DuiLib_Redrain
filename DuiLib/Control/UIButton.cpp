@@ -5,11 +5,11 @@ namespace DuiLib
 {
 	CButtonUI::CButtonUI()
 		: m_uButtonState(0)
-		,m_bButtonDBState(FALSE)
 		, m_dwHotTextColor(0)
 		, m_dwPushedTextColor(0)
 		, m_dwFocusedTextColor(0)
 		,m_dwHotBkColor(0)
+		,m_iBindTabIndex(-1)
 	{
 		m_uTextStyle = DT_SINGLELINE | DT_VCENTER | DT_CENTER;
 	}
@@ -55,18 +55,9 @@ namespace DuiLib
 				}
 			}
 		}		
-		if( event.Type == UIEVENT_BUTTONDOWN )
+		if( event.Type == UIEVENT_BUTTONDOWN || UIEVENT_DBLCLICK)
 		{
 			if( ::PtInRect(&m_rcItem, event.ptMouse) && IsEnabled() ) {
-				m_uButtonState |= UISTATE_PUSHED | UISTATE_CAPTURED;
-				Invalidate();
-			}
-			return;
-		}
-		if( event.Type == UIEVENT_DBLCLICK)    //redrain
-		{
-			if( ::PtInRect(&m_rcItem, event.ptMouse) && IsEnabled() ) {
-				m_bButtonDBState = TRUE ;
 				m_uButtonState |= UISTATE_PUSHED | UISTATE_CAPTURED;
 				Invalidate();
 			}
@@ -125,15 +116,8 @@ namespace DuiLib
 		if( !CControlUI::Activate() ) return false;
 		if( m_pManager != NULL )
 		{
-			if (m_bButtonDBState == FALSE )
-			{
-				m_pManager->SendNotify(this, DUI_MSGTYPE_CLICK);
-			}
-			else
-			{
-				m_bButtonDBState = FALSE ;
-				m_pManager->SendNotify(this, DUI_MSGTYPE_DBCLICK);				
-			}
+			m_pManager->SendNotify(this, DUI_MSGTYPE_CLICK);
+			BindTriggerTabSel();
 		}
 		return true;
 	}
@@ -263,6 +247,46 @@ namespace DuiLib
 		Invalidate();
 	}
 
+	void CButtonUI::BindTabIndex(int _BindTabIndex )
+	{
+		if( _BindTabIndex >= 0)
+			m_iBindTabIndex	= _BindTabIndex;
+	}
+
+	void CButtonUI::BindTabLayoutName( LPCTSTR _TabLayoutName )
+	{
+		if(_TabLayoutName)
+			m_sBindTabLayoutName = _TabLayoutName;
+	}
+
+	void CButtonUI::BindTriggerTabSel( int _SetSelectIndex /*= -1*/ )
+	{
+		if(GetBindTabLayoutName().IsEmpty() || (GetBindTabLayoutIndex() < 0 && _SetSelectIndex < 0))
+			return;
+
+		CTabLayoutUI* pTabLayout = static_cast<CTabLayoutUI*>(GetManager()->FindControl(GetBindTabLayoutName()));
+		if(!pTabLayout)
+			return;
+
+		pTabLayout->SelectItem(_SetSelectIndex >=0?_SetSelectIndex:GetBindTabLayoutIndex());
+	}
+
+	void CButtonUI::RemoveBindTabIndex()
+	{
+		m_iBindTabIndex	= -1;
+		m_sBindTabLayoutName.Empty();
+	}
+
+	int CButtonUI::GetBindTabLayoutIndex()
+	{
+		return m_iBindTabIndex;
+	}
+
+	CDuiString CButtonUI::GetBindTabLayoutName()
+	{
+		return m_sBindTabLayoutName;
+	}
+
 	SIZE CButtonUI::EstimateSize(SIZE szAvailable)
 	{
 		if( m_cxyFixed.cy == 0 ) return CSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
@@ -278,6 +302,8 @@ namespace DuiLib
 		else if( _tcscmp(pstrName, _T("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("foreimage")) == 0 ) SetForeImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("hotforeimage")) == 0 ) SetHotForeImage(pstrValue);
+		else if( _tcscmp(pstrName, _T("bindtabindex")) == 0 ) BindTabIndex(_ttoi(pstrValue));
+		else if( _tcscmp(pstrName, _T("bindtablayoutname")) == 0 ) BindTabLayoutName(pstrValue);
 		else if( _tcscmp(pstrName, _T("hotbkcolor")) == 0 )
 		{
 			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);

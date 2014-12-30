@@ -37,6 +37,9 @@ namespace UiLib
 		LPCTSTR GetForeImage();
 		void SetForeImage(LPCTSTR pStrImage);
 
+		LPCTSTR GetSelectedForedImage();
+		void SetSelectedForedImage(LPCTSTR pStrImage);
+
 		LPCTSTR GetGroup() const;
 		void SetGroup(LPCTSTR pStrGroupName = NULL);
 		bool IsSelected() const;
@@ -59,6 +62,7 @@ namespace UiLib
 		CDuiString		m_sSelectedHotImage;
 		CDuiString		m_sSelectedPushedImage;
 		CDuiString		m_sForeImage;
+		CDuiString		m_sSelectedForeImage;
 	};
 
 } // namespace UiLib
