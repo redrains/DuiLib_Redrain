@@ -1,14 +1,27 @@
 #include "StdAfx.h"
 #include "UIAnimation.h"
+#include <vector>
+#include <algorithm>
 
 namespace UiLib {
-
-	CUIAnimation::CUIAnimation(CControlUI* pOwner)
+	struct CUIAnimation::Imp
+	{
+		std::vector<CAnimationData*> m_arAnimations;
+	};
+	
+	CUIAnimation::CUIAnimation(CControlUI* pOwner):m_pImp(new CUIAnimation::Imp())
 	{
 		ASSERT(pOwner != NULL);
 		m_pControl = pOwner;
 	}
-
+	CUIAnimation:: ~CUIAnimation()
+	{
+		if(m_pImp)
+		{
+			delete m_pImp;
+			m_pImp = NULL;
+		}
+	}
 	BOOL CUIAnimation::StartAnimation(int nElapse, int nTotalFrame, int nAnimationID /*= 0*/, BOOL bLoop/* = FALSE*/)
 	{
 		CAnimationData* pData = GetAnimationDataByID(nAnimationID);
@@ -26,13 +39,13 @@ namespace UiLib {
 		
 		if(m_pControl->GetManager()->SetTimer( m_pControl, nAnimationID, nElapse ))
 		{
-			m_arAnimations.push_back(pAnimation);
+			m_pImp->m_arAnimations.push_back(pAnimation);
 			return TRUE;
 		}
 		return FALSE;
 	}
 
-	VOID CUIAnimation::StopAnimation(int nAnimationID /*= 0*/)
+	void CUIAnimation::StopAnimation(int nAnimationID /*= 0*/)
 	{
 		if(m_pControl == NULL) return;
 
@@ -42,18 +55,18 @@ namespace UiLib {
 			if( NULL != pData )
 			{
 				m_pControl->GetManager()->KillTimer( m_pControl, nAnimationID );
-				m_arAnimations.erase(std::remove(m_arAnimations.begin(), m_arAnimations.end(), pData), m_arAnimations.end());
+				m_pImp->m_arAnimations.erase(std::remove(m_pImp->m_arAnimations.begin(), m_pImp->m_arAnimations.end(), pData), m_pImp->m_arAnimations.end());
 				return;
 			}
 		}
 		else
 		{
-			int nCount = m_arAnimations.size();
+			int nCount = m_pImp->m_arAnimations.size();
 			for(int i=0; i<nCount; ++i)
 			{
-				m_pControl->GetManager()->KillTimer( m_pControl, m_arAnimations[i]->m_nAnimationID );
+				m_pControl->GetManager()->KillTimer( m_pControl, m_pImp->m_arAnimations[i]->m_nAnimationID );
 			}
-			m_arAnimations.clear();
+			m_pImp->m_arAnimations.clear();
 		}
 	}
 
@@ -95,7 +108,7 @@ namespace UiLib {
 		return FALSE;
 	}
 
-	VOID CUIAnimation::OnAnimationElapse(int nAnimationID)
+	void CUIAnimation::OnAnimationElapse(int nAnimationID)
 	{
 		if(m_pControl == NULL) return;
 
@@ -121,7 +134,7 @@ namespace UiLib {
 			else
 			{
 				m_pControl->GetManager()->KillTimer( m_pControl, nAnimationID );
-				m_arAnimations.erase(std::remove(m_arAnimations.begin(), m_arAnimations.end(), pData), m_arAnimations.end());
+				m_pImp->m_arAnimations.erase(std::remove(m_pImp->m_arAnimations.begin(), m_pImp->m_arAnimations.end(), pData), m_pImp->m_arAnimations.end());
 				pData = NULL;
 			}
 		}
@@ -135,12 +148,12 @@ namespace UiLib {
 	CAnimationData* CUIAnimation::GetAnimationDataByID(int nAnimationID)
 	{
 		CAnimationData* pRet = NULL;
-		int nCount = m_arAnimations.size();
+		int nCount = m_pImp->m_arAnimations.size();
 		for(int i=0; i<nCount; ++i)
 		{
-			if(m_arAnimations[i]->m_nAnimationID == nAnimationID)
+			if(m_pImp->m_arAnimations[i]->m_nAnimationID == nAnimationID)
 			{
-				pRet = m_arAnimations[i];
+				pRet = m_pImp->m_arAnimations[i];
 				break;
 			}
 		}
