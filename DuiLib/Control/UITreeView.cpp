@@ -12,7 +12,7 @@ namespace DuiLib
 		m_dwSelItemHotTextColor	= 0;
 
 		pTreeView		= NULL;
-		m_bIsVisable	= true;
+		m_bIsVisable	= false;  //edit by redrain 2014.11.7,应该为false,原来为true
 		m_bIsCheckBox	= false;
 		pParentTreeNode	= NULL;
 
@@ -427,6 +427,8 @@ namespace DuiLib
 			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
 			SetSelItemHotTextColor(clrColor);
 		}
+		else if(_tcscmp(pstrName,_T("defaultexpand")) == 0)
+			GetFolderButton()->Selected(_tcscmp(pstrValue,_T("true")) == 0);
 		else CListContainerElementUI::SetAttribute(pstrName,pstrValue);
 	}
 

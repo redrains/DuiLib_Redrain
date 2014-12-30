@@ -1136,5 +1136,6 @@
 		<Attribute name="texthotcolor" default="0x00000000" type="DWORD" comment="鼠标进入item时文本颜色"/>
 		<Attribute name="selitemtextcolor" default="0x00000000" type="DWORD" comment="item被选中时文本颜色"/>
 		<Attribute name="selhotitemtextcolor" default="0x00000000" type="DWORD" comment="item被选中时且鼠标进入时的文本颜色"/>
+		<Attribute name="defaultexpand" default="false" type="BOOL" comment="设置初始状态是否展开"/>
 	</TreeNode>
 </Controls>
