@@ -533,7 +533,6 @@ protected:
     UINT m_uButtonState;
     IListOwnerUI* m_pOwner;
 
-	int m_nOldCxPos;  //add by Redrain 2014.10.30
 };
 
 } // namespace UiLib

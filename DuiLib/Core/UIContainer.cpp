@@ -772,7 +772,7 @@ namespace DuiLib
 
 		if( cyRequired > rc.bottom - rc.top && !m_pVerticalScrollBar->IsVisible() ) {
 			m_pVerticalScrollBar->SetVisible(true);
-			m_pVerticalScrollBar->SetScrollRange(cyRequired - (rc.bottom - rc.top));
+		m_pVerticalScrollBar->SetScrollRange(cyRequired - (rc.bottom - rc.top));
 			m_pVerticalScrollBar->SetScrollPos(0);
 			m_bScrollProcess = true;
 			SetPos(m_rcItem);

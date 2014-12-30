@@ -60,7 +60,8 @@ namespace DuiLib
 		DWORD	GetSelItemHotTextColor() const;
 
 		void	SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-
+		
+		void	IsAllChildChecked(); //检测所有子项是否都选中 2014.12.11 redrain
 		CStdPtrArray GetTreeNodes();
 
 		int			 GetTreeIndex();

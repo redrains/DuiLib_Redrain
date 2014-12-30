@@ -42,6 +42,7 @@ namespace DuiLib
 		bool v = IsVisible();
 		m_bVisible = bVisible;
 		if( m_bFocused ) m_bFocused = false;
+	
 	}
 
 	void CScrollBarUI::SetEnabled(bool bEnable)

@@ -4,7 +4,7 @@
 namespace UiLib
 {
 
-	CButtonUI::CButtonUI() : m_uButtonState(0), m_dwHotTextColor(0), m_dwPushedTextColor(0), m_dwFocusedTextColor(0),m_dwHotBkColor(0)
+	CButtonUI::CButtonUI() : m_uButtonState(0), m_dwHotTextColor(0), m_dwPushedTextColor(0), m_dwFocusedTextColor(0),m_dwHotBkColor(0),m_iBindTabIndex(-1)
 
 	{
 		m_uTextStyle = DT_SINGLELINE | DT_VCENTER | DT_CENTER;

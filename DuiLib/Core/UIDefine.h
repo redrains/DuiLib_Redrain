@@ -75,7 +75,7 @@ union DuiMessageMapFunctions
 #define DUI_MSGTYPE_VALUECHANGED_MOVE      (_T("movevaluechanged"))
 
 #define DUI_MSGTYPE_SELECTCHANGED 		   (_T("selectchanged"))
-
+#define DUI_MSGTYPE_UNSELECTED	 		   (_T("unselected"))
 
 //////////////////////////////////////////////////////////////////////////
 

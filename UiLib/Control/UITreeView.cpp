@@ -195,11 +195,6 @@ namespace UiLib
         if(_tcsicmp(pControl->GetClass(), _T("TreeNodeUI")) != 0)
             return false;
 
-		if (!GetFolderButton()->IsSelected())       //add by：Redrain   2014.8.8
-		{
-			m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMDBCLICK);
-		}
-
         //filter invalidate index
         int iDestIndex = iIndex;
         if (iDestIndex < 0)
@@ -273,6 +268,12 @@ namespace UiLib
             //parent TreeNode not bind TreeView just insert to parent TreeNode
             bRet = mTreeNodes.InsertAt(iIndex, pControl);
         }
+
+		if(bRet)  //add by redrain 2014.11.7
+		{
+			pControl->SetVisible(GetFolderButton()->IsSelected());
+		}
+
 		return bRet;
 	}
 
@@ -324,11 +325,6 @@ namespace UiLib
 		if (_tcsicmp(_pTreeNodeUI->GetClass(), _T("TreeNodeUI")) != 0)
 			return false;
 
-		if (!GetFolderButton()->IsSelected())       //add by：Redrain   2014.8.8
-		{
-			m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMDBCLICK);
-		}
-
 		_pTreeNodeUI = CalLocation(_pTreeNodeUI);
 
 		bool nRet = true;
@@ -341,7 +337,10 @@ namespace UiLib
 		}
 
 		if(nRet)
+		{
+			_pTreeNodeUI->SetVisible(GetFolderButton()->IsSelected());    //add by redrain 2014.11.7
 			mTreeNodes.Add(_pTreeNodeUI);
+		}
 
 		return nRet;
 	}
@@ -429,6 +428,40 @@ namespace UiLib
 			SetSelItemHotTextColor(clrColor);
 		}
 		else CListContainerElementUI::SetAttribute(pstrName,pstrValue);
+	}
+
+	void CTreeNodeUI::IsAllChildChecked()
+	{	
+		bool bIsAllChildChecked = true;
+		bool bIsAllChildUncheck = true;
+		int nCount = GetCountChild();
+		if(nCount > 0)
+		{			
+			for(int nIndex = 0;nIndex < nCount;nIndex++)
+			{
+				CTreeNodeUI* pItem = GetChildNode(nIndex);
+				if(!pItem->GetCheckBox()->IsSelected())
+				{
+					bIsAllChildChecked = false;
+				}
+				else
+				{
+					bIsAllChildUncheck = false;
+				}
+			}			
+			if (bIsAllChildChecked && !GetCheckBox()->IsSelected())
+			{
+				GetCheckBox()->Selected(true);
+				return;
+			}
+			else if (bIsAllChildUncheck && GetCheckBox()->IsSelected())
+			{
+				GetCheckBox()->Selected(false);
+				return;
+			}
+
+		}
+
 	}
 
 	CStdPtrArray CTreeNodeUI::GetTreeNodes()
@@ -779,6 +812,10 @@ namespace UiLib
 			CCheckBoxUI* pCheckBox = (CCheckBoxUI*)pTNotifyUI->pSender;
 			CTreeNodeUI* pItem = (CTreeNodeUI*)pCheckBox->GetParent()->GetParent();
 			SetItemCheckBox(pCheckBox->GetCheck(),pItem);
+
+			if(pItem->GetParentNode() != NULL)  //edit by:Redrain  2014.12.11
+				pItem->GetParentNode()->IsAllChildChecked();
+
 			return true;
 		}
 		return false;
@@ -803,13 +840,14 @@ namespace UiLib
 		{
 			CTreeNodeUI* pItem		= static_cast<CTreeNodeUI*>(pTNotifyUI->pSender);
 			CCheckBoxUI* pFolder	= pItem->GetFolderButton();
-			pFolder->Selected(!pFolder->IsSelected());    //edit by:Redrain  2014.8.8
-			pItem->SetVisibleTag(pFolder->GetCheck());
-			SetItemExpand(pFolder->GetCheck(),pItem);
+			pFolder->Selected(!pFolder->IsSelected());    
+			//			pItem->SetVisibleTag(pFolder->GetCheck());		//edit by:Redrain  2014.11.12 这两行代码无用，pFolder->Selected(!pFolder->IsSelected()); 会触发OnFolderChanged函数，OnFolderChanged函数会执行这两行代码
+			//			SetItemExpand(pFolder->GetCheck(),pItem);
 			return true;
 		}
 		return false;
 	}
+
 
 	bool CTreeViewUI::SetItemCheckBox( bool _Selected,CTreeNodeUI* _TreeNode /*= NULL*/ )
 	{
