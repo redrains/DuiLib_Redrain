@@ -1,8 +1,10 @@
-2014.12.7
-为edit控件增加了nativetextcolor、tipvalue、tipvaluecolor属性
-
-2014-11-28
-修复弹出窗体中CEditUI和CWebBrowserUI无法切换焦点的bug
+2014-12-29
+更新了属性列表的Edit控件的passwordchar属性
+为Option控件增加selectedforeimage属性
+为button控件增加bindtablayoutname属性和bindtabindex属性
+修复treeview的动态添加子控件控件，子控件的初始显示状态不正确的bug
+修复treeview的复选框判断不完整的bug
+修复list控件横向滚动条在最小化、最大化时显示不正确的bug
 
 2014-11-4
 richedit 容器布局从Container改为HorizontalLayout，可以支持相对布局来完成richedit内嵌复杂的布局
