@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Static_Debug|Win32"
-			OutputDirectory="$(SolutionDir)\Common\$(ConfigurationName)_2008"
-			IntermediateDirectory="$(SolutionDir)\Temp\$(ProjectName)\$(ConfigurationName)_2008\"
+			OutputDirectory="..\dll\"
+			IntermediateDirectory="..\Temp\UiDebug_u\"
 			ConfigurationType="4"
 			CharacterSet="1"
 			>
@@ -79,13 +79,13 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy $(ProjectDir)*.h $(SolutionDir)\Common\Include\UiLib\ /E /S /Y /D&#x0D;&#x0A;xcopy $(ProjectDir)*.tlh $(SolutionDir)\Common\Include\UiLib\ /E /S /Y /D"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Static_Release|Win32"
-			OutputDirectory="$(SolutionDir)\Common\$(ConfigurationName)_2008"
-			IntermediateDirectory="$(SolutionDir)\Temp\$(ProjectName)\$(ConfigurationName)_2008\"
+			OutputDirectory="..\dll\"
+			IntermediateDirectory="..\Temp\UiDebug_u\"
 			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -143,13 +143,13 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy $(ProjectDir)*.h $(SolutionDir)\Common\Include\UiLib\ /E /S /Y /D&#x0D;&#x0A;xcopy $(ProjectDir)*.tlh $(SolutionDir)\Common\Include\UiLib\ /E /S /Y /D"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="DLL_Debug|Win32"
-			OutputDirectory="$(SolutionDir)\Common\$(ConfigurationName)_2008"
-			IntermediateDirectory="$(SolutionDir)\Temp\$(ProjectName)\$(ConfigurationName)_2008\"
+			OutputDirectory="..\dll2008\"
+			IntermediateDirectory="..\Temp\Ui2008_Debug_u\"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -178,6 +178,7 @@
 				EnableFunctionLevelLinking="true"
 				EnableEnhancedInstructionSet="0"
 				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile="..\Temp\Ui2008_Debug_u\$(TargetName).pch"
 				ProgramDataBaseFileName="$(OutDir)\$(ProjectName)_d.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
@@ -193,7 +194,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
+				OutputFile="../dll2008/UiLib_ud.dll"
+				ImportLibrary="../Lib2008/UiLib_ud.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -215,13 +217,13 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy $(ProjectDir)*.h $(SolutionDir)\Common\Include\UiLib\ /E /S /Y /D&#x0D;&#x0A;xcopy $(ProjectDir)*.tlh $(SolutionDir)\Common\Include\UiLib\ /E /S /Y /D"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="DLL_Release|Win32"
-			OutputDirectory="$(SolutionDir)\Common\$(ConfigurationName)_2008"
-			IntermediateDirectory="$(SolutionDir)\Temp\$(ProjectName)\$(ConfigurationName)_2008\"
+			OutputDirectory="..\dll2008\"
+			IntermediateDirectory="..\Temp\Ui2008_Release_u\"
 			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -247,8 +249,9 @@
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories=".\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;UILIB_EXPORTS"
-				RuntimeLibrary="3"
+				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile="..\Temp\Ui2008_Release_u\$(TargetName).pch"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -263,6 +266,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				OutputFile="../dll2008/UiLib_u.dll"
+				ImportLibrary="../Lib2008/UiLib_u.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -284,7 +289,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy $(ProjectDir)*.h $(SolutionDir)\Common\Include\UiLib\ /E /S /Y /D&#x0D;&#x0A;xcopy $(ProjectDir)*.tlh $(SolutionDir)\Common\Include\UiLib\ /E /S /Y /D"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
@@ -360,10 +365,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Control\UICalendar.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\Control\UIChartView.cpp"
 					>
 				</File>
@@ -377,6 +378,10 @@
 				</File>
 				<File
 					RelativePath=".\Control\UIComboBox.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Control\UIDateTime.cpp"
 					>
 				</File>
 				<File
@@ -409,10 +414,6 @@
 				</File>
 				<File
 					RelativePath=".\Control\UIProgress.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Control\UIRadioBox.cpp"
 					>
 				</File>
 				<File
@@ -484,6 +485,10 @@
 				Name="Layout"
 				>
 				<File
+					RelativePath=".\Layout\UIAnimationTabLayout.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Layout\UIChildLayout.cpp"
 					>
 				</File>
@@ -512,10 +517,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Utils\DuiReflection.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\Utils\DuiTrayIcon.cpp"
 					>
 				</File>
@@ -531,7 +532,6 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\"
 							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
@@ -548,7 +548,6 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\"
 							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
@@ -581,7 +580,6 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\"
 							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
@@ -598,7 +596,6 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\"
 							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
@@ -642,10 +639,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Control\UICalendar.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Control\UIChartView.h"
 					>
 				</File>
@@ -659,6 +652,10 @@
 				</File>
 				<File
 					RelativePath=".\Control\UIComboBox.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Control\UIDateTime.h"
 					>
 				</File>
 				<File
@@ -691,10 +688,6 @@
 				</File>
 				<File
 					RelativePath=".\Control\UIProgress.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Control\UIRadioBox.h"
 					>
 				</File>
 				<File
@@ -770,19 +763,15 @@
 				Name="Layout"
 				>
 				<File
+					RelativePath=".\Layout\UIAnimationTabLayout.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Layout\UIChildLayout.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Layout\UIFrameLayout.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Layout\UIHorizontalLayout.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Layout\UILinearLayout.h"
 					>
 				</File>
 				<File
@@ -814,11 +803,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Utils\DuiReflection.h"
+					RelativePath=".\Utils\DuiTrayIcon.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Utils\DuiTrayIcon.h"
+					RelativePath=".\Utils\FlashEventHandler.h"
 					>
 				</File>
 				<File
