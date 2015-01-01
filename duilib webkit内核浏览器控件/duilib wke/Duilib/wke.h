@@ -125,10 +125,10 @@ namespace wke
         virtual void addDirtyArea(int x, int y, int w, int h) = 0;
 
         virtual void layoutIfNeeded() = 0;
-        virtual void paint(void* bits, int pitch) = 0;
 		virtual void tick() = 0;
-		virtual void paint(HDC hdc,int x,int y,int cx,int cy,int xSrc,int ySrc,bool fKeepAlpha) = 0;
-
+        virtual void paint(void* bits, int pitch)=0;
+        virtual void paint(void* bits, int bufWid, int bufHei, int xDst, int yDst, int w, int h, int xSrc, int ySrc, bool bCopyAlpha)=0;
+        virtual HDC getViewDC() =0;
         virtual bool canGoBack() const = 0;
         virtual bool goBack() = 0;
         virtual bool canGoForward() const = 0;
@@ -264,7 +264,8 @@ WKE_API void wkeSetDirty(wkeWebView webView, bool dirty);
 WKE_API bool wkeIsDirty(wkeWebView webView);
 WKE_API void wkeAddDirtyArea(wkeWebView webView, int x, int y, int w, int h);
 WKE_API void wkeLayoutIfNeeded(wkeWebView webView);
-WKE_API void wkePaint(wkeWebView webView, void* bits, int pitch);
+WKE_API void wkePaint(wkeWebView webView, void* bits,int bufWid, int bufHei, int xDst, int yDst, int w, int h, int xSrc, int ySrc, bool bCopyAlpha);
+WKE_API void wkePaint2(wkeWebView webView, void* bits,int pitch);
 
 WKE_API bool wkeCanGoBack(wkeWebView webView);
 WKE_API bool wkeGoBack(wkeWebView webView);
