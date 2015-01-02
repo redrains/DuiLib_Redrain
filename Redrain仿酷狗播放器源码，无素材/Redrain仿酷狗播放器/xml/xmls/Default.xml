@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DefaultConfig>
+	<Font name="微软雅黑" size="13"/>
+    <Font name="微软雅黑" size="16"/>
+    <Font name="微软雅黑" size="22"/>
+    <Font name="微软雅黑" size="13" bold="true" />
+    <Default name="Label" value="textcolor=&quot;#FFFFFFFF&quot; autocalcwidth=&quot;true&quot;" />
+    <Default name="Button" value="textcolor=&quot;#FFFFFFFF&quot; autocalcwidth=&quot;true&quot;"/>
+    <Default name="VScrollBar" value="width=&quot;13&quot; button1normalimage=&quot;file='UI\LeftTab\listitem\vscroll_up_normal.png'&quot; button1hotimage=&quot;file='UI\LeftTab\listitem\vscroll_up_hover.png'&quot; button1pushedimage=&quot;file='UI\LeftTab\listitem\vscroll_up_down.png' &quot; button1disabledimage=&quot;file='UI\LeftTab\listitem\vscroll_up_disable.png'&quot; button2normalimage=&quot;file='UI\LeftTab\listitem\vscroll_down_normal.png'&quot; button2hotimage=&quot;file='UI\LeftTab\listitem\vscroll_down_hover.png'&quot; button2pushedimage=&quot;file='UI\LeftTab\listitem\vscroll_down_down.png'&quot; button2disabledimage=&quot;file='UI\LeftTab\listitem\vscroll_down_disable.png'&quot; thumbnormalimage=&quot;file='UI\LeftTab\listitem\thumb_normal.png' &quot; thumbhotimage=&quot;file='UI\LeftTab\listitem\thumb_hover.png' &quot; thumbpushedimage=&quot;file='UI\LeftTab\listitem\thumb_down.png' &quot; thumbdisabledimage=&quot;file='UI\LeftTab\listitem\thumb_disable.png' &quot;  bkcolor=&quot;#FF000000&quot;" />    
+</DefaultConfig>
+

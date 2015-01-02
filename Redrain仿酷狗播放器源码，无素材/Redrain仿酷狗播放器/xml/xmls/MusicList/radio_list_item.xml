@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+<RadioListItem menu="true" name="RadioItem" height="35" >
+    <TabLayout name="RadioListTab" selectedid="0" float="true" pos="0,0" width="310" height="35">
+        <HorizontalLayout >  <!-- normal  hover  down时的列表项 -->
+                <HorizontalLayout width="34">
+                	<Container padding="2,2,0,0" inset="3,3,3,3" width="30" height="30" bkimage="UI\LeftTab\radio\logo_bk.png">
+                		<Control name="logo_small" width="24" height="24" bkimage="UI\LeftTab\radio\logo_small1.png"/>
+                	</Container>    
+                </HorizontalLayout >
+                <HorizontalLayout childpadding="5,0,5,0">
+                    <Label name="RadioName" text="网络红歌" width="25" font="3" textpadding="0,0,0,0" textcolor="#FF505050" />
+                    <Control padding="0,0,5,0" padding="0,11,0,0" width="11" height="13" bkimage="UI\LeftTab\radio\notation.png" />
+               		<Label name="MusicName" text="Redrain测试音乐电台子项目" width="20" font="0" endellipsis="true" textcolor="#FF505050" />
+                </HorizontalLayout>           
+                <HorizontalLayout name="PlayListOperation1" width="60" visible="false" padding="0,5,0,0">
+                    <Button width="31" height="31" padding="5,0,0,0" normalimage="UI\LeftTab\radio\play_normal.png" hotimage="UI\LeftTab\radio\play_hover.png" pushedimage="UI\LeftTab\radio\play_down.png" />
+                    <Button float="true" pos="43,2,0,0" width="10" height="10" normalimage="UI\LeftTab\radio\close_normal.png" hotimage="UI\LeftTab\radio\close_hover.png" pushedimage="UI\LeftTab\radio\close_down.png" />
+                </HorizontalLayout>
+        </HorizontalLayout> 
+            
+        <HorizontalLayout> <!-- 双击时的列表项 height="100"-->
+        	<HorizontalLayout width="90" inset="5,10,5,10">
+                	<Control name="logo" width="80" height="80" bkimage="UI\LeftTab\radio\logo1.png"/>
+            </HorizontalLayout >
+            <VerticalLayout >
+                <HorizontalLayout height="45">
+	                    <VerticalLayout padding="0,5,0,0">
+		                    <Label name="MusicClass" text="新歌" width="20" height="20" endellipsis="true" font="3" />
+		                    <Label name="AudienceNum" text="8442人正在收听" width="20" height="20" endellipsis="true" font="0" textcolor="#FFD6F1FF"/>
+		                    <Control />
+	                    </VerticalLayout>
+	                    <HorizontalLayout name="PlayListOperation2" width="60" padding="0,5,0,0">
+		                    <Button width="31" height="31" padding="5,0,0,0" normalimage="UI\LeftTab\radio\play_normal.png" hotimage="UI\LeftTab\radio\play_hover.png" pushedimage="UI\LeftTab\radio\play_down.png" />
+                   			<Button float="true" pos="43,2,0,0" width="10" height="10" normalimage="UI\LeftTab\radio\close_normal.png" hotimage="UI\LeftTab\radio\close_hover.png" pushedimage="UI\LeftTab\radio\close_down.png" />
+		                </HorizontalLayout>
+                </HorizontalLayout>
+                <VerticalLayout >
+		                <HorizontalLayout height="20">
+		                    <Label name="MusicName2" text="Redrain测试音乐电台子项目" width="20" height="20" font="0" endellipsis="true" />
+		                </HorizontalLayout>
+	                    <HorizontalLayout name="PlayListExternOperation">
+	                        <Button width="26" height="22" padding="3,0,0,0" normalimage="UI\LeftTab\radio\delete_normal.png" hotimage="UI\LeftTab\radio\delete_hover.png" pushedimage="UI\LeftTab\radio\delete_down.png" />
+	                        <Button width="26" height="22" padding="3,0,0,0" normalimage="UI\LeftTab\radio\add_normal.png" hotimage="UI\LeftTab\radio\add_hover.png" pushedimage="UI\LeftTab\radio\add_down.png" />
+	                        <Button width="26" height="22" padding="3,0,0,0" normalimage="UI\LeftTab\radio\share_normal.png" hotimage="UI\LeftTab\radio\share_hover.png" pushedimage="UI\LeftTab\radio\share_down.png" />
+	                        <Button width="26" height="22" padding="3,0,0,0" normalimage="UI\LeftTab\radio\download_normal.png" hotimage="UI\LeftTab\radio\download_hover.png" pushedimage="UI\LeftTab\radio\download_down.png" />
+	                        <Control width="60" />
+	                        <Button width="26" height="22" padding="3,0,0,0" normalimage="UI\LeftTab\radio\expland_down_normal.png" hotimage="UI\LeftTab\radio\expland_down_hover.png" pushedimage="UI\LeftTab\radio\expland_down_down.png" />
+	                    </HorizontalLayout>
+                </VerticalLayout>
+            </VerticalLayout>
+        </HorizontalLayout>
+    </TabLayout>
+</RadioListItem>
+</Window>

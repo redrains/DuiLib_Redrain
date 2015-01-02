@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="255,114" bktrans="true" >
+<VerticalLayout  bkcolor="#00FFFFFF" inset="14,14,0,0" bkimage="file='UI\LeftTab\listitem\PopupInfoWndBK.png' corner='10,10,10,10'" >
+	<HorizontalLayout height="65">
+		<Control name="Music_Info_Logo" width="52" height="52" />
+		<VerticalLayout inset="10,0,0,0">
+			<Label name="Music_Info_MusicName" endellipsis="true" height="18" width="160" />
+			<HorizontalLayout height="18" >
+				<Label name="Music_Info_MusicSize" width="85" />
+				<Label name="Music_Info_MusicFormat" width="85"/>
+			</HorizontalLayout>
+			<HorizontalLayout height="18" >
+				<Label name="Music_Info_MusicQuality" text="音质:标准" width="85" />
+				<Label name="Music_Info_MusicNum" width="85"/>
+			</HorizontalLayout>
+		</VerticalLayout>
+	</HorizontalLayout>
+	<Control width="225" height="1" bkcolor="#66EBEBEB" />
+	<Label text="来源:本地资源" width="100" height="30" textcolor="#FF666666" /> 	
+
+</VerticalLayout>
+</Window>

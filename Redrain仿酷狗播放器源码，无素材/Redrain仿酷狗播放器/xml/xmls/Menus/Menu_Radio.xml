@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window >
+  <Font name="微软雅黑" size="12" bold="false" default="true" />
+  <Font name="微软雅黑" size="12" bold="true"/>
+  <Default name="Menu" value="bordersize=&quot;1&quot; bordercolor=&quot;#FFB5B5B5&quot; inset=&quot;3,4,3,4&quot; itemtextpadding=&quot;35,0,0,0&quot; bkcolor=&quot;#FFFFFFFE&quot; itemselectedbkcolor=&quot;#FFB5B5B5&quot;" />
+  <Default name="ExplandIcon" value="UI\menu\menu_expand.png" />
+  <Menu >
+  		<MenuElement name="Menu_Radio_Play" text="播放" width="180" />
+  		<MenuElement name="Menu_Radio_Next" text="下一首" />
+  		<MenuElement name="Menu_Radio_Download" text="下载更多音质" />
+	    <MenuElement text="添加到列表" icon="UI\menu\list\Add.png" iconsize="23,23" expland="true" >
+	    	<MenuElement name="" height="25" enabled="false" >
+		       	 <Label text="本地列表—————" textcolor="#FFB5B5B5" textpadding="10,0,0,0" valign="bottom" font="0" /> 
+		     </MenuElement> 
+	     	 <MenuElement name="" text="默认列表" height="25"  />
+	     	 <MenuElement name="" height="25" enabled="false" >
+		       	 <Label text="我的收藏—————" textcolor="#FFB5B5B5" textpadding="10,0,0,0" valign="bottom" font="0" /> 
+		     </MenuElement> 
+	     	 <MenuElement name="" text="默认收藏" height="30"  />
+	    </MenuElement>
+	    <MenuElement type="line" />
+
+  		<MenuElement name="Menu_Radio_Desktop" text="生成桌面快捷方式" />
+  		<MenuElement name="Menu_Radio_Delete" text="删除电台" />
+   </Menu>
+</Window>

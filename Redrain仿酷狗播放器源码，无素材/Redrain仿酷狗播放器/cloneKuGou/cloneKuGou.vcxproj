@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8ECC920A-063A-4D39-BCD3-EDF471BDE4A8}</ProjectGuid>
+    <RootNamespace>cloneKuGou</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>cloneKuGou</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\xml\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\xml\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Redrain音乐盒</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Redrain音乐盒_d</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>../Uilib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <OutputFile>..\xml\Redrain音乐盒_d.exe</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>../Uilib;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <OutputFile>..\xml\Redrain音乐盒.exe</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Controls\PopupWidget.cpp" />
+    <ClCompile Include="Controls\SkinPickerPictureItem.cpp" />
+    <ClCompile Include="Controls\UIColorPalette.cpp" />
+    <ClCompile Include="Controls\UIHotButton.cpp" />
+    <ClCompile Include="Controls\UIMenu.cpp" />
+    <ClCompile Include="Controls\UIMusicList.cpp" />
+    <ClCompile Include="Controls\UIRadioList.cpp" />
+    <ClCompile Include="DropTargetEx.cpp" />
+    <ClCompile Include="FrameWnd.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MessageDialog.cpp" />
+    <ClCompile Include="MusicInfoDialog.cpp" />
+    <ClCompile Include="PalletDialog.cpp" />
+    <ClCompile Include="SettingDialog.cpp" />
+    <ClCompile Include="SkinPickerDialog.cpp" />
+    <ClCompile Include="Utils\FileUtil.cpp" />
+    <ClCompile Include="Utils\WndShadow.cpp" />
+    <ClCompile Include="wke\WkeWebkit.cpp" />
+    <ClCompile Include="zplay\MusicPlayer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Controls\PopupWidget.h" />
+    <ClInclude Include="Controls\SkinPickerPictureItem.h" />
+    <ClInclude Include="Controls\UIColorPalette.h" />
+    <ClInclude Include="Controls\UIHotButton.h" />
+    <ClInclude Include="Controls\UIMenu.h" />
+    <ClInclude Include="Controls\UIMusicList.h" />
+    <ClInclude Include="Controls\UIRadioList.h" />
+    <ClInclude Include="DropTargetEx.h" />
+    <ClInclude Include="duilib.h" />
+    <ClInclude Include="FrameWnd.h" />
+    <ClInclude Include="MessageDialog.h" />
+    <ClInclude Include="MusicInfoDialog.h" />
+    <ClInclude Include="PalletDialog.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="SettingDialog.h" />
+    <ClInclude Include="SkinPickerDialog.h" />
+    <ClInclude Include="Utils\FileUtil.h" />
+    <ClInclude Include="Utils\WndShadow.h" />
+    <ClInclude Include="ControlNames.h" />
+    <ClInclude Include="wke\wke.h" />
+    <ClInclude Include="wke\WkeWebkit.h" />
+    <ClInclude Include="zplay\libzplay.h" />
+    <ClInclude Include="zplay\MusicPlayer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Duilib.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="duilib.ico" />
+    <None Include="ico16.ico" />
+    <None Include="ico24.ico" />
+    <None Include="ico72.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UiLib\UiLib.vcxproj">
+      <Project>{8f14dea1-be9f-4f17-a5e5-15b4191200ef}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

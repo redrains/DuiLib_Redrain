@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window >
+  <Font name="微软雅黑" size="12" bold="false" default="true" />
+  <Font name="微软雅黑" size="12" bold="true"/>
+  <Default name="Menu" value="bordersize=&quot;1&quot; bordercolor=&quot;#FFB5B5B5&quot; inset=&quot;3,4,3,4&quot; itemtextpadding=&quot;35,0,0,0&quot; bkcolor=&quot;#FFFFFFFE&quot; itemselectedbkcolor=&quot;#FFB5B5B5&quot;" />
+  <Default name="ExplandIcon" value="UI\menu\menu_expand.png" />
+  <Menu >
+  		<MenuElement name="Menu_list_Login" text="新建列表" width="180" icon="UI\menu\list\Add.png" iconsize="23,23" />
+  		<MenuElement type="line" />
+
+	    <MenuElement text="添加歌曲" expland="true" >
+	     	 <MenuElement name="" text="添加本地歌曲..." width="180"/>
+	     	 <MenuElement name="" text="添加本地歌曲文件夹..." />
+	    </MenuElement>
+
+  		<MenuElement name="Menu_list_Clock" text="下载本地列表所有歌曲" />
+
+	    <MenuElement text="排序" expland="true" >
+	     	 <MenuElement name="" text="按文件名"  width="180" icon="UI\menu\Yes.png" iconsize="23,23" />
+	     	 <MenuElement name="" text="按歌手" />
+	     	 <MenuElement name="" text="按添加时间" />
+	     	 <MenuElement name="" text="按播放次数" />
+	     	 <MenuElement name="" text="按是否已下载" />
+	     	 <MenuElement name="" text="随机排序" />
+	    </MenuElement> 
+	    <MenuElement name="Menu_list_Mv"  text="匹配MV" icon="UI\menu\list\Mv.png" iconsize="23,23" />
+		<MenuElement name="Menu_list_Collect"  text="收藏整个列表" icon="UI\menu\list\Collect.png" iconsize="23,23" />
+		<MenuElement name="Menu_list_Emport"  text="导出列表"  />
+  		<MenuElement name="Menu_list_Import"  text="导入列表" />
+
+		<MenuElement type="line" />
+  		<MenuElement name="Menu_list_DeleteList" text="删除列表" />
+  		<MenuElement name="Menu_list_Rename" text="重命名" />
+
+ 	</Menu>
+</Window>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="1000,670" sizebox="4,4,4,4" caption="0,0,0,115" mininfo="960,670" roundcorner="6,6" bktrans="false" trayiconid="102" traytiptext="Redrain 音乐盒 测试版1.0" >
+    <Include source="xmls\Default.xml" /> 
+    <VerticalLayout name="background" bkimage="UI\BKImage\2.jpg" bkcolor="#FF01ECFD" bordercolor="#FF47484B" bordersize="1" inset="1,1,1,1"  >
+
+        <HorizontalLayout name="MainWndTitle" height="115"><!-- 标题栏 -->
+            <VerticalLayout name="TitleLeft" width="365" inset="15,0,10,0">
+            	<HorizontalLayout height="35">
+            		<Label name="Lbl_Main_Title" text="Redrain 音乐盒 测试版1.0" width="250" endellipsis="true" autocalcwidth="false"/>
+                    <Control />
+                    <HorizontalLayout name="Main_Show_Right" width="75" height="21" bkimage="file='UI\title\Hide_bk.png' corner='30,0,0,0'" visible="false">
+                        <Button name="Btn_Main_ShowRight" width="23" height="18" padding="7,2,0,0" normalimage="UI\title\show_normal.png" hotimage="UI\title\show_hover.png" pushedimage="UI\title\show_down.png" />
+                        <Button name="minbtn" width="23" height="18" padding="0,2,0,0" normalimage="UI\title\min_normal.png" hotimage="UI\title\min_hover.png" pushedimage="UI\title\min_down.png" />
+                        <Button name="closebtn" width="23" height="18" padding="0,2,0,0" normalimage="UI\title\close_normal.png" hotimage="UI\title\close_hover.png" pushedimage="UI\title\close_down.png" />
+                    </HorizontalLayout>
+            	</HorizontalLayout>
+            	<HorizontalLayout height="15">
+            		<Slider name="slider_play_process" width="332" height="13" bkimage="UI\music_control\slider_bk.png" foreimage="UI\music_control\slider_fore.png" min="0" max="100" value="0" thumbimage="UI\music_control\SliderBar_normal.png" thumbhotimage="UI\music_control\SliderBar_hover.png" thumbpushedimage="UI\music_control\SliderBar_down.png" thumbsize="13,13" />
+            	</HorizontalLayout>
+                <HorizontalLayout height="10" >
+                	<Label name="lbl_play_time" text="00:00" width="10"/>
+                	<Control />
+                	<Label name="lbl_total_time" text="00:00" align="left" autocalcwidth="false" width="35"/>
+            	</HorizontalLayout>
+            	<HorizontalLayout  >
+            		<Button name="btn_music_lrc" width="23" height="23" padding="0,14,0,0" normalimage="UI\music_control\lrc_hide_normal.png" hotimage="UI\music_control\lrc_hide_hover.png" pushedimage="UI\music_control\lrc_hide_down.png" />
+            		<Button width="23" height="23" padding="0,14,0,0" normalimage="UI\music_control\lrc_show_normal.png" hotimage="UI\music_control\lrc_show_hover.png" pushedimage="UI\music_control\lrc_show_down.png" visible="false"/>
+            		<Button name="btn_music_loop" width="29" height="26" padding="8,13,0,0" normalimage="file='UI\music_control\repeat_normal.png' source='87,0,116,26'" hotimage="file='UI\music_control\repeat_hover.png' source='87,0,116,26'"  pushedimage="file='UI\music_control\repeat_down.png' source='87,0,116,26'"  />
+            		<Button name="btn_music_prev" width="49" height="49" padding="20,2,0,0" normalimage="UI\music_control\left_normal.png" hotimage="UI\music_control\left_hover.png" pushedimage="UI\music_control\left_down.png" />
+            		<Button name="btn_music_play" width="49" height="49" padding="0,2,0,0" normalimage="UI\music_control\play_normal.png" hotimage="UI\music_control\play_hover.png" pushedimage="UI\music_control\play_down.png" />
+            		<Button name="btn_music_pause" width="49" height="49" padding="0,2,0,0" normalimage="UI\music_control\pause_normal.png" hotimage="UI\music_control\pause_hover.png" pushedimage="UI\music_control\pause_down.png" visible="false"/>
+            		<Button name="btn_music_next" width="49" height="49" padding="0,2,0,0" normalimage="UI\music_control\right_normal.png" hotimage="UI\music_control\right_hover.png" pushedimage="UI\music_control\right_down.png" />
+            		<HotButton name="btn_music_volume" width="29" height="26" padding="15,13,0,0" normalimage="file='UI\music_control\sound_normal.png' source='87,0,116,26'" hotimage="file='UI\music_control\sound_hover.png' source='87,0,116,26'"  pushedimage="file='UI\music_control\sound_down.png' source='87,0,116,26'"  />
+            		<Button width="48" height="19" padding="8,18,0,0" normalimage="UI\music_control\nicam_uncheck_normal.png" hotimage="UI\music_control\nicam_uncheck_hover.png" pushedimage="UI\music_control\nicam_uncheck_down.png" /> 
+            		<Button width="48" height="19" padding="8,18,0,0" normalimage="UI\music_control\nicam_check_normal.png" hotimage="UI\music_control\nicam_check_hover.png" pushedimage="UI\music_control\nicam_check_down.png" visible="false"/> 
+            	</HorizontalLayout>
+            </VerticalLayout>
+        	<VerticalLayout name="Main_Title_Right" >
+        		<HorizontalLayout height="39" >
+        			<Control width="20"/>
+	        		<HorizontalLayout bkimage="file='UI\title\bk.png' corner='30,0,0,0'">
+	        			<HorizontalLayout >
+		        			<Control width="30" />
+		        			<Button text="登陆" width="25" />
+		        			<Label text="|" width="10" padding="5,0,5,0"/>
+		        			<Button text="注册" width="25"/>
+		        			<Button width="29" height="29" padding="8,4,0,0" bkimage="UI\title\logo.png" />
+		        			<HorizontalLayout padding="20,5,0,0">	
+		        			<!-- <Edit name="Edt_Title_Search" text="张学友 童真年代" tipvalue="张学友 童真年代" tipvaluecolor="#646464" height="27" textpadding="9,5,33,5" textcolor="#646464" bkimage="UI\title\edit.png" bkcolor="#FF000000" nativebkcolor="#FFFFFFFF" trans="false" />		
+		        			<Button name="Btn_Title_Search" float="true" pos="170,0,0,0" relativepos="100,0,0,0" width="33" height="27" normalimage="UI\title\search_normal.png" hotimage="UI\title\search_hover.png" pushedimage="UI\title\search_down.png" />	  -->           
+					            <RichEdit name="Edt_Title_Search" rich="false" multiline="false" font="0" text="张学友 童真年代" height="27" textpadding="9,3,35,5" textcolor="#646464" bkcolor="#00FFFFFF" bkimage="UI\title\edit.png" >
+					            	<Control height="1"/>
+					            	<Button name="Btn_Title_Search" width="33" height="27" normalimage="UI\title\search_normal.png" hotimage="UI\title\search_hover.png" pushedimage="UI\title\search_down.png" />
+					            </RichEdit>					            
+					        </HorizontalLayout>
+				        </HorizontalLayout>
+				        <HorizontalLayout width="220" padding="0,0,8,0">
+					        <Control width="60"/>
+					        <Button name="Btn_Title_SkinPicker" width="23" height="18" padding="0,10,0,0" normalimage="UI\title\skin_normal.png" hotimage="UI\title\skin_hover.png" pushedimage="UI\title\skin_down.png" />
+					        <Control width="1" height="18" padding="9,10,0,0" bkimage="UI\title\separate_line.png" />
+					        <Button name="Menu_Main_Settings" width="23" height="18" padding="9,10,0,0" normalimage="UI\title\menu_normal.png" hotimage="UI\title\menu_hover.png" pushedimage="UI\title\menu_down.png" />
+					        <Button name="Btn_Main_HideRight" width="23" height="18" padding="3,10,0,0" normalimage="UI\title\hide_normal.png" hotimage="UI\title\hide_hover.png" pushedimage="UI\title\hide_down.png" />
+					        <Button name="Btn_Title_Remote" width="23" height="18" padding="3,10,0,0" normalimage="UI\title\remote_normal.png" hotimage="UI\title\remote_hover.png" pushedimage="UI\title\remote_down.png" />
+		        			<Button name="minbtn" width="23" height="18" padding="0,10,0,0" normalimage="UI\title\min_normal.png" hotimage="UI\title\min_hover.png" pushedimage="UI\title\min_down.png" />
+		           			<Button name="closebtn" width="23" height="18" padding="0,10,0,0" normalimage="UI\title\close_normal.png" hotimage="UI\title\close_hover.png" pushedimage="UI\title\close_down.png" />
+		           		</HorizontalLayout>
+	        		</HorizontalLayout>
+        		</HorizontalLayout>
+        		<HorizontalLayout inset="35,16,0,10" >
+							<Button name="Btn_Goback" width="34" height="50" normalimage="UI\tab\back_normal.png" hotimage="UI\tab\back_hover.png" pushedimage="UI\tab\back_down.png" disabledimage="UI\tab\back_disable.png"/>
+							<Button name="Btn_Refresh" width="34" height="50" padding="10,0,0,0" normalimage="UI\tab\refresh_normal.png" hotimage="UI\tab\refresh_hover.png" pushedimage="UI\tab\refresh_down.png" />
+							<Option name="TopTabMusic" width="80" height="50" padding="25,0,0,0" normalimage="UI\tab\music_normal.png" hotimage="UI\tab\music_hover.png" pushedimage="UI\tab\music_down.png"  group="TitleTab" selectedimage="UI\tab\music_down.png" selected="true" />
+							<Option name="TopTabRadio" width="80" height="50" padding="15,0,0,0" normalimage="UI\tab\radio_normal.png" hotimage="UI\tab\radio_hover.png" pushedimage="UI\tab\radio_down.png"  group="TitleTab" selectedimage="UI\tab\radio_down.png" />
+							<Option name="TopTabMv" width="80" height="50" padding="15,0,0,0" normalimage="UI\tab\mv_normal.png" hotimage="UI\tab\mv_hover.png" pushedimage="UI\tab\mv_down.png"  group="TitleTab" selectedimage="UI\tab\mv_down.png" />
+							<Option name="TopTabLive" width="80" height="50" padding="15,0,0,0" normalimage="UI\tab\live_normal.png" hotimage="UI\tab\live_hover.png" pushedimage="UI\tab\live_down.png"  group="TitleTab" selectedimage="UI\tab\live_down.png" />
+							<Option name="TopTabLrc" width="80" height="50" padding="15,0,0,0" normalimage="UI\tab\lrc_normal.png" hotimage="UI\tab\lrc_hover.png" pushedimage="UI\tab\lrc_down.png"  group="TitleTab" selectedimage="UI\tab\lrc_down.png" />	
+        		</HorizontalLayout> 
+        	</VerticalLayout>                              
+        </HorizontalLayout>
+        <HorizontalLayout ><!-- 主体 -->
+            <VerticalLayout name="LeftTabBk" width="45" bkimage="UI\LeftTab\left_tab_normal.png" >
+            	<Option name="LeftTabMusic" width="46" height="62" normalimage="UI\LeftTab\music_normal.png" hotimage="UI\LeftTab\music_hover.png" pushedimage="UI\LeftTab\music_down.png"  group="LeftTab" selectedimage="UI\LeftTab\music_down.png"  selected="true" tooltip="本地列表"/>
+            	<Option name="LeftTabFavorite" width="46" height="62" normalimage="UI\LeftTab\favorite_normal.png" hotimage="UI\LeftTab\favorite_hover.png" pushedimage="UI\LeftTab\favorite_down.png"  group="LeftTab" selectedimage="UI\LeftTab\favorite_down.png" tooltip="网络收藏" />
+            	<Option name="LeftTabRadio" width="46" height="62" normalimage="UI\LeftTab\radio_normal.png" hotimage="UI\LeftTab\radio_hover.png" pushedimage="UI\LeftTab\radio_down.png"  group="LeftTab" selectedimage="UI\LeftTab\radio_down.png"  tooltip="音乐电台"/>
+            	<Option name="LeftTabLocal" width="46" height="62" normalimage="UI\LeftTab\location_normal.png" hotimage="UI\LeftTab\location_hover.png" pushedimage="UI\LeftTab\location_down.png"  group="LeftTab" selectedimage="UI\LeftTab\location_down.png" tooltip="附近" />
+            	<Option name="LeftTabTemp" width="46" height="62" normalimage="UI\LeftTab\temp_normal.png" hotimage="UI\LeftTab\temp_hover.png" pushedimage="UI\LeftTab\temp_down.png"  group="LeftTab" selectedimage="UI\LeftTab\temp_down.png" tooltip="临时播" />
+            	<Option name="LeftTabDownload" width="46" height="62" normalimage="UI\LeftTab\download_normal.png" hotimage="UI\LeftTab\download_hover.png" pushedimage="UI\LeftTab\download_down.png"  group="LeftTab" selectedimage="UI\LeftTab\download_down.png" tooltip="我的下载" />
+            	<Option name="LeftTabMore" width="46" height="62" normalimage="UI\LeftTab\more_normal.png" hotimage="UI\LeftTab\more_hover.png" pushedimage="UI\LeftTab\more_down.png"  group="LeftTab" selectedimage="UI\LeftTab\more_down.png" tooltip="更多" />
+            </VerticalLayout>
+            <VerticalLayout width="310">
+            	<VerticalLayout name="LeftTabListBk"  bkimage="file='UI\LeftTab\List_bk.png' fade='180'" >
+            	<AnimationTabLayout name="LeftTab" selectedid="0" ><!-- 默认动画效果 -->
+            		<VerticalLayout ><!-- 播放列表 -->
+	            		<MusicList name="MusicList" vscrollbar="true" itemhotimage="file='UI\LeftTab\listitem\ListBk.png' fade='25' " itemselectedimage="file='UI\LeftTab\listitem\ListBk.png' fade='55' " itemdisabledimage="file='UI\LeftTab\listitem\ListBk.png' fade='105'" itembkcolor="#00000000" itemdisabledbkcolor="#FFD5D1CC" itemhotbkcolor="#00000000" itemselectedbkcolor="#00000000" menu="true" >
+                        </MusicList>  
+		       		</VerticalLayout >
+		       		<VerticalLayout ><!-- 收藏 -->
+	            		<MusicList name="Favorite" height="30" vscrollbar="true" itemhotimage="UI\LeftTab\listitem\item_bk_hover.png" itemselectedimage="UI\LeftTab\listitem\item_bk_down.png" itemdisabledbkcolor="#00FFFFFF" menu="true">
+	            			<TreeNode inset="5,0,0,0" text="未登录" height="28" mouse="false" itemattr="valign=&quot;vcenter&quot; textpadding=&quot;5,0,0,0&quot; font=&quot;3&quot;" folderattr="padding=&quot;0,8,0,0&quot; width=&quot;16&quot; height=&quot;12&quot; selectedimage=&quot;UI\LeftTab\listitem\expland_down.png&quot; normalimage=&quot;UI\LeftTab\listitem\expland_normal.png&quot;"/>
+                        </MusicList> 
+                        <VerticalLayout name="FavoriteTipInfo" inset="20,0,0,0">
+                        	<Control width="262" height="237" bkimage="UI\LeftTab\favorite\TipInfo.png" />
+                        	<Button width="100" height="29" text="立即登录" textcolor="#FF000000" padding="75,0,0,0" normalimage="file='UI\button\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\button\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\button\button_down.png' corner='5,5,5,5'" />
+                        	<HorizontalLayout height="40" inset="0,5,0,0">
+	                        	<Label height="29" text="还没有帐号？" textcolor="#FF000000" font="0" padding="75,0,0,0" />
+	                        	<Text  height="29" text="注册" font="0" textcolor="#FF408cFF" padding="0,5,0,0" />
+                      		</HorizontalLayout>
+                        </VerticalLayout >
+		       		</VerticalLayout >
+		       		<VerticalLayout ><!-- 电台 --> 
+	            		<MusicList name="RadioList" vscrollbar="true" itemhotimage="file='UI\LeftTab\listitem\ListBk.png' fade='15' " itemselectedimage="file='UI\LeftTab\listitem\ListBk.png' fade='45' " itemdisabledimage="file='UI\LeftTab\listitem\ListBk.png' fade='65'" itembkcolor="#00000000" itemdisabledbkcolor="#FFD5D1CC" itemhotbkcolor="#00000000" itemselectedbkcolor="#00000000" itemlinecolor="#FFCCCCCC" menu="true">
+	            			<TreeNode name="RadioGroup" inset="5,0,0,0" text="随机播放一个电台" height="28" itemattr="valign=&quot;vcenter&quot; textpadding=&quot;5,0,0,0&quot; font=&quot;0&quot;" folderattr="padding=&quot;0,6,0,0&quot; width=&quot;23&quot; height=&quot;16&quot; selectedimage=&quot;UI\LeftTab\radio\rand.png&quot; normalimage=&quot;UI\LeftTab\radio\rand.png&quot;" />
+	            			<TreeNode height="28" itemattr="visible=&quot;false&quot;" folderattr="visible=&quot;false&quot;">
+	            				<HorizontalLayout float="true" pos="0,0,0,0" width="310" height="28">
+		            				<Control name="groupMenu" width="23" height="23" padding="90,3,0,0" bkimage="UI\LeftTab\radio\add_item.png" />
+	      							<Button  text="添加更多电台" width="80" height="28" textcolor="#FF000000" font="0" />
+	            				</HorizontalLayout>
+	            			</TreeNode>
+                        </MusicList> 
+		       		</VerticalLayout >
+		       		<VerticalLayout ><!-- 附近 -->
+	            		<MusicList name="Location" height="30" vscrollbar="true" itemhotimage="UI\LeftTab\listitem\item_bk_hover.png" itemselectedimage="UI\LeftTab\listitem\item_bk_down.png" itemdisabledbkcolor="#00FFFFFF" menu="true">
+	            			<TreeNode inset="8,0,0,0" text="标记我的位置" height="30" mouse="false" itemattr="valign=&quot;vcenter&quot; textpadding=&quot;8,0,0,0&quot; font=&quot;3&quot;" folderattr="padding=&quot;0,6,0,0&quot; width=&quot;13&quot; height=&quot;18&quot; normalimage=&quot;UI\LeftTab\location\location.png&quot; mouse=&quot;false&quot;">  
+						        <Button name="groupMenu" width="26" height="22" padding="3,3,0,0" normalimage="UI\LeftTab\listitem\menu_normal.png" hotimage="UI\LeftTab\listitem\menu_hover.png" pushedimage="UI\LeftTab\listitem\menu_down.png" />
+						        <Control width="25" />                       
+						    </TreeNode>
+                        </MusicList> 
+                        <VerticalLayout name="LocationTipInfo" >
+                        	<Control height="1" bkimage="UI\LeftTab\location\sep.png" />
+                        	<Control width="310" height="234" bkimage="UI\LeftTab\location\TipInfo.png" />
+                        	<Button width="137" height="40" textcolor="#FF000000" padding="85,40,0,0" normalimage="UI\LeftTab\location\button_normal.png" hotimage="UI\LeftTab\location\button_hover.png" pushedimage="UI\LeftTab\location\button_down.png" />
+                        </VerticalLayout >
+		       		</VerticalLayout >
+		       		<VerticalLayout ><!-- 临时 -->
+	            		<HorizontalLayout height="30" bkimage="UI\LeftTab\List_bk.png">  
+	            			<Label text="优先用临时播试听" padding="10,0,0,0" font="0" textcolor="#FF000000" height="30" /> 
+						    <Option width="43" height="18" padding="5,6,0,0" normalimage="UI\LeftTab\temp\open_normal.png" hotimage="UI\LeftTab\temp\open_hover.png" pushedimage="UI\LeftTab\temp\open_down.png" selectedimage="UI\LeftTab\temp\close_normal.png"  />						                         
+						</HorizontalLayout>
+						<Control width="266" height="219" padding="22,40,0,0" bkimage="UI\LeftTab\temp\TipInfo.png" />
+		       		</VerticalLayout >
+		       		<VerticalLayout ><!-- 下载 -->
+	            		<MusicList name="DownloadList" vscrollbar="true" itemhotimage="file='UI\LeftTab\listitem\ListBk.png' fade='25' " itemselectedimage="file='UI\LeftTab\listitem\ListBk.png' fade='55' " itemdisabledimage="file='UI\LeftTab\listitem\ListBk.png' fade='105'" itembkcolor="#00000000" itemdisabledbkcolor="#FFD5D1CC" itemhotbkcolor="#00000000" itemselectedbkcolor="#00000000" menu="true">
+                        </MusicList>  
+		       		</VerticalLayout >
+		       		<VerticalLayout ><!-- 更多 -->
+	            		<TileLayout name="MoreList" columns="3" >
+                        </TileLayout>
+		       		</VerticalLayout >
+            	</AnimationTabLayout>
+            	</VerticalLayout>
+            </VerticalLayout>
+            <Control width="1" />
+            <VerticalLayout name="Main_Music_Bank" inset="0,0,2,0">  <!-- 主界面最右侧 -->
+            	<TabLayout name="TopTab" selectedid="0" bkimage="UI\LeftTab\List_bk.png">
+            		<wkeWebkit name="ie" bkcolor="#FFFFFFFF" visible="true" />
+            		<VerticalLayout >
+            		</VerticalLayout >
+	            </TabLayout>
+            </VerticalLayout>	            
+        </HorizontalLayout> 
+        <HorizontalLayout name="Main_Status" height="30" inset="77,0,0,0" bkimage="UI\statusbar\status_bk.png"><!-- 状态栏 -->
+            <Button name="btn_add_music" width="31" height="30" padding="0,0,0,0" normalimage="UI\statusbar\add_normal.png" hotimage="UI\statusbar\add_hover.png" pushedimage="UI\statusbar\add_down.png" />
+            <Button width="31" height="30" padding="40,0,0,0" normalimage="UI\statusbar\locate_normal.png" hotimage="UI\statusbar\locate_hover.png" pushedimage="UI\statusbar\locate_down.png" />
+            <Button width="31" height="30" padding="40,0,0,0" normalimage="UI\statusbar\search_normal.png" hotimage="UI\statusbar\search_hover.png" pushedimage="UI\statusbar\search_down.png" />
+            <Button width="31" height="30" padding="40,0,0,0" normalimage="UI\statusbar\setting_normal.png" hotimage="UI\statusbar\setting_hover.png" pushedimage="UI\statusbar\setting_down.png" name="MusicItem" menu="true" />
+   			<Control />
+            <Label name="lbl_Main_Bottom_Info" text="Redrain仿酷狗音乐盒^_^~~  QQ:491646717  2014.9.9" textpadding="0,2,0,0" width="30" font="0" />
+            <Control float="true" pos="990,19,0,0" width="7" height="7" relativepos="100,100,0,0" bkimage="UI\sizebox.png" />
+        </HorizontalLayout>
+    </VerticalLayout>
+
+</Window>

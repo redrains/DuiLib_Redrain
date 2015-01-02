@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="355,166" caption="0,0,0,126" minsize="355,166"> 
+  <Font name="微软雅黑" size="13" default="true"/>
+  <VerticalLayout  bordercolor="#FF47484B" bordersize="1" inset="1,1,1,1">
+      <HorizontalLayout name="background" height="30" bkimage="file='UI\BKImage\4.jpg' source='0,0,1000,30'" ><!-- 标题栏 -->
+          <Label name="caption" text="提示" textcolor="#FFFFFFFF" textpadding="5,0,0,0" font="1" autocalcwidth="false" width="300"/>
+          <Control />
+          <Button name="closebtn" width="23" height="18" padding="0,6,0,0" normalimage="UI\title\close_normal.png" hotimage="UI\title\close_hover.png" pushedimage="UI\title\close_down.png" />                     
+      </HorizontalLayout>
+  
+      <VerticalLayout name="TextLayout" bkcolor="#FFFFFFFF" > 
+          <Text name="text" align="center" padding="0,45,0,0" />      
+          <HorizontalLayout childpadding="10" padding="0,35,0,0" height="36" >
+          	  <Control />
+              <Button name="closebtn" width="75" height="28" normalimage="file='UI\MessageDialog\Ok_normal.png' corner='5,5,5,5'" hotimage="file='UI\MessageDialog\Ok_hover.png' corner='5,5,5,5'" pushedimage="file='UI\MessageDialog\Ok_down.png' corner='5,5,5,5'" text="确定" /> 
+              <Button name="cancelbtn" width="75" height="28" normalimage="file='UI\MessageDialog\Cancel_normal.png' corner='5,5,5,5'" hotimage="file='UI\MessageDialog\Cancel_hover.png' corner='5,5,5,5'" pushedimage="file='UI\MessageDialog\Cancel_down.png' corner='5,5,5,5'" text="取消" />   
+              <Control width="1" /> 
+          </HorizontalLayout >     
+      </VerticalLayout >   
+  </VerticalLayout >  
+</Window>
+
+ 

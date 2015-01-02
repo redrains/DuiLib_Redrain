@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+<MusicListItem name="MusicItem" menu="true" height="28" padding="15,0,0,0" >
+    <TabLayout name="PlayListTab" selectedid="0" float="true" pos="0,0" width="284" height="28">
+
+        <HorizontalLayout >  <!-- normal  hover  down时的列表项 -->
+
+                <HorizontalLayout>
+                    <Button name="PlayListPlay" width="26" height="22" visible="false" padding="0,3,0,0" normalimage="UI\LeftTab\listitem\play_normal.png" hotimage="UI\LeftTab\listitem\play_hover.png" pushedimage="UI\LeftTab\listitem\play_down.png" />
+                    <Label name="MusicIndex" text="00" bordersize="0" width="30" autocalcwidth="false" textpadding="10,0,0,0" textcolor="#FF505050" />
+                    <Label name="MusicName"  autocalcwidth="false" bordersize="0" width="200" textcolor="#FF505050" endellipsis="true" />
+                </HorizontalLayout >
+
+                <TabLayout name="PlayListControlButtonTab" width="90" selectedid="0">   
+                    <HorizontalLayout>
+                        <Control />
+                        <Label name="MusicLength" padding="0,0,5,0" bordersize="0" width="70" textcolor="#FF505050"/>
+                    </HorizontalLayout>           
+                    <HorizontalLayout name="PlayListOperation" height="25" padding="0,3,0,0">
+                        <Button width="26" height="22" padding="6,0,0,0" normalimage="UI\LeftTab\listitem\temp_normal.png" hotimage="UI\LeftTab\listitem\temp_hover.png" pushedimage="UI\LeftTab\listitem\temp_down.png" />
+                        <Button width="26" height="22" padding="3,0,0,0" normalimage="UI\LeftTab\listitem\add_normal.png" hotimage="UI\LeftTab\listitem\add_hover.png" pushedimage="UI\LeftTab\listitem\add_down.png" />
+                        <Button width="26" height="22" padding="3,0,0,0" normalimage="UI\LeftTab\listitem\delete_normal.png" hotimage="UI\LeftTab\listitem\delete_hover.png" pushedimage="UI\LeftTab\listitem\delete_down.png" />
+                        <Control />
+                    </HorizontalLayout>
+                </TabLayout>
+        </HorizontalLayout> 
+            
+        <HorizontalLayout> <!-- 双击时的列表项 height="53"-->
+            <Button name="logo" width="52" height="52" bkimage="UI\LeftTab\listitem\logo.png" />
+            <VerticalLayout>
+                <HorizontalLayout height="28">
+                    <HorizontalLayout >
+                    <Label name="MusicName2" padding="10,0,0,0" autocalcwidth="true" bordersize="0" width="17" textcolor="#FF505050" endellipsis="true" />
+                    <Control />
+                    </HorizontalLayout>
+                    <HorizontalLayout width="52">
+                        <Button width="26" height="22" normalimage="UI\LeftTab\listitem\accompany_normal.png" hotimage="UI\LeftTab\listitem\accompany_hover.png" pushedimage="UI\LeftTab\listitem\accompany_down.png" />
+                        <Button width="26" height="22" normalimage="UI\LeftTab\listitem\delete_normal.png" hotimage="UI\LeftTab\listitem\delete_hover.png" pushedimage="UI\LeftTab\listitem\delete_down.png" />
+                    </HorizontalLayout>
+                </HorizontalLayout>
+                <HorizontalLayout height="25" >
+                    <HorizontalLayout> 
+                        <Label name="MusicCurPos" padding="10,0,5,0" bordersize="0" width="70" textcolor="#FF505050"/>
+                        <Button width="26" height="22" normalimage="UI\LeftTab\listitem\download_normal.png" hotimage="UI\LeftTab\listitem\download_hover.png" pushedimage="UI\LeftTab\listitem\download_down.png" />
+                    </HorizontalLayout>           
+                    <HorizontalLayout name="PlayListExternOperation" width="90">
+                        <Control />
+                        <Button width="26" height="22" padding="3,0,0,0" normalimage="UI\LeftTab\listitem\temp_normal.png" hotimage="UI\LeftTab\listitem\temp_hover.png" pushedimage="UI\LeftTab\listitem\temp_down.png" />
+                        <Button width="26" height="22" padding="3,0,0,0" normalimage="UI\LeftTab\listitem\add_normal.png" hotimage="UI\LeftTab\listitem\add_hover.png" pushedimage="UI\LeftTab\listitem\add_down.png" />
+                        <Button width="26" height="22" padding="3,0,0,0" normalimage="UI\LeftTab\listitem\share_normal.png" hotimage="UI\LeftTab\listitem\share_hover.png" pushedimage="UI\LeftTab\listitem\share_down.png" />
+                    </HorizontalLayout>
+                </HorizontalLayout>
+            </VerticalLayout>
+        </HorizontalLayout>
+    </TabLayout>
+</MusicListItem>
+</Window>

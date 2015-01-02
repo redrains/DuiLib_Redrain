@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window >
+  <Font name="微软雅黑" size="12" bold="false" default="true" />
+  <Font name="微软雅黑" size="12" bold="true"/>
+  <Default name="Menu" value="bordersize=&quot;1&quot; bordercolor=&quot;#FFB5B5B5&quot; inset=&quot;3,4,3,4&quot; itemtextpadding=&quot;35,0,0,0&quot; bkcolor=&quot;#FFFFFFFE&quot; itemselectedbkcolor=&quot;#FFB5B5B5&quot;" />
+  <Default name="ExplandIcon" value="UI\menu\menu_expand.png" />
+  <Menu >
+  	
+    <MenuElement height="70"  width="200">
+        <VerticalLayout bkcolor="#FFFFFFFE" width="40">
+            <HorizontalLayout>
+                <Button name="Menu_Tray_Back" width="32" height="32" padding="28,10,0,0" normalimage="UI\menu\tray\Back_normal.png" hotimage="UI\menu\tray\Back_hover.png" pushedimage="UI\menu\tray\Back_down.png" />
+                <Button name="Menu_Tray_Play" width="32" height="32" padding="20,10,0,0" normalimage="UI\menu\tray\Play_normal.png" hotimage="UI\menu\tray\Play_hover.png" pushedimage="UI\menu\tray\Play_down.png" />
+                <Button name="Menu_Tray_Pause" width="32" height="32" padding="20,10,0,0" normalimage="UI\menu\tray\Pause_normal.png" hotimage="UI\menu\tray\Pause_hover.png" pushedimage="UI\menu\tray\Pause_down.png" visible="false"/>
+                <Button name="Menu_Tray_Forward" width="32" height="32" padding="20,10,0,0" normalimage="UI\menu\tray\Forward_normal.png" hotimage="UI\menu\tray\Forward_hover.png" pushedimage="UI\menu\tray\Forward_down.png" />
+            </HorizontalLayout>
+        <Label name="music_name" text="陈瑞-白狐" textcolor="#FFB5B5B5" font="0" align="center" />   
+        </VerticalLayout>    
+    </MenuElement>
+
+  	<MenuElement type="line" />
+
+    <MenuElement >
+        <HorizontalLayout  bkcolor="#FFFFFFFE">
+              <Button name="Menu_Tray_Sound" height="27" width="27" padding="5,0,0,0" normalimage="file='UI\menu\tray\Sound_normal.png' source='54,0,81,27'" hotimage="file='UI\menu\tray\Sound_hover.png' source='54,0,81,27'" pushedimage="file='UI\menu\tray\Sound_down.png' source='54,0,81,27'"/>
+              <Slider name="slider_play" height="20" width="150" min="0" max="100" value="0" step="1" padding="5,5,0,0" bkimage="UI\menu\tray\Slider_BK.png" foreimage="UI\menu\tray\Slider_Fore.png" isstretchfore="false" thumbimage="UI\menu\tray\thumb_normal.png" thumbhotimage="UI\menu\tray\thumb_hover.png" thumbpushedimage="UI\menu\tray\thumb_hover.png" thumbsize="14,20" />
+        </HorizontalLayout>
+   </MenuElement>
+
+    <MenuElement name="Menu_Tray_Login" height="28" text="显示歌词" icon="UI\menu\tray\Lrc.png" iconsize="27,27" />
+    <MenuElement name="Menu_Tray_Login" height="28" text="锁定歌词" icon="UI\menu\tray\Lock.png" iconsize="23,23" enable="false"/>
+
+		<MenuElement type="line" />
+  	<MenuElement name="Menu_Tray_Settings" height="28" text="选项设置" icon="UI\menu\tray\Settings.png" iconsize="27,27" />
+		<MenuElement type="line" />
+    <MenuElement name="Menu_Tray_Login" height="28" text="Redrain播放器登录" icon="UI\menu\main\Login.png" iconsize="23,23" />
+  	<MenuElement name="Menu_Main_Exit"  height="28" text="退出" />
+ 	</Menu>
+</Window>

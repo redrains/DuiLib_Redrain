@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window >
+  <Font name="微软雅黑" size="12" bold="false" default="true" />
+  <Font name="微软雅黑" size="12" bold="true"/>
+  <Default name="Menu" value="bordersize=&quot;1&quot; bordercolor=&quot;#FFB5B5B5&quot; inset=&quot;3,4,3,4&quot; itemtextpadding=&quot;35,0,0,0&quot; bkcolor=&quot;#FFFFFFFE&quot; itemselectedbkcolor=&quot;#FFB5B5B5&quot;" />
+  <Default name="ExplandIcon" value="UI\menu\menu_expand.png" />
+  <Menu >
+     	 <MenuElement name="Menu_Loop_PlsySingle" text="单曲播放" width="160" icon="UI\menu\Yes.png" iconsize="23,23" ischeck="false" checkitem="true" />
+     	 <MenuElement name="Menu_Loop_SingleLoop" text="单曲循环" icon="UI\menu\Yes.png" iconsize="23,23" ischeck="false" checkitem="true" />
+     	 <MenuElement name="Menu_Loop_PlayList" text="顺序播放" icon="UI\menu\Yes.png" iconsize="23,23" ischeck="false" checkitem="true" />
+     	 <MenuElement name="Menu_Loop_ListLoop" text="列表循环" icon="UI\menu\Yes.png" iconsize="23,23" ischeck="false" checkitem="true" />
+     	 <MenuElement name="Menu_Loop_Random" text="随机播放" icon="UI\menu\Yes.png" iconsize="23,23" ischeck="false" checkitem="true" />
+ 	</Menu>
+</Window>

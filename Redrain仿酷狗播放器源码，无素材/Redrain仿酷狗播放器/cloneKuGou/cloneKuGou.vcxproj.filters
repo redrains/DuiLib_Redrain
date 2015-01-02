@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="FrameWnd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\WndShadow.cpp">
+      <Filter>源文件\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Controls\UIMusicList.cpp">
+      <Filter>源文件\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Controls\UIRadioList.cpp">
+      <Filter>源文件\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Controls\UIMenu.cpp">
+      <Filter>源文件\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Controls\PopupWidget.cpp">
+      <Filter>源文件\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\FileUtil.cpp">
+      <Filter>源文件\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Controls\SkinPickerPictureItem.cpp">
+      <Filter>源文件\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="PalletDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Controls\UIColorPalette.cpp">
+      <Filter>源文件\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinPickerDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Controls\UIHotButton.cpp">
+      <Filter>源文件\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="zplay\MusicPlayer.cpp">
+      <Filter>源文件\zplay</Filter>
+    </ClCompile>
+    <ClCompile Include="wke\WkeWebkit.cpp">
+      <Filter>源文件\wke</Filter>
+    </ClCompile>
+    <ClCompile Include="DropTargetEx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MusicInfoDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="duilib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\WndShadow.h">
+      <Filter>头文件\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Controls\UIMusicList.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>资源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Controls\UIRadioList.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Controls\UIMenu.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Controls\PopupWidget.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\FileUtil.h">
+      <Filter>头文件\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Controls\SkinPickerPictureItem.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="PalletDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Controls\UIColorPalette.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinPickerDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Controls\UIHotButton.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="zplay\libzplay.h">
+      <Filter>头文件\zplay</Filter>
+    </ClInclude>
+    <ClInclude Include="zplay\MusicPlayer.h">
+      <Filter>头文件\zplay</Filter>
+    </ClInclude>
+    <ClInclude Include="wke\WkeWebkit.h">
+      <Filter>头文件\wke</Filter>
+    </ClInclude>
+    <ClInclude Include="wke\wke.h">
+      <Filter>头文件\wke</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlNames.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DropTargetEx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MusicInfoDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{767a8edb-3928-4810-9402-ba9775373145}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{6bef1155-60b6-4f96-888c-ae8033b88f55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Utils">
+      <UniqueIdentifier>{bb911a11-92b5-4e11-9df8-3e062efb78f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Utils">
+      <UniqueIdentifier>{b0fba2af-92eb-48ab-8c7d-63aabf491ee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Controls">
+      <UniqueIdentifier>{9c2b3f37-4e7b-4943-947e-b39d1a60a939}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Controls">
+      <UniqueIdentifier>{d6d85fe3-055f-4d64-807d-6774cf4bfc39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{2091229a-6945-47c0-9a85-ec69663ef214}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\zplay">
+      <UniqueIdentifier>{ec8ae720-8bab-492d-93bb-fd185cf57186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\zplay">
+      <UniqueIdentifier>{c30acc05-63ce-4c8c-bea2-076414873ef6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\wke">
+      <UniqueIdentifier>{fd229ef9-acfa-4f38-8605-f9f76503b604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\wke">
+      <UniqueIdentifier>{0e6c6c02-49e2-463a-a105-d0a6543b6180}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="duilib.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="ico16.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="ico24.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="ico72.ico">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Duilib.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

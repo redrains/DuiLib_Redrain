@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="522,302" sizebox="4,4,4,4" caption="0,0,0,30" mininfo="522,302" roundcorner="3,3" bktrans="true" >
+    <Font name="微软雅黑" size="13" default="true"/>
+    <Font name="微软雅黑" size="13" bold="true" />
+ 
+    <VerticalLayout  bkcolor="#FFFFFFFF" bordercolor="#FF47484B" bordersize="1" inset="1,1,1,1">
+        <HorizontalLayout name="background" height="30" bkimage="file='UI\BKImage\4.jpg' source='0,0,1000,30'" ><!-- 标题栏 -->
+            <Label text="Redrain调色板" textcolor="#FFFFFFFF" textpadding="5,0,0,0" font="1" autocalcwidth="false" width="300"/>
+			<Control />
+			<Button name="closebtn" width="23" height="18" padding="0,6,0,0" normalimage="UI\title\close_normal.png" hotimage="UI\title\close_hover.png" pushedimage="UI\title\close_down.png" />                     
+        </HorizontalLayout>
+
+        <VerticalLayout height="230"><!-- 主体 -->
+   		<!-- 	<Pallet name="Pallet" width="506" height="220" palletheight="200" barheight="14" padding="7,5,0,0" bkcolor="#FFFFFFFF" />     -->   
+   		<ColorPalette name="Pallet" width="506" height="220" palletheight="200" barheight="14" padding="8,5,0,0" bkcolor="#FFFFFFFF" thumbimage="UI\skin\cursor.png" />
+        </VerticalLayout> 
+
+        <HorizontalLayout inset="0,4,0,0" >
+            <Button name="okbtn" height="40" text="确定" width="72" height="28" padding="358,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+            <Button name="closebtn" text="取消" width="72" height="28" padding="12,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+        </HorizontalLayout>
+    </VerticalLayout>
+
+</Window>

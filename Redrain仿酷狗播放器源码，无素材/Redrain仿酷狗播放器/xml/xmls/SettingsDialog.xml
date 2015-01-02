@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="632,484" sizebox="4,4,4,4" caption="0,0,0,30" mininfo="632,484" roundcorner="3,3" bktrans="false" >
+    <Font name="宋体" size="12" default="true"/>
+    <Font name="宋体" size="12" bold="true" />
+    <Default name="Label" value="autocalcwidth=&quot;true&quot; textcolor=&quot;#FF454545&quot; " />
+    <Default name="Button" value="autocalcwidth=&quot;true&quot; textcolor=&quot;#FF454545&quot; disabledtextcolor=&quot;#FF454545&quot; " />
+    <Default name="CheckBox" value="textcolor=&quot;#FF454545&quot; disabledtextcolor=&quot;#FF888888&quot; width=&quot;10&quot; height=&quot;14&quot; textpadding=&quot;16,1,0,0&quot; align=&quot;left&quot; normalimage=&quot;file='UI\setting\check_normal.png' dest='0,0,14,14'&quot; hotimage=&quot;file='UI\setting\check_hover.png' dest='0,0,14,14'&quot; pushedimage=&quot;file='UI\setting\check_down.png' dest='0,0,14,14'&quot; disabledimage=&quot;file='UI\setting\check_disable.png' dest='0,0,14,14'&quot; selectedimage=&quot;file='UI\setting\checked_normal.png' dest='0,0,14,14'&quot; selectedhotimage=&quot;file='UI\setting\checked_hover.png' dest='0,0,14,14'&quot; selectedpushedimage=&quot;file='UI\setting\checked_down.png' dest='0,0,14,14'&quot; autocalcwidth=&quot;true&quot;"/>
+
+    <VerticalLayout  bkcolor="#FFFFFFFF" bordercolor="#FF47484B" bordersize="1" inset="1,1,1,1">
+        <HorizontalLayout name="background" height="30" bkimage="file='UI\BKImage\4.jpg' source='0,0,1000,30'" ><!-- 标题栏 -->
+            <Label text="选项设置——Redrain播放器" textcolor="#FFFFFFFF" textpadding="5,0,0,0" font="1" autocalcwidth="false" width="300"/>
+			<Control />
+			<Button name="closebtn" width="23" height="18" padding="0,6,0,0" normalimage="UI\title\close_normal.png" hotimage="UI\title\close_hover.png" pushedimage="UI\title\close_down.png" />                     
+        </HorizontalLayout>
+
+        <HorizontalLayout >
+            <VerticalLayout width="135" inset="7,0,0,0" bkcolor="#FFE0F2FE" rightbordersize="1" bordercolor="#FFCEDEEA"><!-- 左侧选项卡 -->
+            	<Label bkimage="UI\setting\lblTop.png" padding="0,24,0,0" width="128" height="28" />
+            	<Option name="setting_OptConv" width="128" height="26" normalimage="UI\setting\conv_normal.png" hotimage="UI\setting\conv_hover.png" pushedimage="UI\setting\conv_down.png"  group="Setting_Tab" selectedimage="UI\setting\conv_down.png"  selected="true" bindtablayoutname="setting_Tab" bindtabindex="0"/>
+   				<Option name="setting_OptDownload" width="128" height="26" normalimage="UI\setting\download_normal.png" hotimage="UI\setting\download_hover.png" pushedimage="UI\setting\download_down.png"  group="Setting_Tab" selectedimage="UI\setting\download_down.png" bindtablayoutname="setting_Tab" bindtabindex="1"/>
+   				<Option name="setting_OptAcce" width="128" height="26" normalimage="UI\setting\acce_normal.png" hotimage="UI\setting\acce_hover.png" pushedimage="UI\setting\acce_down.png"  group="Setting_Tab" selectedimage="UI\setting\acce_down.png" bindtablayoutname="setting_Tab" bindtabindex="2"/>
+   				<Option name="setting_OptUpdate" width="128" height="26" normalimage="UI\setting\update_normal.png" hotimage="UI\setting\update_hover.png" pushedimage="UI\setting\update_down.png"  group="Setting_Tab" selectedimage="UI\setting\update_down.png" bindtablayoutname="setting_Tab" bindtabindex="3"/>
+
+   				<Label bkimage="UI\setting\lblMid.png" padding="0,30,0,0" width="128" height="28" />
+   				<Option name="setting_OptLrcDest" width="128" height="26" normalimage="UI\setting\lrc_dest_normal.png" hotimage="UI\setting\lrc_dest_hover.png" pushedimage="UI\setting\lrc_dest_down.png"  group="Setting_Tab" selectedimage="UI\setting\lrc_dest_down.png" bindtablayoutname="setting_Tab" bindtabindex="4"/>
+   				<Option name="setting_OptLrcWnd" width="128" height="26" normalimage="UI\setting\lrc_wnd_normal.png" hotimage="UI\setting\lrc_wnd_hover.png" pushedimage="UI\setting\lrc_wnd_down.png"  group="Setting_Tab" selectedimage="UI\setting\lrc_wnd_down.png" bindtablayoutname="setting_Tab" bindtabindex="5"/>
+
+   				<Label bkimage="UI\setting\lblBot.png" padding="0,30,0,0" width="128" height="28" />
+   				<Option name="setting_OptAudio" width="128" height="26" normalimage="UI\setting\Audio_normal.png" hotimage="UI\setting\Audio_hover.png" pushedimage="UI\setting\Audio_down.png"  group="Setting_Tab" selectedimage="UI\setting\Audio_down.png" bindtablayoutname="setting_Tab" bindtabindex="6"/>
+   				<Option name="setting_OptNet" width="128" height="26" normalimage="UI\setting\net_normal.png" hotimage="UI\setting\net_hover.png" pushedimage="UI\setting\net_down.png"  group="Setting_Tab" selectedimage="UI\setting\net_down.png" bindtablayoutname="setting_Tab" bindtabindex="7"/>
+   				<Option name="setting_OptOther" width="128" height="26" normalimage="UI\setting\other_normal.png" hotimage="UI\setting\other_hover.png" pushedimage="UI\setting\other_down.png"  group="Setting_Tab" selectedimage="UI\setting\other_down.png" bindtablayoutname="setting_Tab" bindtabindex="8"/>
+
+            </VerticalLayout >
+
+            <VerticalLayout>
+            	<TabLayout name="setting_Tab" selectedid="0" inset="50,26,0,0"><!-- 主体界面 -->
+	               	<VerticalLayout childpadding="8,0,0,0"><!-- 第一个设置页面 -->
+	               		<Button text="启动时" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<HorizontalLayout height="14" padding="0,2,0,0">
+	               			<CheckBox text="自动播放歌曲"/>
+	               			<CheckBox text="恢复上次播放的状态" padding="106,0,0,0" />
+	               		</HorizontalLayout>
+	               		<CheckBox text="播放Redrain问候语" selected="true" />
+	               		<Button text="关闭主面板时"  padding="0,12,0,0" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<Option text="最小化到系统托盘，不退出程序"  padding="0,2,0,0" textcolor="#FF454545" disabledtextcolor="#FF454545" width="10" height="16" textpadding="18,1,0,0" align="left" normalimage="file='UI\setting\option_normal.png' dest='0,0,16,16'" hotimage="file='UI\setting\option_hover.png' dest='0,0,16,16'" pushedimage="file='UI\setting\option_down.png' dest='0,0,16,16'" disabledimage="file='UI\setting\option_disable.png' dest='0,0,16,16'" selectedimage="file='UI\setting\optioned_normal.png' dest='0,0,16,16'" selectedhotimage="file='UI\setting\optioned_hover.png' dest='0,0,16,16'" selectedpushedimage="file='UI\setting\optioned_down.png' dest='0,0,16,16'" autocalcwidth="true" group="SettingConv" selected="true" />
+	               		<Option text="退出程序"  padding="0,2,0,0" textcolor="#FF454545" disabledtextcolor="#FF454545" width="10" height="16" textpadding="18,1,0,0" align="left" normalimage="file='UI\setting\option_normal.png' dest='0,0,16,16'" hotimage="file='UI\setting\option_hover.png' dest='0,0,16,16'" pushedimage="file='UI\setting\option_down.png' dest='0,0,16,16'" disabledimage="file='UI\setting\option_disable.png' dest='0,0,16,16'" selectedimage="file='UI\setting\optioned_normal.png' dest='0,0,16,16'" selectedhotimage="file='UI\setting\optioned_hover.png' dest='0,0,16,16'" selectedpushedimage="file='UI\setting\optioned_down.png' dest='0,0,16,16'" autocalcwidth="true" group="SettingConv"/>
+
+	               		<Button text="其他设置"  padding="0,12,0,0" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<CheckBox text="关闭网络功能，作为本地播放器使用。(试听和下载会重新打开网络功能)"/>
+	               		<CheckBox text="允许弹出推广信息" selected="true"/>
+	               		<CheckBox text="开机时自动启动Redrain播放器"/>
+	               		<CheckBox text="开机时启动桌面写真"/>
+	               		<CheckBox text="USB连接时显示设备接入提示" selected="true"/>
+
+	               		<Button text="文件关联"  padding="0,12,0,0" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<CheckBox text="将Redrain播放器作为默认音乐播放器"/>
+	               	</VerticalLayout>
+
+	               	<VerticalLayout childpadding="8,0,0,0"><!-- 第二个设置页面 -->
+	               		<Button text="目录设置" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<VerticalLayout height="85">
+		               		<HorizontalLayout height="27" >
+		               			<Label text="下载目录  " width="65"/>
+		               			<Edit name="" text="D:\Redrain\" width="252" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               			<Button name="" text="更改目录" width="70" height="25" padding="12,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'" />
+		               		</HorizontalLayout>
+		               		<HorizontalLayout height="27" >
+		               			<Label text="歌词目录  " width="65"/>
+		               			<Edit name="" text="D:\Redrain\Lyric\" width="252" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               			<Button name="" text="更改目录" width="70" height="25" padding="12,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'" />
+		               		</HorizontalLayout>
+		               		<HorizontalLayout height="27" >
+		               			<Label text="缓存目录  " width="65"/>
+		               			<Edit name="" text="D:\Redrain\Temp\" width="252" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               			<Button name="" text="更改目录" width="70" height="25" padding="12,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'" />
+		               		</HorizontalLayout>
+	               		</VerticalLayout>
+	               		<HorizontalLayout height="24">
+	               			<Label text="缓存大小设置" textpadding="0,3,0,0" width="75"/>
+	               			<Option text="自动"  padding="30,3,0,0" textcolor="#FF454545" disabledtextcolor="#FF454545" width="10" height="16" textpadding="18,1,0,0" align="left" normalimage="file='UI\setting\option_normal.png' dest='0,0,16,16'" hotimage="file='UI\setting\option_hover.png' dest='0,0,16,16'" pushedimage="file='UI\setting\option_down.png' dest='0,0,16,16'" disabledimage="file='UI\setting\option_disable.png' dest='0,0,16,16'" selectedimage="file='UI\setting\optioned_normal.png' dest='0,0,16,16'" selectedhotimage="file='UI\setting\optioned_hover.png' dest='0,0,16,16'" selectedpushedimage="file='UI\setting\optioned_down.png' dest='0,0,16,16'" autocalcwidth="true" group="SettingDownload" selected="true" />
+	               			<Option text="手动"  padding="30,3,0,0" textcolor="#FF454545" disabledtextcolor="#FF454545" width="10" height="16" textpadding="18,1,0,0" align="left" normalimage="file='UI\setting\option_normal.png' dest='0,0,16,16'" hotimage="file='UI\setting\option_hover.png' dest='0,0,16,16'" pushedimage="file='UI\setting\option_down.png' dest='0,0,16,16'" disabledimage="file='UI\setting\option_disable.png' dest='0,0,16,16'" selectedimage="file='UI\setting\optioned_normal.png' dest='0,0,16,16'" selectedhotimage="file='UI\setting\optioned_hover.png' dest='0,0,16,16'" selectedpushedimage="file='UI\setting\optioned_down.png' dest='0,0,16,16'" autocalcwidth="true" group="SettingDownload" selected="true" />
+	               			<HorizontalLayout width="60" height="22" padding="28,0,0,0" >
+	               				<Edit name="" text="4704" width="60" height="22" bordercolor="#FFC5C5C5" textpadding="5,5,20,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+	               				<Button float="true" pos="40,1,0,0" height="10" width="19" normalimage="UI\setting\arrowup_normal.png" hotimage="UI\setting\arrowup_hover.png" pushedimage="UI\setting\arrowup_down.png"/>
+	               				<Button float="true" pos="40,11,0,0" height="10" width="19" normalimage="UI\setting\arrowdown_normal.png" hotimage="UI\setting\arrowdown_hover.png" pushedimage="UI\setting\arrowdown_down.png"/>
+	               			</HorizontalLayout>
+	               			<Label text=" 512M-5210M" width="75" enabled="false" />
+	               			
+	               		</HorizontalLayout>
+
+	               		<Button text="速度控制"  padding="0,12,0,0" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<Option text="全速下载"  padding="0,8,0,0" textcolor="#FF454545" disabledtextcolor="#FF454545" width="10" height="16" textpadding="18,1,0,0" align="left" normalimage="file='UI\setting\option_normal.png' dest='0,0,16,16'" hotimage="file='UI\setting\option_hover.png' dest='0,0,16,16'" pushedimage="file='UI\setting\option_down.png' dest='0,0,16,16'" disabledimage="file='UI\setting\option_disable.png' dest='0,0,16,16'" selectedimage="file='UI\setting\optioned_normal.png' dest='0,0,16,16'" selectedhotimage="file='UI\setting\optioned_hover.png' dest='0,0,16,16'" selectedpushedimage="file='UI\setting\optioned_down.png' dest='0,0,16,16'" autocalcwidth="true" group="SettingConv" selected="true" />
+	               		<HorizontalLayout height="24">
+	               			<Option text="自定义" padding="0,5,0,0" textcolor="#FF454545" disabledtextcolor="#FF454545" width="10" height="16" textpadding="18,1,0,0" align="left" normalimage="file='UI\setting\option_normal.png' dest='0,0,16,16'" hotimage="file='UI\setting\option_hover.png' dest='0,0,16,16'" pushedimage="file='UI\setting\option_down.png' dest='0,0,16,16'" disabledimage="file='UI\setting\option_disable.png' dest='0,0,16,16'" selectedimage="file='UI\setting\optioned_normal.png' dest='0,0,16,16'" selectedhotimage="file='UI\setting\optioned_hover.png' dest='0,0,16,16'" selectedpushedimage="file='UI\setting\optioned_down.png' dest='0,0,16,16'" autocalcwidth="true" group="SettingConv"/>
+	               			<Label text="下载带宽" textpadding="20,5,0,0" />
+	               			<Button name="" text="最快速度"  align="left" textpadding="6,6,0,0" width="73" height="24" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+	               			<Label text="KB/s" textpadding="3,5,0,0" />
+	               			<Label text="上载带宽" textpadding="20,5,0,0" />
+	               			<Button name="" text="无限制" align="left" textpadding="6,6,0,0" width="73" height="24" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+	               			<Label text="KB/s" textpadding="3,5,0,0" />
+	               		</HorizontalLayout>	               		
+	               		<CheckBox text="开启VIP下载加速" enabled="false" />
+
+	               		<Button text="其他" padding="0,12,0,0" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<CheckBox text="每次下载弹出音质选择框" selected="true" padding="0,8,0,0"/>
+	               		<HorizontalLayout height="27" >
+		               			<Label text="同时下载文件数: " />
+		               			<Edit name="" text="3" width="80" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               			<Label text="下载端口: " width="65" padding="30,0,0,0" />
+		               			<Edit name="" text="8000" width="80" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />		
+		               		</HorizontalLayout>
+	               	</VerticalLayout>
+
+	               	<VerticalLayout ><!-- 第三个设置页面 -->
+	               		<Button text="播放设置" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<Button  width="1" height="1" />
+	               		<HorizontalLayout height="27" padding="0,8,0,0" >
+		               		<Label text="播放/暂停" autocalcwidth="false" width="190"/>
+		               		<Edit name="" text="Alt + F5" align="center" width="166" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF" />
+		               	</HorizontalLayout>
+		               	<HorizontalLayout height="27" >
+		               		<Label text="上一首" autocalcwidth="false" width="190"/>
+		               		<Edit name="" text="Alt + Left" align="center" width="166" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               	</HorizontalLayout>
+		               	<HorizontalLayout height="27" >
+		               		<Label text="下一首" autocalcwidth="false" width="190"/>
+		               		<Edit name="" text="Alt + Right" align="center" width="166" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               	</HorizontalLayout>
+		               	<HorizontalLayout height="27" >
+		               		<Label text="快进" autocalcwidth="false" width="190"/>
+		               		<Edit name="" text="Ctrl + Shift + Right" align="center" width="166" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               	</HorizontalLayout>
+		               	<HorizontalLayout height="27" >
+		               		<Label text="快退" autocalcwidth="false" width="190"/>
+		               		<Edit name="" text="Ctrl + Shift + Left" align="center" width="166" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               	</HorizontalLayout>
+		               	<HorizontalLayout height="27" >
+		               		<Label text="增大音量" autocalcwidth="false" width="190"/>
+		               		<Edit name="" text="Ctrl + G" align="center" width="166" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               	</HorizontalLayout>
+		               	<HorizontalLayout height="27" >
+		               		<Label text="减小音量" autocalcwidth="false" width="190"/>
+		               		<Edit name="" text="Alt + Down" align="center" width="166" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               	</HorizontalLayout>
+		               	<HorizontalLayout height="27" >
+		               		<Label text="静音" autocalcwidth="false" width="190"/>
+		               		<Edit name="" text="Ctrl + Alt + S" align="center" width="166" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               	</HorizontalLayout>
+		               	<Button text="歌词控制" padding="0,12,0,0" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<HorizontalLayout height="27" padding="0,8,0,0">
+		               		<Label text="显示/隐藏桌面歌词" autocalcwidth="false" width="190"/>
+		               		<Edit name="" text="Ctrl + Alt + D" align="center" width="166" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               	</HorizontalLayout>
+		               	<HorizontalLayout height="27" >
+		               		<Label text="锁定/解锁桌面歌词" autocalcwidth="false" width="190"/>
+		               		<Edit name="" text="Ctrl + Alt + E" align="center" width="166" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               	</HorizontalLayout>
+	               		<HorizontalLayout height="25" padding="0,8,0,0">
+	               			<CheckBox text="启用全局快捷键" padding="0,5,0,0" selected="true" />
+	               			<CheckBox text="弹出快捷键提示窗口" padding="30,5,0,0" />
+	               			<Button text="恢复默认" width="90" height="25" padding="12,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+	               		</HorizontalLayout>
+	               	</VerticalLayout>
+
+	               	<VerticalLayout childpadding="8,0,0,0"><!-- 第四个设置页面 -->
+	               		<Button text="软件更新" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+		               	<Label text="当前版本：Redrain 音乐盒 测试版1.0" />
+		               	<Label text="更新事件：2014.8.25" />
+		               	<Button text="手动检查更新" width="100" height="25" padding="0,7,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+	               	</VerticalLayout>
+
+	                <VerticalLayout childpadding="8,0,0,0"><!-- 第五个设置页面 -->
+	               		<Button text="目录设置" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<CheckBox text="单行显示歌词" padding="0,8,0,0"/>
+	               		<HorizontalLayout height="24">
+	               			<Label text="字体" textpadding="0,5,0,0" />
+	               			<Button name="" text="黑体"  align="left" textpadding="6,6,0,0" width="80" height="24" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+	               			<Label text="字号" textpadding="20,5,0,0" />
+	               			<Button name="" text="29" align="left" textpadding="6,6,0,0" width="80" height="24" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+	               			<Label text="字形" textpadding="20,5,0,0" />
+	               			<Button name="" text="粗体" align="left" textpadding="6,6,0,0" width="80" height="24" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+	               		</HorizontalLayout>	
+	               		<HorizontalLayout height="25">
+	               			<Label text="颜色" textpadding="0,5,0,0" />
+	               			<Button text="未播放" align="left" foreimage="file='UI\setting\dest_lrc1.png' dest='3,3,30,22'" textpadding="36,6,0,0" width="82" height="25" padding="10,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />	      
+	               			<Button text="已播放" align="left" foreimage="file='UI\setting\dest_lrc2.png' dest='3,3,30,22'" textpadding="36,6,0,0" width="82" height="25" padding="10,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+	               			<Label text="预设方案" textpadding="37,5,0,0" />
+	               			<Button name="" text="海洋蓝" align="left" textpadding="6,6,0,0" width="80" height="24" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+	               		</HorizontalLayout>	
+	               		<HorizontalLayout height="25">
+	               			<Label text="透明度" textpadding="0,5,0,0" />
+	               			<Slider name="setting_dest_slider" height="21" width="239" min="0" max="100" value="0" step="1" padding="21,4,0,0" bkimage="file='UI\setting\SliderBK.png' dest='0,10,239,11'" foreimage="file='UI\setting\SliderFore.png'" isstretchfore="false" thumbimage="file='UI\skin\thumb_normal.png'" thumbhotimage="file='UI\skin\thumb_hover.png'"  thumbpushedimage="file='UI\skin\thumb_hover.png'" thumbsize="21,21" sendmove="true" />
+	               			<Label text="0%" textpadding="10,5,0,0" />
+	               		</HorizontalLayout>	
+	               		<Button text="预览" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<Control name="setting_dest_view" width="418" height="115" bkimage="UI\setting\view.png" />
+	               		<Button text="恢复默认方案" width="100" height="25" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+	               	</VerticalLayout>
+
+	               	<VerticalLayout childpadding="8,0,0,0"><!-- 第六个设置页面 -->
+	               		<Button text="样式设置" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<HorizontalLayout height="24">
+	               			<Label text="字体" textpadding="0,5,0,0" />
+	               			<Button name="" text="微软雅黑"  align="left" textpadding="6,6,0,0" width="80" height="24" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+	               			<Label text="字号" textpadding="20,5,0,0" />
+	               			<Button name="" text="18" align="left" textpadding="6,6,0,0" width="80" height="24" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+	               			<Label text="字形" textpadding="20,5,0,0" />
+	               			<Button name="" text="常规" align="left" textpadding="6,6,0,0" width="80" height="24" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+	               		</HorizontalLayout>	
+	               		<HorizontalLayout height="25">
+	               			<Label text="颜色" textpadding="0,5,0,0" />
+	               			<Button text="未播放" align="left" foreimage="file='UI\setting\dest_wnd1.png' dest='3,3,30,22'" textpadding="36,6,0,0" width="82" height="25" padding="10,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />	      
+	               			<Button text="已播放" align="left" foreimage="file='UI\setting\dest_wnd2.png' dest='3,3,30,22'" textpadding="36,6,0,0" width="82" height="25" padding="10,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+	               			<Label text="预设方案" textpadding="37,5,0,0" />
+	               			<Button name="" text="活力黄" align="left" textpadding="6,6,0,0" width="80" height="24" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+	               		</HorizontalLayout>	
+	               		<Button text="预览" font="1" padding="0,8,0,0" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<Control name="setting_dest_view" width="415" height="110" bkimage="UI\setting\view2.png" />
+	               		<Button text="恢复默认方案" padding="0,5,0,0" width="100" height="25" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+	               	</VerticalLayout>
+
+	               	<VerticalLayout childpadding="8,0,0,0"><!-- 第七个设置页面 -->
+	               		<Button text="输出设置" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<VerticalLayout height="55">
+		               		<HorizontalLayout height="27" >
+		               			<Label text="音频输出  " width="65"/>
+		               			<Button name="" text="Default DirectSound Device"  align="left" textpadding="6,6,0,0" width="327" height="22" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+		               		</HorizontalLayout>
+		               		<HorizontalLayout height="27" >
+		               			<Label text="视频渲染  " width="65"/>
+		               			<Button name="" text="VMR9 窗口化"  align="left" textpadding="6,6,0,0" width="327" height="22" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+		               		</HorizontalLayout>
+	               		</VerticalLayout>
+						<Label text="提示：新设置的参数会在重新播放的时候生效。输出设备推荐选择DirectSound" height="18" enabled="false" />
+						<Label text="输出类型" textpadding="0,3,0,0" height="18" enabled="false" />
+
+	               		<Button text="音频设置"  padding="0,20,0,0" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<CheckBox text="激活声音淡入淡出效果" padding="0,8,0,0"/>
+               			<HorizontalLayout height="24">
+	               			<Label text="淡入" textpadding="0,3,0,0" />
+	               			<HorizontalLayout width="60" height="22" padding="8,0,0,0" >
+	               				<Edit name="" text="600" width="60" height="22" bordercolor="#FFC5C5C5" textpadding="5,5,20,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+	               				<Button float="true" pos="40,1,0,0" height="10" width="19" normalimage="UI\setting\arrowup_normal.png" hotimage="UI\setting\arrowup_hover.png" pushedimage="UI\setting\arrowup_down.png"/>
+	               				<Button float="true" pos="40,11,0,0" height="10" width="19" normalimage="UI\setting\arrowdown_normal.png" hotimage="UI\setting\arrowdown_hover.png" pushedimage="UI\setting\arrowdown_down.png"/>
+	               			</HorizontalLayout>
+	               			<Label text=" 毫秒(1-10000)" width="75" />
+	               			<Label text="淡出" textpadding="20,3,0,0" />
+	               			<HorizontalLayout width="60" height="22" padding="8,0,0,0" >
+	               				<Edit name="" text="600" width="60" height="22" bordercolor="#FFC5C5C5" textpadding="5,5,20,5" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+	               				<Button float="true" pos="40,1,0,0" height="10" width="19" normalimage="UI\setting\arrowup_normal.png" hotimage="UI\setting\arrowup_hover.png" pushedimage="UI\setting\arrowup_down.png"/>
+	               				<Button float="true" pos="40,11,0,0" height="10" width="19" normalimage="UI\setting\arrowdown_normal.png" hotimage="UI\setting\arrowdown_hover.png" pushedimage="UI\setting\arrowdown_down.png"/>
+	               			</HorizontalLayout>
+	               			<Label text=" 毫秒(1-10000)" width="75" />
+	               		</HorizontalLayout>
+	               		<Label text="提示：仅支持DirectSound输出类型" height="18" enabled="false" />
+	               		<HorizontalLayout height="26">
+	               			<Button name="" text="设置均衡器" width="92" height="25" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'" />
+		               		<Button name="" text="设置音效插件" width="92" height="25" padding="12,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'" />
+	               		</HorizontalLayout>		               	
+	               	</VerticalLayout>
+
+	               	<VerticalLayout childpadding="8,0,0,0"><!-- 第八个设置页面 -->
+	               		<Button text="代理" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<VerticalLayout height="130">
+		               		<HorizontalLayout height="27" >
+		               			<Label text="代理类型： " width="65"/>
+		               			<Button name="" text="HTTP代理"  align="left" textpadding="6,6,0,0" width="130" height="22" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+		               			<Button name="" text="测试" width="60" height="25" padding="15,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'" />
+		               		</HorizontalLayout>
+		               		<HorizontalLayout height="27" padding="0,8,0,0">
+		               			<Label text="代理地址： " width="65"/>
+		               			<Edit name=""  width="130" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" padding="10,0,0,0" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+								<Label text="端口： "  padding="15,0,0,0" width="65"/>
+		               			<Edit name=""  width="130" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" padding="10,0,0,0" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               		</HorizontalLayout>
+		               		<HorizontalLayout height="27" padding="0,8,0,0">
+		               			<Label text="用户名：   " width="65"/>
+		               			<Edit name=""  width="130" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" padding="10,0,0,0" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+								<Label text="密码： "  padding="15,0,0,0" width="65"/>
+		               			<Edit name=""  width="130" height="22" bordercolor="#FFC5C5C5" focusbordercolor="#FF5AAFF7" textpadding="9,5,5,5" padding="10,0,0,0" textcolor="#FF454545" bkcolor="#00000000" nativebkcolor="#FFFFFFFF"  />
+		               		</HorizontalLayout>
+		               		<HorizontalLayout height="27" padding="0,8,0,0">
+		               			<Label text="域(可不填) " width="65"/>
+		               			<Button name="" text="HTTP代理"  align="left" textpadding="6,6,0,0" width="130" height="22" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+		               			<CheckBox text="使用服务器中转" padding="15,5,0,0"/>
+		               		</HorizontalLayout>
+	               		</VerticalLayout>
+
+	               		<Button text="网络连接"  padding="0,20,0,0" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+               			<HorizontalLayout height="27" >
+	               			<Label text="您当前的网络连接运营商是：  " width="65"/>
+	               			<Button name="" text="未知"  align="left" textpadding="6,6,0,0" width="100" height="22" padding="10,0,0,0" normalimage="file='UI\setting\combo_normal.png' corner='20,0,20,0'" hotimage="file='UI\setting\combo_down.png' corner='20,0,20,0'" pushedimage="file='UI\setting\combo_down.png' corner='20,0,20,0'"  />
+	               			<Button name="" text="自动选择最优" width="80" height="25" padding="12,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'" />
+	               		</HorizontalLayout>
+	               		<HorizontalLayout height="27" >
+	               			<Label text="您当前的网络连接方式是：UDP  " width="65"/>
+	               			<Button name="" text="网络测试" width="80" height="25" padding="115,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'" />
+	               		</HorizontalLayout>	
+	               	</VerticalLayout>
+
+					<VerticalLayout childpadding="8,0,0,0"><!-- 第九个设置页面 -->
+	               		<Button text="主播模式" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<HorizontalLayout height="16" padding="0,8,0,0">
+	               			<Option text="启动" textcolor="#FF454545" disabledtextcolor="#FF454545" width="10" height="16" textpadding="18,1,0,0" align="left" normalimage="file='UI\setting\option_normal.png' dest='0,0,16,16'" hotimage="file='UI\setting\option_hover.png' dest='0,0,16,16'" pushedimage="file='UI\setting\option_down.png' dest='0,0,16,16'" disabledimage="file='UI\setting\option_disable.png' dest='0,0,16,16'" selectedimage="file='UI\setting\optioned_normal.png' dest='0,0,16,16'" selectedhotimage="file='UI\setting\optioned_hover.png' dest='0,0,16,16'" selectedpushedimage="file='UI\setting\optioned_down.png' dest='0,0,16,16'" autocalcwidth="true" group="SettingOther1" />
+	               			<Option text="关闭" textcolor="#FF454545" disabledtextcolor="#FF454545" width="10" height="16" textpadding="18,1,0,0" align="left" normalimage="file='UI\setting\option_normal.png' dest='0,0,16,16'" hotimage="file='UI\setting\option_hover.png' dest='0,0,16,16'" pushedimage="file='UI\setting\option_down.png' dest='0,0,16,16'" disabledimage="file='UI\setting\option_disable.png' dest='0,0,16,16'" selectedimage="file='UI\setting\optioned_normal.png' dest='0,0,16,16'" selectedhotimage="file='UI\setting\optioned_hover.png' dest='0,0,16,16'" selectedpushedimage="file='UI\setting\optioned_down.png' dest='0,0,16,16'" autocalcwidth="true" group="SettingOther1" selected="true" />	               			
+	               		</HorizontalLayout>	
+	               		<Label text="繁星主播专用。开播更流畅，并能识别当前播的歌" enabled="false" />
+
+	               		<Button text="主播上线提醒" font="1" enabled="false" align="left" bkimage="UI\setting\sepline.png" width="420" height="13" />
+	               		<HorizontalLayout height="16" padding="0,8,0,0">
+	               			<Option text="启动" textcolor="#FF454545" disabledtextcolor="#FF454545" width="10" height="16" textpadding="18,1,0,0" align="left" normalimage="file='UI\setting\option_normal.png' dest='0,0,16,16'" hotimage="file='UI\setting\option_hover.png' dest='0,0,16,16'" pushedimage="file='UI\setting\option_down.png' dest='0,0,16,16'" disabledimage="file='UI\setting\option_disable.png' dest='0,0,16,16'" selectedimage="file='UI\setting\optioned_normal.png' dest='0,0,16,16'" selectedhotimage="file='UI\setting\optioned_hover.png' dest='0,0,16,16'" selectedpushedimage="file='UI\setting\optioned_down.png' dest='0,0,16,16'" autocalcwidth="true" group="SettingOther2" selected="true" />
+	               			<Option text="关闭" textcolor="#FF454545" disabledtextcolor="#FF454545" width="10" height="16" textpadding="18,1,0,0" align="left" normalimage="file='UI\setting\option_normal.png' dest='0,0,16,16'" hotimage="file='UI\setting\option_hover.png' dest='0,0,16,16'" pushedimage="file='UI\setting\option_down.png' dest='0,0,16,16'" disabledimage="file='UI\setting\option_disable.png' dest='0,0,16,16'" selectedimage="file='UI\setting\optioned_normal.png' dest='0,0,16,16'" selectedhotimage="file='UI\setting\optioned_hover.png' dest='0,0,16,16'" selectedpushedimage="file='UI\setting\optioned_down.png' dest='0,0,16,16'" autocalcwidth="true" group="SettingOther2" />
+	               		</HorizontalLayout>
+	               		<Label text="关闭的主播上线后提醒。让您不错过每一个主播的每一个瞬间" enabled="false" />            		
+	               	</VerticalLayout>
+	            </TabLayout>
+
+
+	            <HorizontalLayout height="50" inset="6,5,0,0" ><!-- 状态栏 -->
+		        	<Button name="okbtn" text="确定" width="90" height="25" padding="165,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+		            <Button name="closebtn" text="取消" width="90" height="25" padding="12,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+		            <Button name="applybtn" text="应用" width="90" height="25" padding="12,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'" />
+       			</HorizontalLayout>
+            </VerticalLayout>      
+        </HorizontalLayout> 
+    </VerticalLayout>
+</Window>

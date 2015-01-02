@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window >
+  <Font name="微软雅黑" size="12" bold="false" default="true" />
+  <Font name="微软雅黑" size="12" bold="true"/>
+  <Default name="Menu" value="bordersize=&quot;1&quot; bordercolor=&quot;#FFB5B5B5&quot; inset=&quot;3,4,3,4&quot; itemtextpadding=&quot;35,0,0,0&quot; bkcolor=&quot;#FFFFFFFE&quot; itemselectedbkcolor=&quot;#FFB5B5B5&quot;" />
+  <Default name="ExplandIcon" value="UI\menu\menu_expand.png" />
+  <Menu >
+  		<MenuElement name="Menu_Item_Play" text="播放" width="180" />
+  		<MenuElement name="Menu_Item_PlayTemp" text="临时博" />
+  		<MenuElement name="Menu_Item_Download" text="下载更多音质" />
+  		<MenuElement type="line" />
+  	
+	    <MenuElement text="上传歌曲" expland="true" >
+	     	 <MenuElement name="" text="上传本地歌曲..." width="180"/>
+	     	 <MenuElement name="" text="上传本地歌曲文件夹..." />
+	    </MenuElement>
+	    <MenuElement text="排序" expland="true" >
+	     	 <MenuElement name="" text="按文件名"  width="180" icon="UI\menu\Yes.png" iconsize="23,23" />
+	     	 <MenuElement name="" text="按歌手" />
+	     	 <MenuElement name="" text="按添加时间" />
+	     	 <MenuElement name="" text="按播放次数" />
+	     	 <MenuElement name="" text="按是否已下载" />
+	     	 <MenuElement name="" text="随机排序" />
+	    </MenuElement> 
+	    <MenuElement text="播放模式" expland="true" >
+	     	 <MenuElement name="" text="单曲播放"  width="180" icon="UI\menu\Yes.png" iconsize="23,23" />
+	     	 <MenuElement name="" text="单曲循环" />
+	     	 <MenuElement name="" text="顺序播放" />
+	     	 <MenuElement name="" text="列表循环" />
+	     	 <MenuElement name="" text="随机播放" />
+	    </MenuElement>
+	    <MenuElement name="Menu_list_Mv"  text="匹配MV" icon="UI\menu\list\Mv.png" iconsize="23,23" />	    
+	    <MenuElement type="line" />
+
+	    <MenuElement name="Menu_Item_Recover" text="列表恢复(列表丢失时使用)" />
+	    <MenuElement type="line" />
+
+	    <MenuElement text="添加到列表" icon="UI\menu\list\Add.png" iconsize="23,23" expland="true" >
+	    	<MenuElement name="" height="25" enabled="false" >
+		       	 <Label text="我的收藏—————" textcolor="#FFB5B5B5" textpadding="10,0,0,0" font="0" /> 
+		     </MenuElement> 
+	     	 <MenuElement name="" text="本地列表" height="25"  />
+	     	 <MenuElement name="" height="25" enabled="false" >
+		       	 <Label text="我的收藏—————" textcolor="#FFB5B5B5" textpadding="10,0,0,0" font="0" /> 
+		     </MenuElement> 
+	     	 <MenuElement name="" text="默认收藏" height="30"  />
+	    </MenuElement>
+	    <MenuElement text="移动到"  expland="true" > 
+	     	 <MenuElement name="" height="25" enabled="false" >
+		       	 <Label text="我的收藏—————" textcolor="#FFB5B5B5" textpadding="10,0,0,0" font="0" /> 
+		     </MenuElement>  
+	     	 <MenuElement name="" text="默认收藏" height="30" />
+	    </MenuElement>
+		<MenuElement name="Menu_Item_Share" text="分享到" icon="UI\menu\list\Share.png" iconsize="23,23" />
+  		<MenuElement name="Menu_Item_Send" text="发送到移动工具" icon="UI\menu\list\Mobile.png" iconsize="23,23" />
+  		<MenuElement name="Menu_Item_OpenFloder" text="打开歌曲所在目录" enabled="false" />
+  		<MenuElement name="Menu_Item_Info" text="歌曲信息" />
+		<MenuElement type="line" />
+
+  		<MenuElement name="Menu_Item_Delelte" text="删除" icon="UI\menu\list\Delete.png" iconsize="23,23" />
+  		<MenuElement name="Menu_Item_DeleteFile" text="删除(包括文件)" />
+  		<MenuElement name="Menu_Item_Rename" text="重命名" enabled="false" />
+  		<MenuElement name="Menu_Item_Clear" text="清空列表" />
+ 	</Menu>
+</Window>

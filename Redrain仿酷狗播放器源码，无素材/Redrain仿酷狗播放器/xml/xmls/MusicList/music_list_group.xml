@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+    <MusicListGroup menu="true" inset="5,0,0,0" height="28" itemattr="valign=&quot;vcenter&quot; textpadding=&quot;5,0,0,0&quot; font=&quot;3&quot;" folderattr="padding=&quot;0,8,0,0&quot; width=&quot;16&quot; height=&quot;12&quot; selectedimage=&quot;UI\LeftTab\listitem\expland_down.png&quot; normalimage=&quot;UI\LeftTab\listitem\expland_normal.png&quot;">  
+        <Button name="GroupMenuBtn" float="true" pos="255,0,0,0" width="26" height="22" padding="3,3,0,0" normalimage="UI\LeftTab\listitem\menu_normal.png" hotimage="UI\LeftTab\listitem\menu_hover.png" pushedimage="UI\LeftTab\listitem\menu_down.png" />                    
+    </MusicListGroup>
+</Window>
+<!-- inherit TreeNode -->

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="632,402" sizebox="4,4,4,4" caption="0,0,0,30" mininfo="632,402" roundcorner="3,3" bktrans="false" >
+    <Font name="微软雅黑" size="13" default="true"/>
+    <Font name="微软雅黑" size="13" bold="true" />
+    <Default name="Label" value="autocalcwidth=&quot;true&quot;" />
+    <Default name="VScrollBar" value="width=&quot;17&quot; button1normalimage=&quot;file='UI\skin\scroll1_normal.png'&quot; button1hotimage=&quot;file='UI\skin\scroll1_normal.png'&quot; button1pushedimage=&quot;file='UI\skin\scroll1_down.png'&quot; button2normalimage=&quot;file='UI\skin\scroll2_normal.png'&quot; button2hotimage=&quot;file='UI\skin\scroll2_normal.png'&quot; button2pushedimage=&quot;file='UI\skin\scroll2_down.png'&quot; thumbnormalimage=&quot;file='UI\skin\scroll.png' corner='3,3,3,3'&quot; thumbhotimage=&quot;file='UI\skin\scroll.png' corner='3,3,3,3'&quot;" />    
+    <VerticalLayout  bordercolor="#FF47484B" bordersize="1" inset="1,1,1,1">
+        <HorizontalLayout name="background" height="30" bkimage="file='UI\BKImage\4.jpg' source='0,0,1000,30'" ><!-- 标题栏 -->
+            <Label text="皮肤与窗口调整——Redrain播放器" textcolor="#FFFFFFFF" textpadding="5,0,0,0" font="1" autocalcwidth="false" width="300"/>
+			<Control />
+			<Button name="closebtn" width="23" height="18" padding="0,6,0,0" normalimage="UI\title\close_normal.png" hotimage="UI\title\close_hover.png" pushedimage="UI\title\close_down.png" />                     
+        </HorizontalLayout>
+
+        <VerticalLayout height="306" bkcolor="#FFFFFFFF"><!-- 主体 -->
+            <HorizontalLayout height="36" bottombordersize="2" bordercolor="FFCACACA">
+            	<Option name="Skin_OptOfficial" width="84" height="36" normalimage="UI\skin\official_normal.png" hotimage="UI\skin\official_hover.png" pushedimage="UI\skin\official_down.png"  group="TopTab" selectedimage="UI\skin\official_down.png"  selected="true" />
+            	<Option name="Skin_OptMy" width="84" height="36" normalimage="UI\skin\my_normal.png" hotimage="UI\skin\my_hover.png" pushedimage="UI\skin\my_down.png"  group="TopTab" selectedimage="UI\skin\my_down.png" />
+            	<Button name="Skin_BtnRestore" float="true" pos="490,12,0,0" width="118" height="13" normalimage="UI\skin\restore_normal.png" hotimage="UI\skin\restore_hover.png" pushedimage="UI\skin\restore_down.png"  />
+            </HorizontalLayout >
+            <AnimationTabLayout name="Skin_Tab" height="270" selectedid="0" >
+	            <TileLayout columns="5" vscrollbar="true" padding="13,10,0,0" childpadding="1,0,0,0" width="613" height="260" >
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\1small.jpg" bkname="默认皮肤" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\2small.jpg" bkname="隽永七夕" author="Redrain"  />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\3small.jpg" bkname="你好狮子座" author="Redrain"  />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\4small.jpg"  bkname="激情世界杯" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\5small.jpg"  bkname="新春快乐" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\6small.jpg"  bkname="快乐童年" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\7small.jpg"  bkname="土豪金" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\8small.jpg"  bkname="雾林小径" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\9small.jpg"  bkname="落叶沉思" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\10small.jpg" bkname="春日初暖" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\11small.jpg" bkname="雾色渐浓" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\12small.jpg" bkname="馨馨相伴" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\13small.jpg" bkname="灿烂黄昏" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\14small.jpg" bkname="音乐节" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\15small.jpg" bkname="青青碧色" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\16small.jpg" bkname="森林呓语" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\17small.jpg" bkname="初秋日光" author="Redrain" />
+                    <SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\18small.jpg" bkname="寂寥秋意" author="Redrain" />
+                    <SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\19small.jpg" bkname="来自星星的你" author="Redrain" />
+                </TileLayout >
+                <TileLayout columns="5" vscrollbar="true" padding="13,10,0,0" childpadding="1,0,0,0" width="613" height="260" >
+                	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\1small.jpg" bkname="默认皮肤" author="Redrain" />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\2small.jpg" bkname="来自星星的你" author="Redrain"  />
+	            	<SkinPikerPictureItem name="SkinPictureItem" width="118" height="70" bkimage="UI\BKImage\3small.jpg" bkname="寂寥秋意" author="Redrain"  />
+                </TileLayout >
+            </AnimationTabLayout>	            
+        </VerticalLayout> 
+
+        <HorizontalLayout height="64" inset="12,23,0,0" bkcolor="#FFFFFFFF"><!-- 状态栏 -->
+        	<Label text="列表透明" padding="0,3,0,0" width="1" height="18" font="0" />
+        	<Button name="Skin_BtnListTrans" text="50 %" tag="50" align="left" textpadding="6,2,0,0" width="73" height="24" padding="10,0,0,0" normalimage="UI\skin\combo_normal.png" hotimage="UI\skin\combo_down.png" pushedimage="UI\skin\combo_down.png"  />
+
+        	<Option name="Skin_OptSkinTrans" width="14" height="14" padding="52,6,0,0" normalimage="UI\skin\check_normal.png" hotimage="UI\skin\check_hover.png" pushedimage="UI\skin\check_down.png" selectedimage="UI\skin\checked_normal.png" selectedhotimage="UI\skin\checked_hover.png" selectedpushedimage="UI\skin\checked_down.png"/>
+			<Label text="皮肤透明" padding="2,3,0,0" width="1" height="18" font="0" />
+        	<Button name="Skin_BtnSkinTrans" enabled="false" text="0 %" tag="0" align="left" textpadding="6,2,0,0" width="73" height="24" padding="10,0,0,0" normalimage="UI\skin\combo_normal.png" hotimage="UI\skin\combo_down.png" pushedimage="UI\skin\combo_down.png"  />
+
+            <Button name="Skin_BtnPattet"  text="调色板" width="65" height="26" padding="117,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+            <Button name="Skin_BtnCustom"  text="自定义皮肤" width="77" height="26" padding="5,0,0,0" normalimage="file='UI\skin\button_normal.png' corner='5,5,5,5'" hotimage="file='UI\skin\button_hover.png' corner='5,5,5,5'" pushedimage="file='UI\skin\button_down.png' corner='5,5,5,5'"  />
+        </HorizontalLayout>
+    </VerticalLayout>
+
+</Window>

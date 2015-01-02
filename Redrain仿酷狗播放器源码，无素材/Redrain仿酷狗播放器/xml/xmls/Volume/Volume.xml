@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="89,27" bktrans="true" >
+<HorizontalLayout  bkcolor="#00FFFFFF" bkimage="file='UI\music_control\volume_bk.png' mask='#FFFFFFFF'" >
+	<Button width="29" height="26" padding="3,0,0,0" normalimage="file='UI\music_control\sound_normal.png' source='87,0,116,26'" hotimage="file='UI\music_control\sound_hover.png' source='87,0,116,26'"  pushedimage="file='UI\music_control\sound_down.png' source='87,0,116,26'" />
+    <Slider name="Widget_slider" height="8" width="52" min="0" max="100" value="100" step="1" padding="0,10,0,0" bkimage="UI\music_control\volume_sliber_bk.png" foreimage="UI\music_control\volume_sliber_fore.png" isstretchfore="false" thumbimage="UI\music_control\volume_sliberbar_normal.png" thumbhotimage="file='UI\music_control\volume_sliberbar_hover.png' "  thumbpushedimage="UI\music_control\volume_sliberbar_down.png" thumbsize="8,8" sendmove="true" />
+</HorizontalLayout>
+</Window>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window >
+  <Font name="微软雅黑" size="12" bold="false" default="true" />
+  <Font name="微软雅黑" size="12" bold="true"/>
+  <Default name="Menu" value="bordersize=&quot;1&quot; bordercolor=&quot;#FFB5B5B5&quot; inset=&quot;3,4,3,4&quot; itemtextpadding=&quot;35,0,0,0&quot; bkcolor=&quot;#FFFFFFFE&quot; itemselectedbkcolor=&quot;#FFB5B5B5&quot;" />
+  <Default name="ExplandIcon" value="UI\menu\menu_expand.png" />
+  <Menu >
+  		<MenuElement name="Menu_Main_Login" text="Redrain播放器登录" width="180" icon="UI\menu\main\Login.png" iconsize="23,23" />
+  		<MenuElement type="line" />
+
+	    <MenuElement text="添加歌曲" expland="true" >
+	     	 <MenuElement name="" text="添加本地歌曲..." width="180"/>
+	     	 <MenuElement name="" text="添加本地歌曲文件夹..." />
+	    </MenuElement>
+	    <MenuElement text="播放模式" expland="true" >
+	     	 <MenuElement name="" text="单曲播放"  width="180" icon="UI\menu\Yes.png" iconsize="23,23" />
+	     	 <MenuElement name="" text="单曲循环" />
+	     	 <MenuElement name="" text="顺序播放" />
+	     	 <MenuElement name="" text="列表循环" />
+	     	 <MenuElement name="" text="随机播放" />
+
+	    </MenuElement>
+	    
+	    <MenuElement type="line" />
+
+  		<MenuElement name="Menu_Main_Remote" text="遥控器" />
+  		<MenuElement name="Menu_Main_Equal" text="均衡器" />
+  		<MenuElement name="Menu_Main_Effect" text="音效插件" />
+  		<MenuElement name="Menu_Main_Clock" text="定时设置" />
+
+		<MenuElement type="line" />
+
+  		<MenuElement name="Menu_Main_AllwaysTop" text="界面总在最前" />
+  		<MenuElement name="Menu_Main_Download" text="下载设置" />
+  		<MenuElement name="Menu_Main_Uptate" text="在线升级" icon="UI\menu\main\Update.png" iconsize="23,23" />
+  		<MenuElement name="Menu_Main_Today" text="显示今日推荐" />
+  		<MenuElement name="Menu_Main_Help" text="帮助与意见反馈" icon="UI\menu\main\Help.png" iconsize="23,23" />
+  		<MenuElement name="Menu_Main_Settings" text="设置" icon="UI\menu\main\Settings.png" iconsize="23,23" />
+
+		<MenuElement type="line" />
+
+  		<MenuElement name="Menu_Main_Exit"  text="退出" icon="UI\menu\main\Exit.png" iconsize="23,23" />
+ 	</Menu>
+</Window>
