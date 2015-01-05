@@ -39,6 +39,9 @@ namespace UiLib
 
 		void PaintText(HDC hDC);
 
+		virtual bool GetAutoCalcWidth();
+		virtual void SetAutoCalcWidth(bool bAutoCalcWidth);
+
 		void		SetEnabledEffect(bool _EnabledEffect);
 		bool		GetEnabledEffect();
 		void		SetText(LPCTSTR pstrText);
@@ -66,8 +69,6 @@ namespace UiLib
 		void		SetTextShadowColorB(DWORD _TextShadowColorB);
 		DWORD		GetTextShadowColorB();
 		void		SetStrokeColor(DWORD _StrokeColor);
-		bool		GetAutoCalcWidth();
-		void		SetAutoCalcWidth(bool _AutoCalcWidth);
 		DWORD		GetStrokeColor();
 		void		SetGradientAngle(int _SetGradientAngle);
 		int			GetGradientAngle();
@@ -83,6 +84,7 @@ namespace UiLib
 		UINT	m_uTextStyle;
 		RECT	m_rcTextPadding;
 		bool	m_bShowHtml;
+		bool	m_bAutoCalcWidth;
 
 		int						m_hAlign;
 		int						m_vAlign;
@@ -100,7 +102,6 @@ namespace UiLib
 		DWORD					m_dwTextShadowColorA;
 		DWORD					m_dwTextShadowColorB;
 		DWORD					m_dwStrokeColor;
-		bool					m_AutoCalcWidth;
 		//RectF					m_ShadowOffset;
 		CDuiString				m_TextValue;
 		ULONG_PTR				m_gdiplusToken;

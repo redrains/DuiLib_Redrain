@@ -36,7 +36,7 @@ namespace UiLib
 		m_EnabledStroke(false),
 		m_TransStroke(255),
 		m_dwStrokeColor(0),
-		m_AutoCalcWidth(false),
+		m_bAutoCalcWidth(false),
 		m_EnabledShadow(false),
 		m_GradientLength(0)
 	{
@@ -135,13 +135,13 @@ namespace UiLib
 
 	SIZE CLabelUI::EstimateSize(SIZE szAvailable)
 	{
-		if (m_AutoCalcWidth)
+		if (m_bAutoCalcWidth)
 		{
-			RECT rect = {0};
+			RECT rcText = {0};
 			HFONT hOldFont = (HFONT)::SelectObject(m_pManager->GetPaintDC(), m_pManager->GetFont(m_iFont));
-			::DrawText(m_pManager->GetPaintDC(), m_sText.GetData(), -1, &rect, DT_CALCRECT);
+			::DrawText(m_pManager->GetPaintDC(), m_sText.GetData(), -1, &rcText, DT_CALCRECT);
 			::SelectObject(m_pManager->GetPaintDC(), hOldFont);
-			m_cxyFixed.cx = rect.right - rect.left;
+			m_cxyFixed.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
 		}
 
 		if( m_cxyFixed.cy == 0 ) return CSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 4);
@@ -385,6 +385,16 @@ namespace UiLib
 		//		}
 	}
 
+	bool CLabelUI::GetAutoCalcWidth()
+	{
+		return m_bAutoCalcWidth;
+	}
+
+	void CLabelUI::SetAutoCalcWidth(bool bAutoCalcWidth)
+	{
+		m_bAutoCalcWidth = bAutoCalcWidth;
+	}
+
 	void CLabelUI::SetTransShadow( int _TransShadow )
 	{
 		m_TransShadow = _TransShadow;
@@ -551,16 +561,6 @@ namespace UiLib
 	void CLabelUI::SetStrokeColor( DWORD _StrokeColor )
 	{
 		m_dwStrokeColor = _StrokeColor;
-	}
-
-	bool CLabelUI::GetAutoCalcWidth()
-	{
-		return m_AutoCalcWidth;
-	}
-
-	void CLabelUI::SetAutoCalcWidth(bool _AutoCalcWidth)
-	{
-		m_AutoCalcWidth = _AutoCalcWidth;
 	}
 
 	DWORD CLabelUI::GetStrokeColor()

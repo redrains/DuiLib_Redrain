@@ -39,6 +39,9 @@ namespace DuiLib
 
 		void PaintText(HDC hDC);
 
+		virtual bool GetAutoCalcWidth() const;
+		virtual void SetAutoCalcWidth(bool bAutoCalcWidth);
+
 		void		SetEnabledEffect(bool _EnabledEffect);
 		bool		GetEnabledEffect();
 		void		SetText(LPCTSTR pstrText);
@@ -55,10 +58,7 @@ namespace DuiLib
 		int			GetTransStroke();
 		void		SetGradientLength(int _GradientLength);
 		int			GetGradientLength();
-		//void		SetTextRenderingHintAntiAlias(int _TextRenderingHintAntiAlias);
-		//int			GetTextRenderingHintAntiAlias();
 		void		SetShadowOffset(int _offset,int _angle);
-		//RectF		GetShadowOffset();
 		void		SetTextColor1(DWORD _TextColor1);
 		DWORD		GetTextColor1();
 		void		SetTextShadowColorA(DWORD _TextShadowColorA);
@@ -66,8 +66,6 @@ namespace DuiLib
 		void		SetTextShadowColorB(DWORD _TextShadowColorB);
 		DWORD		GetTextShadowColorB();
 		void		SetStrokeColor(DWORD _StrokeColor);
-		bool		GetAutoCalcWidth();
-		void		SetAutoCalcWidth(bool _AutoCalcWidth);
 		DWORD		GetStrokeColor();
 		void		SetGradientAngle(int _SetGradientAngle);
 		int			GetGradientAngle();
@@ -83,6 +81,7 @@ namespace DuiLib
 		UINT	m_uTextStyle;
 		RECT	m_rcTextPadding;
 		bool	m_bShowHtml;
+		bool	m_bAutoCalcWidth;
 
 		int						m_hAlign;
 		int						m_vAlign;
@@ -100,12 +99,10 @@ namespace DuiLib
 		DWORD					m_dwTextShadowColorA;
 		DWORD					m_dwTextShadowColorB;
 		DWORD					m_dwStrokeColor;
-		bool					m_AutoCalcWidth;
-		//RectF					m_ShadowOffset;
+
 		CDuiString				m_TextValue;
 		ULONG_PTR				m_gdiplusToken;
-		//GdiplusStartupInput		m_gdiplusStartupInput;
-		//TextRenderingHint		m_TextRenderingHintAntiAlias;
+
 	};
 }
 

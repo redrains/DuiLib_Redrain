@@ -1,3 +1,6 @@
+2015-1-5
+修复text控件无法设置宽度的bug，并且增加自动加算宽度的属性
+
 2014-12-31
 为treenode增加defaultexpand，设置treenode初始状态是否展开
 

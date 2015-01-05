@@ -106,9 +106,11 @@ namespace UiLib
 
 	SIZE CTextUI::EstimateSize(SIZE szAvailable)
 	{
-		RECT rcText = { 0, 0, MAX(szAvailable.cx, m_cxyFixed.cx), 9999 };
+
+		RECT rcText = { 0, 0, m_bAutoCalcWidth ? 9999 : m_cxyFixed.cx, 9999 };
 		rcText.left += m_rcTextPadding.left;
 		rcText.right -= m_rcTextPadding.right;
+
 		if( m_bShowHtml ) {   
 			int nLinks = 0;
 			CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, m_dwTextColor, NULL, NULL, nLinks, DT_CALCRECT | m_uTextStyle);
@@ -118,6 +120,11 @@ namespace UiLib
 		}
 		SIZE cXY = {rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right,
 			rcText.bottom - rcText.top + m_rcTextPadding.top + m_rcTextPadding.bottom};
+
+		if (m_bAutoCalcWidth)
+		{
+			m_cxyFixed.cx = cXY.cx;
+		}
 
 		if( m_cxyFixed.cy != 0 ) cXY.cy = m_cxyFixed.cy;
 		return cXY;
