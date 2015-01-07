@@ -505,34 +505,50 @@ void CTxtWinHost::TxViewChange(BOOL fUpdate)
 
 BOOL CTxtWinHost::TxCreateCaret(HBITMAP hbmp, INT xWidth, INT yHeight)
 {
-    //return ::CreateCaret(m_re->GetManager()->GetPaintWindow(), hbmp, xWidth, yHeight);
-	return m_re->GetManager()->CreateCaret(hbmp, xWidth, yHeight);
+	if (m_re->GetManager()->IsBackgroundTransparent())
+	{
+		return m_re->GetManager()->CreateCaret(hbmp, xWidth, yHeight);
+	}
+	else
+	{
+		return ::CreateCaret(m_re->GetManager()->GetPaintWindow(), hbmp, xWidth, yHeight);
+	}
 }
 
 BOOL CTxtWinHost::TxShowCaret(BOOL fShow)
 {
-    //if(fShow)
-    //    return ::ShowCaret(m_re->GetManager()->GetPaintWindow());
-    //else
-    //    return ::HideCaret(m_re->GetManager()->GetPaintWindow());
-	
-	if(m_re->GetManager()->GetCurrentCaretObject() == m_re)
+	if (m_re->GetManager()->IsBackgroundTransparent())
 	{
-		if((m_re->IsReadOnly() || !m_re->Activate()))
+		if(m_re->GetManager()->GetCurrentCaretObject() == m_re)
 		{
-			m_re->GetManager()->ShowCaret(false);
-			return TRUE;
+			if((m_re->IsReadOnly() || !m_re->Activate()))
+			{
+				m_re->GetManager()->ShowCaret(false);
+				return TRUE;
+			}
 		}
-	}
 	
-	return m_re->GetManager()->ShowCaret(fShow == TRUE);
+		return m_re->GetManager()->ShowCaret(fShow == TRUE);
+	}
+	else
+	{
+		if(fShow)
+		    return ::ShowCaret(m_re->GetManager()->GetPaintWindow());
+		else
+		    return ::HideCaret(m_re->GetManager()->GetPaintWindow());
+	}
 }
 
 BOOL CTxtWinHost::TxSetCaretPos(INT x, INT y)
 {
-   // return ::SetCaretPos(x, y);
-	m_re->GetManager()->SetCaretPos(m_re, x, y);
-	return true;
+	if (m_re->GetManager()->IsBackgroundTransparent())
+	{
+		m_re->GetManager()->SetCaretPos(m_re, x, y);
+		return true;
+	}
+	else
+		return ::SetCaretPos(x, y);
+
 }
 
 BOOL CTxtWinHost::TxSetTimer(UINT idTimer, UINT uTimeout)
@@ -1045,7 +1061,8 @@ void CTxtWinHost::SetParaFormat(PARAFORMAT2 &p)
 
 CRichEditUI::CRichEditUI() : m_pTwh(NULL), m_bVScrollBarFixing(false), m_bWantTab(true), m_bWantReturn(true), 
     m_bWantCtrlReturn(true), m_bRich(true), m_bReadOnly(false), m_bWordWrap(false), m_dwTextColor(0), m_iFont(-1), 
-    m_iLimitText(cInitTextMax), m_lTwhStyle(ES_MULTILINE), m_bInited(false), m_chLeadByte(0),m_uButtonState(0)
+    m_iLimitText(cInitTextMax), m_lTwhStyle(ES_MULTILINE), m_bInited(false), m_chLeadByte(0),m_uButtonState(0),
+	m_dwTipValueColor(0xFFBAC0C5)
 {
 #ifndef _UNICODE
 	m_fAccumulateDBC =true;
@@ -1254,6 +1271,7 @@ void CRichEditUI::SetText(LPCTSTR pstrText)
 {
     m_sText = pstrText;
     if( !m_pTwh ) return;
+	m_pTwh->SetColor(m_dwTextColor);
     SetSel(0, -1);
     ReplaceSel(pstrText, FALSE);
 }
@@ -1677,6 +1695,11 @@ void CRichEditUI::DoInit()
         m_pTwh->GetTextServices()->TxSendMessage(EM_SETLANGOPTIONS, 0, 0, &lResult);
         m_pTwh->OnTxInPlaceActivate(NULL);
         m_pManager->AddMessageFilter(this);
+		if (GetText() == _T(""))
+		{
+			SetText(m_sTipValue);
+			m_pTwh->SetColor(m_dwTipValueColor);
+		}
     }
 
 	m_bInited= true;
@@ -1866,6 +1889,11 @@ void CRichEditUI::DoEvent(TEventUI& event)
     if( event.Type == UIEVENT_SETFOCUS ) {
         if( m_pTwh ) {
             m_pTwh->OnTxInPlaceActivate(NULL);
+			if (GetText() == m_sTipValue)
+			{
+				SetText(_T(""));
+				m_pTwh->SetColor(m_dwTextColor);
+			}
             m_pTwh->GetTextServices()->TxSendMessage(WM_SETFOCUS, 0, 0, 0);
         }
 		m_bFocused = true;
@@ -1875,6 +1903,11 @@ void CRichEditUI::DoEvent(TEventUI& event)
     if( event.Type == UIEVENT_KILLFOCUS )  {
         if( m_pTwh ) {
             m_pTwh->OnTxInPlaceActivate(NULL);
+			if (GetText() == _T(""))
+			{
+				SetText(m_sTipValue);
+				m_pTwh->SetColor(m_dwTipValueColor);
+			}
             m_pTwh->GetTextServices()->TxSendMessage(WM_KILLFOCUS, 0, 0, 0);
         }
 		m_bFocused = false;
@@ -1980,6 +2013,30 @@ void CRichEditUI::SetTextPadding(RECT rc)
 {
 	m_rcTextPadding = rc;
 	Invalidate();
+}
+
+void CRichEditUI::SetTipValue( LPCTSTR pStrTipValue )
+{
+	m_sTipValue	= pStrTipValue;
+}
+
+LPCTSTR CRichEditUI::GetTipValue()
+{
+	return m_sTipValue.GetData();
+}
+
+void CRichEditUI::SetTipValueColor( LPCTSTR pStrColor )
+{
+	if( *pStrColor == _T('#')) pStrColor = ::CharNext(pStrColor);
+	LPTSTR pstr = NULL;
+	DWORD clrColor = _tcstoul(pStrColor, &pstr, 16);
+
+	m_dwTipValueColor = clrColor;
+}
+
+DWORD CRichEditUI::GetTipValueColor()
+{
+	return m_dwTipValueColor;
 }
 
 void CRichEditUI::PaintStatusImage(HDC hDC)
@@ -2363,6 +2420,8 @@ void CRichEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
 		SetTextPadding(rcTextPadding);
 	}
+	else if( _tcscmp(pstrName, _T("tipvalue")) == 0 ) SetTipValue(pstrValue);
+	else if( _tcscmp(pstrName, _T("tipvaluecolor")) == 0 ) SetTipValueColor(pstrValue);
     else CContainerUI::SetAttribute(pstrName, pstrValue);
 }
 

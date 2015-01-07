@@ -136,6 +136,11 @@ public:
 	RECT GetTextPadding() const;
 	void SetTextPadding(RECT rc);
 
+	void SetTipValue(LPCTSTR pStrTipValue);
+	LPCTSTR GetTipValue();
+	void SetTipValueColor(LPCTSTR pStrColor);
+	DWORD GetTipValueColor();
+
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
     LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled);
@@ -164,6 +169,8 @@ protected:
 	CDuiString m_sFocusedImage;
 	CDuiString m_sDisabledImage;
 	RECT m_rcTextPadding;
+	CDuiString m_sTipValue;
+	DWORD m_dwTipValueColor;
 };
 
 } // namespace DuiLib

@@ -901,6 +901,9 @@ private:
 	bool m_bCaretShowing;
 	CRichEditUI* m_currentCaretObject;
 	//
+	ULONG_PTR						m_gdiplusToken;
+	Gdiplus::GdiplusStartupInput	*m_pGdiplusStartupInput;
+	//
 	CDuiTrayIcon mDuiTray;
     //
     CControlUI* m_pRoot;
