@@ -35,7 +35,7 @@ namespace DuiLib
 		m_pOwner = pOwner;
 		RECT rcPos = CalPos();
 		UINT uStyle = 0;
-		if(m_pOwner->GetTransMode())
+		if(m_pOwner->GetManager()->IsBackgroundTransparent())
 		{
 			uStyle = WS_POPUP | ES_AUTOHSCROLL | WS_VISIBLE;
 			RECT rcWnd={0};
@@ -181,7 +181,7 @@ namespace DuiLib
 
 	CEditUI::CEditUI() : m_pWindow(NULL), m_uMaxChar(255), m_bReadOnly(false), 
 		m_bPasswordMode(false), m_cPasswordChar(_T('*')), m_uButtonState(0), 
-		m_dwEditbkColor(0xFFFFFFFF), m_dwEditTextColor(0x00000000), m_iWindowStyls(0),m_bTrans(false),m_sTipValueColor(0xFFBAC0C5)
+		m_dwEditbkColor(0xFFFFFFFF), m_dwEditTextColor(0x00000000), m_iWindowStyls(0),m_dwTipValueColor(0xFFBAC0C5)
 	{
 		SetTextPadding(CDuiRect(4, 3, 4, 3));
 		SetBkColor(0xFFFFFFFF);
@@ -478,10 +478,12 @@ namespace DuiLib
 
 	void CEditUI::SetTipValue( LPCTSTR pStrTipValue )
 	{
-		if(m_sText != _T(""))
-			m_sText = pStrTipValue;
-		m_sSrcTipValue	= pStrTipValue;
-		m_sTipValue		= CDuiString(_T("__IsTipValue__"))+pStrTipValue;
+		m_sTipValue	= pStrTipValue;
+	}
+
+	LPCTSTR CEditUI::GetTipValue()
+	{
+		return m_sTipValue.GetData();
 	}
 
 	void CEditUI::SetTipValueColor( LPCTSTR pStrColor )
@@ -490,22 +492,12 @@ namespace DuiLib
 		LPTSTR pstr = NULL;
 		DWORD clrColor = _tcstoul(pStrColor, &pstr, 16);
 
-		m_sTipValueColor = clrColor;
+		m_dwTipValueColor = clrColor;
 	}
 
 	DWORD CEditUI::GetTipValueColor()
 	{
-		return m_sTipValueColor;
-	}
-
-	CDuiString CEditUI::GetTipValue()
-	{
-		return m_sTipValue;
-	}
-
-	LPCTSTR CEditUI::GetSrcTipValue()
-	{
-		return m_sSrcTipValue.GetData();
+		return m_dwTipValueColor;
 	}
 
 	void CEditUI::SetPos(RECT rc)
@@ -535,16 +527,6 @@ namespace DuiLib
 		return CControlUI::EstimateSize(szAvailable);
 	}
 
-	void CEditUI::SetTransMode(bool bTrans)   //Add by Redrain 20114.8.24
-	{
-		m_bTrans = bTrans;
-	}
-
-	bool CEditUI::GetTransMode() const
-	{
-		return m_bTrans;
-	}
-
 	void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
 		if( _tcscmp(pstrName, _T("readonly")) == 0 ) SetReadOnly(_tcscmp(pstrValue, _T("true")) == 0);
@@ -565,7 +547,6 @@ namespace DuiLib
 			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
 			SetNativeEditBkColor(clrColor);
 		}
-		else if( _tcscmp(pstrName, _T("trans")) == 0) SetTransMode(_tcscmp(pstrValue,_T("true")) == 0);
 		else CLabelUI::SetAttribute(pstrName, pstrValue);
 	}
 
@@ -606,12 +587,12 @@ namespace DuiLib
 		DWORD mCurTextColor = m_dwTextColor;
 
 		if( m_dwTextColor == 0 ) mCurTextColor = m_dwTextColor = m_pManager->GetDefaultFontColor();
-		if(GetText() == m_sSrcTipValue || GetText() == _T(""))	mCurTextColor = m_sTipValueColor;
+		if(GetText() == m_sTipValue || GetText() == _T(""))	mCurTextColor = m_dwTipValueColor;
 		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
 
 		CDuiString sText;
 		if( m_sText.IsEmpty() ) 
-			sText = m_sSrcTipValue;
+			sText = m_sTipValue;
 		else 
 			sText = m_sText;
 

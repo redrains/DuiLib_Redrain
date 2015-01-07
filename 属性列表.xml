@@ -398,6 +398,10 @@
 		<Attribute name="transtext1" default="100" type="INT" comment="字体色彩透明度"/>
 		<Attribute name="autocalcwidth" default="false" type="INT" comment="是否自动计算宽度"/>		
 	</Label>
+	<GifAnim parent="Label" notifies="setfocus killfocus timer menu windowinit(root)">
+		<Attribute name="bkimage" default="" type="STRING" comment="Gif动画图片路径"/>
+		<Attribute name="autoplay" default="true" type="BOOL" comment="是否自动播放GIF动画"/>
+	</GifAnim>
 	<Button parent="Label" notifies="setfocus killfocus timer menu click windowinit(root)">
 		<Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
 		<Attribute name="pos" default="0,0,0,0" type="RECT" comment="位置，如果为float控件则指定位置和大小，否则只指定大小,如(0,0,100,100)"/>
@@ -673,7 +677,6 @@
 		<Attribute name="passwordchar" default="" type="STRING" comment="设置密码字符"/>
 		<Attribute name="tipvalue" default="" type="STRING" comment="文本框内提示文字，当文本框text为空时显示并失去焦点时显示"/>
 		<Attribute name="tipvaluecolor" default="0xFFBAC0C5" type="DWORD" comment="文本框内提示文字的颜色"/>
-		<Attribute name="trans" default="false" type="BOOL" comment="启此属性设置为true可支持透明窗体效果，不需要透明效果请不要开启"/>
 	</Edit>
 	<ScrollBar parent="Control" notifies="timer menu scrolled windowinit(root)">
 		<Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
@@ -826,6 +829,7 @@
 		<Attribute name="childpadding" default="0" type="INT" comment="子控件之间的额外距离,如(4)"/>
 		<Attribute name="sepwidth" default="0" type="INT" comment="分隔符宽,正负表示分隔符在左边还是右边,如(-4)"/>
 		<Attribute name="sepimm" default="false" type="BOOL" comment="拖动分隔符是否立即改变大小,如(false)"/>
+		<Attribute name="scaleheader" default="false" type="BOOL" comment="每个表头的宽度是否按照百分比来设置"/>
 	</ListHeader>
 	<ListHeaderItem parent="Control" notifies="setfocus killfocus timer headerclick windowinit(root)">
 		<Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
@@ -868,6 +872,7 @@
 		<Attribute name="pushedimage" default="" type="STRING" comment="鼠标按下的状态图片"/>
 		<Attribute name="focusedimage" default="" type="STRING" comment="获得焦点时的状态图片"/>
 		<Attribute name="sepimage" default="" type="STRING" comment="拖动条图片"/>
+		<Attribute name="scale" default="0" type="INT" comment="设置子表头所占总表头的百分比宽度，如40（代表占40%的宽度）"/>
 	</ListHeaderItem>
 	<ListLabelElement parent="Control" notifies="setfocus killfocus timer itemactivate itemclick windowinit(root)">
 		<Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
@@ -1018,6 +1023,8 @@
 		<Attribute name="focusedimage" default="" type="STRING" comment="获得焦点状态图片"/>
 		<Attribute name="disabledimage" default="" type="STRING" comment="禁用状态图片"/>
 		<Attribute name="textpadding" default="0,0,0,0" type="RECT" comment="文字显示的边距,如(2,2,2,2)"/>
+		<Attribute name="tipvalue" default="" type="STRING" comment="文本框内提示文字，当文本框text为空时显示并失去焦点时显示"/>
+		<Attribute name="tipvaluecolor" default="0xFFBAC0C5" type="DWORD" comment="文本框内提示文字的颜色"/>
 	</RichEdit>
 	<TreeView parent="List" notifies="selectchanged setfocus killfocus timer menu itemselect windowinit(root)">
 		<Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>

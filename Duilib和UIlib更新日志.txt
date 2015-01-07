@@ -1,3 +1,10 @@
+2015-1-1
+edit控件自动判断是否为透明窗体，来选择创建方式，不需要手工设置trans属性来适应透明窗体
+richedit控件增加tipvalue和tipvaluecolor属性
+增加GifAnim控件，可控制gif的播放、暂停、停止
+ListHeader控件增加scaleheader属性，控制是否按照百分比设置每个表头的宽度
+ListHeaderItem增加scale属性，设置子表头的宽度百分比
+
 2015-1-5
 修复text控件无法设置宽度的bug，并且增加自动加算宽度的属性
 

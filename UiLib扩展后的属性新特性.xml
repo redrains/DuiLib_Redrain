@@ -115,12 +115,6 @@
 		<Attribute name="transtext1" default="100" type="INT" comment="字体色彩透明度"/>
 	</Label>
 	
-	<!--UiLib 扩展的UI元素对象-->
-	<GifAnim parent="Label" notifies="setfocus killfocus timer menu windowinit(root)">
-		<!--UiLib 扩展更新的属性-->
-		<Attribute name="bkimage" default="" type="STRING" comment="Gif动画图片"/>
-	</GifAnim>
-	
 	<!--UiLib 扩展事件 OnSelcetDay 日期选择完成时触发该事件-->
 	<Button parent="Label" notifies="OnSelcetDay setfocus killfocus timer menu click windowinit(root)">
 		<!--UiLib 扩展属性-->

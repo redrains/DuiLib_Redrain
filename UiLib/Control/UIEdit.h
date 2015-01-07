@@ -57,13 +57,9 @@ namespace UiLib
 		bool GetMatchCase();
 
 		void SetTipValue(LPCTSTR pStrTipValue);
+		LPCTSTR GetTipValue();
 		void SetTipValueColor(LPCTSTR pStrColor);
 		DWORD GetTipValueColor();
-		CDuiString GetTipValue();
-		LPCTSTR GetSrcTipValue();
-
-		void SetTransMode(bool bTrans);  //Add by Redrain 20114.8.24
-		bool GetTransMode() const;
 
 		void SetPos(RECT rc);
 		void SetVisible(bool bVisible = true);
@@ -103,12 +99,10 @@ namespace UiLib
 		CDuiString m_sFocusedImage;
 		CDuiString m_sDisabledImage;
 		CDuiString m_sTipValue;
-		CDuiString m_sSrcTipValue;
-		DWORD m_sTipValueColor;
+		DWORD m_dwTipValueColor;
 		DWORD m_dwEditbkColor;
 		DWORD m_dwEditTextColor;
 		int m_iWindowStyls;
-		bool m_bTrans; //Add by Redrain 20114.8.24
 	};
 }
 #endif // __UIEDIT_H__
