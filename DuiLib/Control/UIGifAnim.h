@@ -3,7 +3,7 @@
 
 #pragma once
 
-namespace UiLib
+namespace DuiLib
 {
 	class CLabelUI;
 

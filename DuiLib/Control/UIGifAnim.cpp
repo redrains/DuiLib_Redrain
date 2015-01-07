@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "UIGifAnim.h"
 
-namespace UiLib
+namespace DuiLib
 {
 
 	CGifAnimUI::CGifAnimUI(void)

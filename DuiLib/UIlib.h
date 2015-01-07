@@ -17,6 +17,7 @@
 // #pragma comment(lib,"winmm.lib")
 // #pragma comment(lib,"comctl32.lib") 
 // #pragma comment(lib,"Riched20.lib")
+#pragma comment(lib,"gdiplus.lib")
 
 #define UILIB_COMDAT __declspec(selectany)
 
@@ -39,6 +40,7 @@
 #include <assert.h>
 #include <crtdbg.h>
 #include <malloc.h>
+#include <gdiplus.h>
 
 #include "Utils/Utils.h"
 #include "Utils/UIDelegate.h"
@@ -67,6 +69,7 @@
 #include "Control/UILabel.h"
 #include "Control/UIText.h"
 #include "Control/UIEdit.h"
+#include "Control/UIGifAnim.h"
 
 #include "Control/UIButton.h"
 #include "Control/UIOption.h"

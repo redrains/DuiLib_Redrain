@@ -384,6 +384,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Control\UIGifAnim.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Control\UILabel.cpp"
 					>
 				</File>
@@ -558,6 +562,10 @@
 				</File>
 				<File
 					RelativePath=".\Control\UIFlash.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Control\UIGifAnim.h"
 					>
 				</File>
 				<File
