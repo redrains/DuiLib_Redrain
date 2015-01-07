@@ -33,6 +33,7 @@
 #include <atlbase.h>
 #include <atlstr.h>
 #include <xstring>
+#include <comdef.h>
 #include <gdiplus.h>
 
 #pragma comment(lib,"oledlg.lib")

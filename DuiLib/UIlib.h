@@ -40,6 +40,7 @@
 #include <assert.h>
 #include <crtdbg.h>
 #include <malloc.h>
+#include <comdef.h>
 #include <gdiplus.h>
 
 #include "Utils/Utils.h"
