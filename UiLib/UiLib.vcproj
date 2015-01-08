@@ -195,6 +195,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="../dll2008/UiLib_ud.dll"
+				LinkIncremental="1"
 				ImportLibrary="../Lib2008/UiLib_ud.lib"
 			/>
 			<Tool
@@ -267,6 +268,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="../dll2008/UiLib_u.dll"
+				LinkIncremental="1"
 				ImportLibrary="../Lib2008/UiLib_u.lib"
 			/>
 			<Tool

@@ -398,9 +398,10 @@
 		<Attribute name="transtext1" default="100" type="INT" comment="字体色彩透明度"/>
 		<Attribute name="autocalcwidth" default="false" type="INT" comment="是否自动计算宽度"/>		
 	</Label>
-	<GifAnim parent="Label" notifies="setfocus killfocus timer menu windowinit(root)">
+	<GifAnim parent="Control" notifies="setfocus killfocus timer menu windowinit(root)">
 		<Attribute name="bkimage" default="" type="STRING" comment="Gif动画图片路径"/>
 		<Attribute name="autoplay" default="true" type="BOOL" comment="是否自动播放GIF动画"/>
+		<Attribute name="autosize" default="false" type="BOOL" comment="是否根据图片自动设置控件大小"/>
 	</GifAnim>
 	<Button parent="Label" notifies="setfocus killfocus timer menu click windowinit(root)">
 		<Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
@@ -1018,6 +1019,7 @@
 		<Attribute name="align" default="left" type="STRING" comment="文字对齐方式,取值left、right、cente，如(center)"/>
 		<Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>
 		<Attribute name="textcolor" default="0xFF000000" type="DWORD" comment="字体颜色，如(0xFFFF0000)"/>
+		<Attribute name="maxchar" default="-1" type="INT" comment="输入字符最大长度，如(100),默认为无限制"/>
 		<Attribute name="normalimage" default="" type="STRING" comment="普通状态图片"/>
 		<Attribute name="hotimage" default="" type="STRING" comment="鼠标悬浮状态图片"/>
 		<Attribute name="focusedimage" default="" type="STRING" comment="获得焦点状态图片"/>
