@@ -1,3 +1,6 @@
+2015-1-9
+修复GifAnim一个bug
+
 2015-1-8
 GifAnim控件增加autosize属性控制自动设置大小
 GifAnim修改加载资源的方式，支持从zip加载

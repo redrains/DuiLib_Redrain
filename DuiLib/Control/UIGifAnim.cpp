@@ -75,6 +75,11 @@ namespace DuiLib
 		return CControlUI::GetInterface(pstrName);
 	}
 
+	void CGifAnimUI::DoInit()
+	{
+		InitGifImage();
+	}
+
 	void CGifAnimUI::DoPaint( HDC hDC, const RECT& rcPaint )
 	{
 		if( !::IntersectRect( &m_rcPaint, &rcPaint, &m_rcItem ) ) return;
@@ -153,7 +158,7 @@ namespace DuiLib
 
 	void CGifAnimUI::PlayGif()
 	{
-		if (m_bIsPlaying)
+		if (m_bIsPlaying || m_pGifImage == NULL)
 		{
 			return;
 		}
@@ -167,7 +172,7 @@ namespace DuiLib
 
 	void CGifAnimUI::PauseGif()
 	{
-		if (!m_bIsPlaying)
+		if (!m_bIsPlaying || m_pGifImage == NULL)
 		{
 			return;
 		}
@@ -192,11 +197,6 @@ namespace DuiLib
 
 	void CGifAnimUI::InitGifImage()
 	{
-// 		CDuiString sImageName	=	GetBkImage();
-// 		CDuiString sImagePath	=	CPaintManagerUI::GetResourcePath();
-// 		sImagePath += sImageName;
-//		if ( NULL == sImagePath ) return;
-//		m_pGifImage = Gdiplus::Image::FromFile( sImagePath );
 		m_pGifImage = LoadGifFromFile(GetBkImage());
 		if ( NULL == m_pGifImage ) return;
 		UINT nCount	= 0;

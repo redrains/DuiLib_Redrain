@@ -17,6 +17,7 @@ namespace DuiLib
 
 		LPCTSTR	GetClass() const;
 		LPVOID	GetInterface(LPCTSTR pstrName);
+		void	DoInit() override;
 		void	DoPaint(HDC hDC, const RECT& rcPaint) override;
 		void	DoEvent(TEventUI& event) override;
 		void	SetVisible(bool bVisible = true ) override;
