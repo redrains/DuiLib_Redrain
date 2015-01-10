@@ -231,6 +231,7 @@ HANDLE CPaintManagerUI::GetResourceZipHandle()
 void CPaintManagerUI::SetInstance(HINSTANCE hInst)
 {
     m_hInstance = hInst;
+	CShadowUI::Initialize(hInst);
 }
 
 void CPaintManagerUI::SetCurrentPath(LPCTSTR pStrPath)
@@ -1420,6 +1421,9 @@ bool CPaintManagerUI::AttachDialog(CControlUI* pControl)
     m_bUpdateNeeded = true;
     m_bFirstLayout = true;
     m_bFocusNeeded = true;
+
+	m_shadow.Create(this);
+
     // Initiate all control
     return InitControls(pControl);
 }
@@ -2339,6 +2343,11 @@ void CPaintManagerUI::RemoveAllDefaultAttributeList()
 		}
 	}
 	m_DefaultAttrHash.RemoveAll();
+}
+
+CShadowUI* CPaintManagerUI::GetShadow()
+{
+	return &m_shadow;
 }
 
 CControlUI* CPaintManagerUI::GetRoot() const

@@ -280,6 +280,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL_Release_2010|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Utils\UIDelegate.cpp" />
+    <ClCompile Include="Utils\UIShadow.cpp" />
     <ClCompile Include="Utils\Utils.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Static_Debug_2010|Win32'">WIN32;_DEBUG;_WINDOWS;UILIB_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -340,6 +341,7 @@
     <ClInclude Include="Utils\Internal.h" />
     <ClInclude Include="Utils\IWindowBase.h" />
     <ClInclude Include="Utils\UIDelegate.h" />
+    <ClInclude Include="Utils\UIShadow.h" />
     <ClInclude Include="Utils\Utils.h" />
     <ClInclude Include="Utils\WebBrowserEventHandler.h" />
     <ClInclude Include="Utils\WinImplBase.h" />

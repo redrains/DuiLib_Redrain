@@ -747,6 +747,8 @@ public:
     const CStdStringPtrMap& GetDefaultAttribultes() const;
     void RemoveAllDefaultAttributeList();
 
+	CShadowUI* GetShadow();
+
     bool AttachDialog(CControlUI* pControl);
     bool InitControls(CControlUI* pControl, CControlUI* pParent = NULL);
     void ReapObjects(CControlUI* pControl);
@@ -900,6 +902,8 @@ private:
 	bool m_bCaretActive;
 	bool m_bCaretShowing;
 	CRichEditUI* m_currentCaretObject;
+
+	CShadowUI m_shadow;
 	//
 	ULONG_PTR						m_gdiplusToken;
 	Gdiplus::GdiplusStartupInput	*m_pGdiplusStartupInput;

@@ -1529,6 +1529,9 @@ namespace UiLib {
 		m_bUpdateNeeded = true;
 		m_bFirstLayout = true;
 		m_bFocusNeeded = true;
+
+		m_shadow.Create(this);
+
 		// Initiate all control
 		return InitControls(pControl);
 	}
@@ -2800,6 +2803,11 @@ namespace UiLib {
 			}
 		}
 		m_DefaultAttrHash.RemoveAll();
+	}
+
+	CShadowUI* CPaintManagerUI::GetShadow()
+	{
+		return &m_shadow;
 	}
 
 	CControlUI* CPaintManagerUI::GetRoot() const

@@ -43,6 +43,7 @@
 
 #include "Utils/DuiPointer.h"
 #include "Utils/Utils.h"
+#include "Utils/UIShadow.h"
 #include "Utils/Internal.h"
 #include "Utils/UIDelegate.h"
 #include "Utils/DuiAutoComplete.h"

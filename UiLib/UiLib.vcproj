@@ -567,6 +567,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Utils\UIShadow.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Utils\Utils.cpp"
 					>
 				</File>
@@ -822,6 +826,10 @@
 				</File>
 				<File
 					RelativePath=".\Utils\UIDelegate.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Utils\UIShadow.h"
 					>
 				</File>
 				<File

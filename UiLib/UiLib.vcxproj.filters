@@ -180,6 +180,9 @@
     <ClCompile Include="Layout\UIAnimationTabLayout.cpp">
       <Filter>源文件\Layout</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\UIShadow.cpp">
+      <Filter>源文件\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="layout\UIAnimationTabLayout.h">
       <Filter>头文件\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\UIShadow.h">
+      <Filter>头文件\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

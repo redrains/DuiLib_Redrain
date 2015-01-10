@@ -457,6 +457,42 @@ namespace UiLib
 						else if(_tcscmp(pstrName, _T("traytiptext")) == 0 ) {
 							pManager->GetTrayObject().SetTooltipText(pstrValue);
 						}
+						else if( _tcscmp(pstrName, _T("shadowsize")) == 0 ) {
+							pManager->GetShadow()->SetSize(_ttoi(pstrValue));
+						}
+						else if( _tcscmp(pstrName, _T("shadowsharpness")) == 0 ) {
+							pManager->GetShadow()->SetSharpness(_ttoi(pstrValue));
+						}
+						else if( _tcscmp(pstrName, _T("shadowdarkness")) == 0 ) {
+							pManager->GetShadow()->SetDarkness(_ttoi(pstrValue));
+						}
+						else if( _tcscmp(pstrName, _T("shadowpositon")) == 0 ) {
+							LPTSTR pstr = NULL;
+							int cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
+							int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr); 
+							pManager->GetShadow()->SetPosition(cx, cy);
+						}
+						else if( _tcscmp(pstrName, _T("shadowcolor")) == 0 ) {
+							if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+							LPTSTR pstr = NULL;
+							DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+							pManager->GetShadow()->SetColor(clrColor);
+						}
+						else if( _tcscmp(pstrName, _T("shadowcorner")) == 0 ) {
+							RECT rcCorner = { 0 };
+							LPTSTR pstr = NULL;
+							rcCorner.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
+							rcCorner.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
+							rcCorner.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
+							rcCorner.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
+							pManager->GetShadow()->SetShadowCorner(rcCorner);
+						}
+						else if( _tcscmp(pstrName, _T("shadowimage")) == 0 ) {
+							pManager->GetShadow()->SetImage(pstrValue);
+						}
+						else if( _tcscmp(pstrName, _T("showshadow")) == 0 ) {
+							pManager->GetShadow()->ShowShadow(_tcscmp(pstrValue, _T("true")) == 0);
+						} 
 					}
 				}
 			}
