@@ -300,7 +300,7 @@ void CListUI::DoEvent(TEventUI& event)
         case VK_RETURN:
             if( m_iCurSel != -1 ) GetItemAt(m_iCurSel)->Activate();
             return;
-            }
+        }
         break;
     case UIEVENT_SCROLLWHEEL:
         {

@@ -347,6 +347,7 @@ namespace UiLib {
 						SelectAllItems();
 				}
 				return;
+			}
 				break;
 			case UIEVENT_SCROLLWHEEL:
 				{
@@ -366,7 +367,6 @@ namespace UiLib {
 				}
 				break;
 
-			}
 		}
 		CVerticalLayoutUI::DoEvent(event);
 	}
