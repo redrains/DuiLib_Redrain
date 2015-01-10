@@ -13,7 +13,7 @@
     <VerticalLayout bkimage="file='bk\foreground.png' corner='2,120,2,35'" inset="1,1,1,1">
         <HorizontalLayout height="74"> <!-- 标题栏 -->
             <HorizontalLayout name="hlayout_title" >
-                <Label text="Redrain Duilib 框架 Demo" float="true" pos="54,19,0,0"  width="200" height="31" font="1" textcolor="#FFFFFFFF"/>
+                <Label text="Redrain Duilib 阴影 Demo" float="true" pos="54,19,0,0"  width="200" height="31" font="1" textcolor="#FFFFFFFF"/>
             </HorizontalLayout>
             <HorizontalLayout width="76" >
                 <Button name="minbtn" width="31" height="29" normalimage="file='title\min.png' source='0,0,31,29'" hotimage="file='title\min.png' source='31,0,62,29'" pushedimage="file='title\min.png' source='62,0,93,29'" />
@@ -33,7 +33,7 @@
         </VerticalLayout>
 
         <HorizontalLayout height="30"> <!-- 状态栏 -->
-            <Label name="lbl_bottom_status" text="这是Redrain Duilib 窗体框架" padding="10,7,0,0" width="820" height="18" textcolor="#FF000000" font="0" />
+            <Label name="lbl_bottom_status" text="Redrain Duilib 阴影 Demo" padding="10,7,0,0" width="820" height="18" textcolor="#FF000000" font="0" />
         </HorizontalLayout>
     </VerticalLayout>
 </VerticalLayout>
