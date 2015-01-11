@@ -407,9 +407,9 @@
 		<Attribute name="autocalcwidth" default="false" type="INT" comment="是否自动计算宽度"/>		
 	</Label>
 	<GifAnim parent="Control" notifies="setfocus killfocus timer menu windowinit(root)">
-		<Attribute name="bkimage" default="" type="STRING" comment="Gif动画图片路径"/>
+		<Attribute name="bkimage" default="" type="STRING" comment="Gif动画图片路径(不支持source等属性设置)"/>
 		<Attribute name="autoplay" default="true" type="BOOL" comment="是否自动播放GIF动画"/>
-		<Attribute name="autosize" default="false" type="BOOL" comment="是否根据图片自动设置控件大小"/>
+		<Attribute name="autosize" default="false" type="BOOL" comment="是否根据图片自动设置控件大小(开启后width和height属性失效)"/>
 	</GifAnim>
 	<Button parent="Label" notifies="setfocus killfocus timer menu click windowinit(root)">
 		<Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
