@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+	<Style stylename="MenuBtn" name="MenuBtn" width="26" maxheight="17" hotimage="file='WndFrame/sys_btn_menu.png' source='26,0,52,17'" normalimage="file='WndFrame/sys_btn_menu.png' source='0,0,26,17'" pushedimage="file='WndFrame/sys_btn_menu.png' source='52,0,78,17'" />
+	<Style stylename="SysMinBtn" name="SysMinBtn" width="26" maxheight="17" hotimage="file='WndFrame/sys_btn_min.png' source='26,0,52,17'" normalimage="file='WndFrame/sys_btn_min.png' source='0,0,26,17'" pushedimage="file='WndFrame/sys_btn_min.png' source='52,0,78,17'" />
+	<Style stylename="SysMaxBtn" name="SysMaxBtn" width="26" maxheight="17" hotimage="file='WndFrame/sys_btn_max.png' source='26,0,52,17'" normalimage="file='WndFrame/sys_btn_max.png' source='0,0,26,17'" pushedimage="file='WndFrame/sys_btn_max.png' source='52,0,78,17'" />
+	<Style stylename="SysRestoreBtn" name="SysRestoreBtn" width="26" maxheight="17" visible="false" hotimage="file='WndFrame/sys_btn_restore.png' source='26,0,52,17'" normalimage="file='WndFrame/sys_btn_restore.png' source='0,0,26,17'" pushedimage="file='WndFrame/sys_btn_restore.png' source='52,0,78,17'" />
+	<Style stylename="SysCloseBtn" name="SysCloseBtn" animeffects="false" mouseineffects="sysMenu" width="45" maxheight="17" hotimage="file='WndFrame/sys_btn_close.png' source='45,0,90,17' fade='255'" normalimage="file='WndFrame/sys_btn_close.png' source='0,0,45,17' fade='255'" pushedimage="file='WndFrame/sys_btn_close.png' source='90,0,135,17' fade='255'"/>
+</Window>
