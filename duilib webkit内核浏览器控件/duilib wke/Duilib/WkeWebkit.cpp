@@ -366,6 +366,11 @@ void CWkeWebkitUI::WkeWebkit_Shutdown()
 	wkeShutdown();
 }
 
+void CWkeWebkitUI::SetVisible(bool bVisible)
+{
+	CControlUI::SetVisible(bVisible);
+	SetInternVisible(bVisible);
+}
 
 void CWkeWebkitUI::SetInternVisible(bool bVisible)
 {

@@ -57,6 +57,7 @@ public:
 	LPCTSTR	GetClass() const;
 	LPVOID	GetInterface(LPCTSTR pstrName);
 
+	void	SetVisible(bool bVisible);
 	void	SetInternVisible(bool bVisible = true);
 	void	DoInit();
 	void	SetPos(RECT rc);
