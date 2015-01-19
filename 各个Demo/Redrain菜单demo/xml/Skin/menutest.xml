@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window showshadow="true" shadowimage="shadow.png" shadowcorner="23,13,23,33">
+<Font name="微软雅黑" size="12" bold="false" default="true" />
+<Font name="微软雅黑" size="12" bold="true"/>
+
+<!-- Menu标签的属性要通过Default来定义，为了让下级菜单也能拥有同样的外观 -->
+<Default name="Menu" value="bordersize=&quot;1&quot; borderround=&quot;2,2&quot; bordercolor=&quot;0x303132&quot; inset=&quot;2,2,2,2&quot; itemtextpadding=&quot;30,0,0,0&quot; bkimage=&quot;file='menu_bk.png' corner='26,2,2,2' source='6,6,44,24'&quot; itemselectedbkcolor=&quot;0xFF338ACA&quot;" />
+<!-- ExplandIcon属性定义了下级菜单的小图标的样子 -->
+<Default name="ExplandIcon" value="menu_expand.png" />
+
+<Menu>
+    <MenuElement text="菜单测试0" expland="true" >
+     	 <MenuElement text="菜单测试01" id="102"/>
+     	 <MenuElement text="菜单测试02" />
+    </MenuElement>
+
+    <MenuElement height="120" >
+    	<VerticalLayout bkcolor="#FFFFFFFE">
+            <Button name="Menu_btn" height="118" normalimage="error.png" hotimage="check_hover.png" pushedimage="check_pressed.png"/>
+        </VerticalLayout>
+    </MenuElement>
+
+    <MenuElement name="Menu_Test1" text="菜单测试3" icon="right.png" iconsize="9,9" checkitem="true" ischeck="true" />
+	<MenuElement name="Menu_Test2" text="菜单测试31" />
+	<MenuElement name="Menu_Test3" text="菜单测试32" icon="right.png" iconsize="9,9" checkitem="true" ischeck="true" />
+
+	<MenuElement linetype="true" />
+
+    <MenuElement text="菜单测试4" icon="right.png" iconsize="9,9" expland="true" >
+	      <MenuElement text="菜单测试5" expland="true" icon="WebSit.png" >  
+	      	  <MenuElement text="菜单测试6"  icon="Virus.png" />
+	      	  <MenuElement text="菜单测试7" />
+	      </MenuElement>
+	      <MenuElement text="菜单测试8" expland="true"> 
+	      	  <MenuElement text="菜单测试a" />
+	       	  <MenuElement text="菜单测试b" />
+	      </MenuElement>
+    </MenuElement> 
+</Menu>
+</Window>

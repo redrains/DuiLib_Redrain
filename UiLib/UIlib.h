@@ -98,6 +98,8 @@
 #include "Control/UIWebBrowser.h"
 #include "Control/UIFlash.h"
 
+#include "Control/UIMenu.h"
+
 #include "Utils/WinImplBase.h"
 #include "Utils/IWindowBase.h"
 

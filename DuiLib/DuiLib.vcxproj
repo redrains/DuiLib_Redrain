@@ -137,6 +137,7 @@
       <BaseAddress>0x11000000</BaseAddress>
       <ImportLibrary>../Lib/DuiLib_u.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -145,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Control\UIGifAnim.cpp" />
+    <ClCompile Include="Control\UIMenu.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">Create</PrecompiledHeader>
@@ -199,6 +201,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Control\UIGifAnim.h" />
+    <ClInclude Include="Control\UIMenu.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="UIlib.h" />
     <ClInclude Include="Utils\downloadmgr.h" />

@@ -8,7 +8,7 @@ namespace DuiLib
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 
-	class STRINGorID
+	class UILIB_API STRINGorID
 	{
 	public:
 		STRINGorID(LPCTSTR lpString) : m_lpstr(lpString)

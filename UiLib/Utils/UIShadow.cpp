@@ -4,16 +4,16 @@
 #include "crtdbg.h"
 #include "Core/UIManager.h"
 
-namespace UiLib
+namespace DuiLib
 {
 
 const TCHAR *strWndClassName = _T("PerryShadowWnd");
-std::map<HWND, CShadowUI *>* CShadowUI::s_Shadowmap = new std::map<HWND, CShadowUI *>;
 bool CShadowUI::s_bHasInit = FALSE;
 
 CShadowUI::CShadowUI(void)
 : m_hWnd((HWND)NULL)
 , m_OriParentProc(NULL)
+, m_Status(0)
 , m_nDarkness(150)
 , m_nSharpness(5)
 , m_nSize(0)
@@ -72,8 +72,8 @@ void CShadowUI::Create(CPaintManagerUI* pPaintManager)
 	m_pManager = pPaintManager;
 	HWND hParentWnd = m_pManager->GetPaintWindow();
 	// Add parent window - shadow pair to the map
-	_ASSERT(s_Shadowmap->find(hParentWnd) == s_Shadowmap->end());	// Only one shadow for each window
-	(*s_Shadowmap)[hParentWnd] = this;
+	_ASSERT(GetShadowMap().find(hParentWnd) == GetShadowMap().end());	// Only one shadow for each window
+	GetShadowMap()[hParentWnd] = this;
 
 	// Determine the initial show state of shadow according to parent window's state
 	LONG lParentStyle = GetWindowLong(hParentWnd, GWL_STYLE);
@@ -104,11 +104,17 @@ void CShadowUI::Create(CPaintManagerUI* pPaintManager)
 
 }
 
+std::map<HWND, CShadowUI *>& CShadowUI::GetShadowMap()
+{
+	static std::map<HWND, CShadowUI *> s_Shadowmap;
+	return s_Shadowmap;
+}
+
 LRESULT CALLBACK CShadowUI::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	_ASSERT(s_Shadowmap->find(hwnd) != s_Shadowmap->end());	// Shadow must have been attached
+	_ASSERT(GetShadowMap().find(hwnd) != GetShadowMap().end());	// Shadow must have been attached
 
-	CShadowUI *pThis = (*s_Shadowmap)[hwnd];
+	CShadowUI *pThis = GetShadowMap()[hwnd];
 
 	switch(uMsg)
 	{
@@ -202,7 +208,7 @@ LRESULT CALLBACK CShadowUI::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
 		break;
 		
 	case WM_NCDESTROY:
-		s_Shadowmap->erase(hwnd);	// Remove this window and shadow from the map
+		GetShadowMap().erase(hwnd);	// Remove this window and shadow from the map
 		break;
 
 	}
@@ -595,6 +601,7 @@ bool CShadowUI::SetImage(LPCTSTR szImage)
 
 	return true;
 }
+
 bool CShadowUI::SetShadowCorner(RECT rcCorner)
 {
 	if (rcCorner.left < 0 || rcCorner.top < 0 || rcCorner.right < 0 || rcCorner.bottom < 0)
@@ -608,4 +615,21 @@ bool CShadowUI::SetShadowCorner(RECT rcCorner)
 	return true;
 }
 
+bool CShadowUI::CopyShadow(CShadowUI* pShadow)
+{
+	if (m_bIsImageMode)
+	{
+		pShadow->SetImage(m_sShadowImage);
+		pShadow->SetShadowCorner(m_rcShadowCorner);
+	}
+	else
+	{
+		pShadow->SetSize((int)m_nSize);
+		pShadow->SetSharpness((unsigned int)m_nSharpness);
+		pShadow->SetDarkness((unsigned int)m_nDarkness);
+		pShadow->SetColor(m_Color);
+		pShadow->SetPosition((int)m_nxOffset, (int)m_nyOffset);
+	}
+	return true;
+}
 } //namespace DuiLib

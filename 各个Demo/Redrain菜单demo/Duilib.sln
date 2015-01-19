@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Duilib", "Duilib\Duilib Tutorial.vcxproj", "{8ECC920A-063A-4D39-BCD3-EDF471BDE4A8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Duilib", "Duilib\Duilib.vcxproj", "{8ECC920A-063A-4D39-BCD3-EDF471BDE4A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

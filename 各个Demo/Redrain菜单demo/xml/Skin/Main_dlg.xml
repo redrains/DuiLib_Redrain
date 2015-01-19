@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="840,600" sizebox="4,4,4,4" caption="0,0,0,75" mininfo="840,600" >
+<Font name="微软雅黑" size="13" default="true"/>
+<Font name="微软雅黑" size="16"/>
+<Font name="微软雅黑" size="22"/>
+<VerticalLayout name="background" width="840" height="320" bkimage="file='SKIN_PIC_2.png' corner='0,320,0,0'" bkcolor="#FFA0A0A4" bordercolor="#00969696" bordersize="1">
+    <VerticalLayout bkimage="file='WindowsBack.png' corner='2,120,2,35'" inset="1,1,1,1">
+        <HorizontalLayout height="74">
+            <HorizontalLayout name="" >
+
+            </HorizontalLayout>
+            <HorizontalLayout width="76" >
+                <Button name="minbtn" width="31" height="29" normalimage="file='BT_MIN.png' source='0,0,31,29'" hotimage="file='BT_MIN.png' source='31,0,62,29'" pushedimage="file='BT_MIN.png' source='62,0,93,29'" />
+                <Button name="closebtn" width="45" height="29" normalimage="file='BT_CLOSE.png' source='0,0,45,29'" hotimage="file='BT_CLOSE.png' source='45,0,90,29'" pushedimage="file='BT_CLOSE.png' source='90,0,135,29'" />
+            </HorizontalLayout>                
+        </HorizontalLayout>
+
+        <VerticalLayout>
+            <HorizontalLayout height="250">  
+                <Button  name="btn_error" padding="20,60,0,0" width="146" height="118" normalimage="error.png" />
+                <VerticalLayout padding="52,80,0,0">
+                    <HorizontalLayout height="30" >
+                        <Text text="您的电脑已经" padding="2,5,0,0" autocalcwidth="true" height="23" textcolor="#001C1C1C" font="1" />
+                        <Text text="40" padding="2,0,0,0" autocalcwidth="true" height="27" textcolor="#00FF0042" font="2" />
+                        <Text text="天没有体检，建议立即体检！" padding="2,5,0,0" autocalcwidth="true" height="23" textcolor="#001C1C1C" font="1" />
+                    </HorizontalLayout>
+                    <Text text="系统可能已经存在大量风险，安全性和性能都在急速下降，" padding="0,20,0,0" autocalcwidth="true" height="18" textcolor="#00555555" />
+                    <Text text="建议您每天坚持电脑体检，提高电脑的安全和性能" padding="0,10,0,0" autocalcwidth="true" height="18" textcolor="#00555555"  /> 
+                </VerticalLayout>
+                         
+            </HorizontalLayout>
+            <Button name="btnMenu" padding="230,0,0,0" width="166" height="66"  normalimage="check_normal.png" hotimage="check_hover.png" pushedimage="check_pressed.png" />
+        </VerticalLayout>
+        
+    </VerticalLayout>
+</VerticalLayout>
+</Window>
