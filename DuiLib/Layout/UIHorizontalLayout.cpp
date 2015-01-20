@@ -105,8 +105,10 @@ namespace DuiLib
 				if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
 				if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
 
-				cxFixedRemaining -= (sz.cx + rcPadding.left + rcPadding.right + m_iChildPadding);
+				cxFixedRemaining -= sz.cx + rcPadding.left + rcPadding.right ;
 			}
+
+			cxFixedRemaining -= m_iChildPadding;
 
 			sz.cy = pControl->GetFixedHeight();
 			if( sz.cy == 0 ) sz.cy = rc.bottom - rc.top - rcPadding.top - rcPadding.bottom;
