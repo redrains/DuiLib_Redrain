@@ -4,7 +4,7 @@
 #include "crtdbg.h"
 #include "Core/UIManager.h"
 
-namespace DuiLib
+namespace UiLib
 {
 
 const TCHAR *strWndClassName = _T("PerryShadowWnd");

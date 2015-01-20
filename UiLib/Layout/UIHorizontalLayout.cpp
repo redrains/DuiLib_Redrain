@@ -106,7 +106,7 @@ namespace UiLib
 				if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
 				if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
 
-				cxFixedRemaining -= sz.cx;
+				cxFixedRemaining -= (sz.cx + rcPadding.left + rcPadding.right + m_iChildPadding);
 			}
 
 			sz.cy = pControl->GetFixedHeight();

@@ -40,7 +40,7 @@
 #pragma once
 #include "map"
 
-namespace DuiLib
+namespace UiLib
 {
 
 class UILIB_API CShadowUI

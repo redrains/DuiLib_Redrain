@@ -4,7 +4,7 @@
 #pragma once
 
 #include <map>
-namespace DuiLib {
+namespace UiLib {
 
 struct ContextMenuParam
 {
