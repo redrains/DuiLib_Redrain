@@ -115,7 +115,7 @@ namespace UiLib
 			if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
 			if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
 
-			RECT rcCtrl = { iPosX + rcPadding.left, rc.top + rcPadding.top, iPosX + sz.cx + rcPadding.left + rcPadding.right, rc.top + rcPadding.top + sz.cy};
+			RECT rcCtrl = { iPosX + rcPadding.left, rc.top + rcPadding.top, iPosX + sz.cx + rcPadding.left , rc.top + rcPadding.top + sz.cy};
 			pControl->SetPos(rcCtrl);
 			iPosX += sz.cx + m_iChildPadding + rcPadding.left + rcPadding.right;
 			cxNeeded += sz.cx + rcPadding.left + rcPadding.right;
