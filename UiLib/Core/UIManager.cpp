@@ -243,6 +243,7 @@ namespace UiLib {
 	void CPaintManagerUI::SetInstance(HINSTANCE hInst)
 	{
 		m_hInstance = hInst;
+		CShadowUI::Initialize(hInst); 
 	}
 
 	void CPaintManagerUI::SetCurrentPath(LPCTSTR pStrPath)
