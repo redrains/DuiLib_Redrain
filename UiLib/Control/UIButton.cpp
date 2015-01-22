@@ -262,6 +262,19 @@ namespace UiLib
 			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
 			SetFocusedTextColor(clrColor);
 		}
+		else if( _tcscmp(pstrName, _T("multiline")) == 0 )
+		{
+			if( _tcscmp(pstrValue, _T("true")) == 0)
+			{
+				m_uTextStyle = m_uTextStyle & ~DT_SINGLELINE;
+				m_uTextStyle |= DT_WORDBREAK;
+			}
+			else
+			{
+				m_uTextStyle = m_uTextStyle & ~DT_WORDBREAK;
+				m_uTextStyle |= DT_SINGLELINE;
+			}
+		}
 		else CLabelUI::SetAttribute(pstrName, pstrValue);
 	}
 

@@ -203,6 +203,19 @@ namespace UiLib
 		}
 	}
 
+	void CContainerUI::SetEnabled(bool bEnabled)
+	{
+		if( m_bEnabled == bEnabled ) return;
+
+		m_bEnabled = bEnabled;
+
+		for( int it = 0; it < m_items.GetSize(); it++ ) {
+			static_cast<CControlUI*>(m_items[it])->SetEnabled(m_bEnabled);
+		}
+
+		Invalidate();
+	}
+
 	void CContainerUI::SetMouseEnabled(bool bEnabled)
 	{
 		if( m_pVerticalScrollBar != NULL ) m_pVerticalScrollBar->SetMouseEnabled(bEnabled);

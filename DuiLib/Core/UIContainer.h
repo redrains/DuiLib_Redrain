@@ -49,6 +49,7 @@ public:
     void DoEvent(TEventUI& event);
     void SetVisible(bool bVisible = true);
     void SetInternVisible(bool bVisible = true);
+	void SetEnabled(bool bEnabled);
     void SetMouseEnabled(bool bEnable = true);
 
     virtual RECT GetInset() const;

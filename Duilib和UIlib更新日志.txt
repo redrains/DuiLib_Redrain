@@ -1,3 +1,10 @@
+2015-1-22
+阴影类支持64位系统
+button增加multiline属性，支持多行文字
+container修改enabled属性，禁用容器时会禁用所有子控件
+window标签增加gdiplustext标签，控制是否使用gdi+渲染文字
+CRenderEngine类的DrawText函数改为gdi+和gdi两种形式，透明窗体或者开启gdiplustext属性后使用gdi+渲染文字
+
 2015-1-20
 修复横纵向布局子控件使用padding属性，导致最后一个自动计算宽高度的控件计算错误的bug
 修复控件使用padding属性的right和bottom字段，导致自身畸形的bug

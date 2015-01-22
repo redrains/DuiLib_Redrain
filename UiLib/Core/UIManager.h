@@ -682,6 +682,9 @@ public:
 	CRichEditUI* GetCurrentCaretObject();
 	bool CreateCaret(HBITMAP hBmp, int nWidth, int nHeight);
 	void DrawCaret(HDC hDC, const RECT& rcPaint);
+	CShadowUI* GetShadow();
+	void SetUseGdiplusText(bool bUse);
+	bool IsUseGdiplusText() const;
 
     static HINSTANCE GetInstance();
     static CDuiString GetInstancePath();
@@ -746,8 +749,6 @@ public:
     bool RemoveDefaultAttributeList(LPCTSTR pStrControlName);
     const CStdStringPtrMap& GetDefaultAttribultes() const;
     void RemoveAllDefaultAttributeList();
-
-	CShadowUI* GetShadow();
 
     bool AttachDialog(CControlUI* pControl);
     bool InitControls(CControlUI* pControl, CControlUI* pParent = NULL);
@@ -904,6 +905,7 @@ private:
 	CRichEditUI* m_currentCaretObject;
 
 	CShadowUI m_shadow;
+	bool m_bUseGdiplusText;
 	//
 	ULONG_PTR						m_gdiplusToken;
 	Gdiplus::GdiplusStartupInput	*m_pGdiplusStartupInput;

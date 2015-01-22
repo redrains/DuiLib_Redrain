@@ -93,7 +93,8 @@ m_pParentResourcePM(NULL),
 m_pBmpBackgroundBits(NULL),
 m_bCaretActive(false),
 m_bCaretShowing(false),
-m_currentCaretObject(NULL)
+m_currentCaretObject(NULL),
+m_bUseGdiplusText(false)
 {
     m_dwDefaultDisabledColor = 0xFFA7A6AA;
     m_dwDefaultFontColor = 0xFF000001;
@@ -564,6 +565,21 @@ void CPaintManagerUI::DrawCaret(HDC hDC, const RECT& rcPaint)
 			CRenderEngine::DrawColor(hDC, temp, dwColor);
 		}
 	}
+}
+
+CShadowUI* CPaintManagerUI::GetShadow()
+{
+	return &m_shadow;
+}
+
+void CPaintManagerUI::SetUseGdiplusText(bool bUse)
+{
+	m_bUseGdiplusText = bUse;
+}
+
+bool CPaintManagerUI::IsUseGdiplusText() const
+{
+	return m_bUseGdiplusText;
 }
 
 bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& /*lRes*/)
@@ -2343,11 +2359,6 @@ void CPaintManagerUI::RemoveAllDefaultAttributeList()
 		}
 	}
 	m_DefaultAttrHash.RemoveAll();
-}
-
-CShadowUI* CPaintManagerUI::GetShadow()
-{
-	return &m_shadow;
 }
 
 CControlUI* CPaintManagerUI::GetRoot() const

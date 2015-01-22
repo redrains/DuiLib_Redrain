@@ -493,6 +493,9 @@ namespace UiLib
 						else if( _tcscmp(pstrName, _T("showshadow")) == 0 ) {
 							pManager->GetShadow()->ShowShadow(_tcscmp(pstrValue, _T("true")) == 0);
 						} 
+						else if( _tcscmp(pstrName, _T("gdiplustext")) == 0 ) {
+							pManager->SetUseGdiplusText(_tcscmp(pstrValue, _T("true")) == 0);
+						} 
 					}
 				}
 			}

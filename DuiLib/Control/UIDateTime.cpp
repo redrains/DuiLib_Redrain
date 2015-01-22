@@ -86,6 +86,57 @@ namespace DuiLib
 	{
 		LRESULT lRes = 0;
 		BOOL bHandled = TRUE;
+		/**xpBug
+		DWORD ProcessId;
+		if(WM_NOTIFY==uMsg)
+		{
+			::SetFocus(m_hWnd);
+		}
+		if( uMsg == WM_KILLFOCUS )
+		{
+			::OutputDebugString("WM_KILLFOCUS\n");
+			if( uMsg == WM_KILLFOCUS )
+			{
+				//这里肯可能需要优化，因为FindWindow找出来的窗口不一定是本进程的窗口
+				HWND hh=::FindWindow(_T("SysMonthCal32"),NULL);
+				//Isdel=true;
+				if(::IsWindow(hh))
+				{
+					MCHITTESTINFO pp;
+					memset(&pp,0,sizeof(pp));
+					GetCursorPos(&pp.pt);
+					::ScreenToClient(hh,&pp.pt);
+					pp.cbSize=sizeof(pp);
+					MonthCal_HitTest(hh,&pp);
+					//下一个月
+					if(pp.uHit==MCHT_TITLEBTNNEXT)
+					{
+						return 1;
+					}
+					//上一个月
+					if(pp.uHit==MCHT_TITLEBTNPREV)
+					{
+						return 1;
+					}
+				}else
+				{
+					POINT pt;
+					::GetCursorPos(&pt); 
+					RECT rt;
+					::GetWindowRect(m_hWnd,&rt);
+					if(
+						!(pt.x>=rt.left&&pt.x<=rt.right)||
+						!(pt.x>=rt.top&&pt.x<=rt.bottom)
+						)
+					{
+						::OutputDebugString("CLose\n");
+						lRes= OnKillFocus(uMsg,wParam, lParam,bHandled);
+					}
+
+				}
+			}
+		}
+		xpBug***/
 		if( uMsg == WM_KILLFOCUS )
 		{
 			lRes = OnKillFocus(uMsg, wParam, lParam, bHandled);

@@ -1210,13 +1210,85 @@ void CRenderEngine::DrawRoundRect(HDC hDC, const RECT& rc, int nSize, int width,
 
 void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle)
 {
-    ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
-    if( pstrText == NULL || pManager == NULL ) return;
-    ::SetBkMode(hDC, TRANSPARENT);
-    ::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
-    HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
-    ::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
-    ::SelectObject(hDC, hOldFont);
+	ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
+	if( pstrText == NULL || pManager == NULL ) return;
+
+	if ( pManager->IsBackgroundTransparent() || pManager->IsUseGdiplusText())
+	{
+		Gdiplus::Graphics graphics( hDC );
+		graphics.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAlias);
+
+		Gdiplus::Font font(hDC, pManager->GetFont(iFont));
+		Gdiplus::RectF rectF((Gdiplus::REAL)rc.left, (Gdiplus::REAL)rc.top, (Gdiplus::REAL)(rc.right - rc.left), (Gdiplus::REAL)(rc.bottom - rc.top));
+		Gdiplus::SolidBrush brush(Gdiplus::Color(254, GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+
+		Gdiplus::StringFormat stringFormat = Gdiplus::StringFormat::GenericTypographic();
+
+		if ((uStyle & DT_END_ELLIPSIS) != 0) {
+			stringFormat.SetTrimming(Gdiplus::StringTrimmingEllipsisCharacter);
+		}
+
+		int formatFlags = 0;
+		if ((uStyle & DT_NOCLIP) != 0) {
+			formatFlags |= Gdiplus::StringFormatFlagsNoClip;
+		}
+		if ((uStyle & DT_SINGLELINE) != 0) {
+			formatFlags |= Gdiplus::StringFormatFlagsNoWrap;
+		}
+
+		stringFormat.SetFormatFlags(formatFlags);
+
+		if ((uStyle & DT_LEFT) != 0) {
+			stringFormat.SetAlignment(Gdiplus::StringAlignmentNear);
+		}
+		else if ((uStyle & DT_CENTER) != 0) {
+			stringFormat.SetAlignment(Gdiplus::StringAlignmentCenter);
+		}
+		else if ((uStyle & DT_RIGHT) != 0) {
+			stringFormat.SetAlignment(Gdiplus::StringAlignmentFar);
+		}
+		else {
+			stringFormat.SetAlignment(Gdiplus::StringAlignmentNear);
+		}
+		stringFormat.GenericTypographic();
+		if ((uStyle & DT_TOP) != 0) {
+			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentNear);
+		}
+		else if ((uStyle & DT_VCENTER) != 0) {
+			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentCenter);
+		}
+		else if ((uStyle & DT_BOTTOM) != 0) {
+			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentFar);
+		}
+		else {
+			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentNear);
+		}
+
+		if ((uStyle & DT_CALCRECT) != 0)
+		{
+			Gdiplus::RectF bounds;
+			graphics.MeasureString(pstrText, -1, &font, rectF, &stringFormat, &bounds);
+
+			// MeasureString存在计算误差，这里加一像素
+			rc.bottom = rc.top + (long)bounds.Height + 1;
+			rc.right = rc.left + (long)bounds.Width + 1;
+		}
+		else
+		{
+			graphics.DrawString(pstrText, -1, &font, rectF, &stringFormat, &brush);
+		}
+
+	}
+	else
+	{
+		::SetBkMode(hDC, TRANSPARENT);
+		::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+		HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
+		::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
+		::SelectObject(hDC, hOldFont);
+
+	}
+
 }
 
 void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, RECT* prcLinks, CDuiString* sLinks, int& nLinkRects, UINT uStyle)

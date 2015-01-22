@@ -101,7 +101,8 @@ namespace UiLib {
 		m_pBmpBackgroundBits(NULL),
 		m_bCaretActive(false),
 		m_bCaretShowing(false),
-		m_currentCaretObject(NULL)
+		m_currentCaretObject(NULL),
+		m_bUseGdiplusText(false)
 	{
 		m_pControlsStyle				= &m_mControlsStyle;
 		m_dwDefaultDisabledColor		= 0xFFA7A6AA;
@@ -578,6 +579,20 @@ namespace UiLib {
 		}
 	}
 
+	CShadowUI* CPaintManagerUI::GetShadow()
+	{
+		return &m_shadow;
+	}
+
+	void CPaintManagerUI::SetUseGdiplusText(bool bUse)
+	{
+		m_bUseGdiplusText = bUse;
+	}
+
+	bool CPaintManagerUI::IsUseGdiplusText() const
+	{
+		return m_bUseGdiplusText;
+	}
 
 	bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& /*lRes*/)
 	{
@@ -2804,11 +2819,6 @@ namespace UiLib {
 			}
 		}
 		m_DefaultAttrHash.RemoveAll();
-	}
-
-	CShadowUI* CPaintManagerUI::GetShadow()
-	{
-		return &m_shadow;
 	}
 
 	CControlUI* CPaintManagerUI::GetRoot() const

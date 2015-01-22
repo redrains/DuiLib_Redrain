@@ -2,7 +2,6 @@
 #include "UIShadow.h"
 #include "math.h"
 #include "crtdbg.h"
-#include "Core/UIManager.h"
 
 namespace DuiLib
 {
@@ -76,7 +75,7 @@ void CShadowUI::Create(CPaintManagerUI* pPaintManager)
 	GetShadowMap()[hParentWnd] = this;
 
 	// Determine the initial show state of shadow according to parent window's state
-	LONG lParentStyle = GetWindowLong(hParentWnd, GWL_STYLE);
+	LONG lParentStyle = GetWindowLongPtr(hParentWnd, GWL_STYLE);
 
 	// Create the shadow window
 	LONG styleValue = lParentStyle & WS_CAPTION;
@@ -96,10 +95,10 @@ void CShadowUI::Create(CPaintManagerUI* pPaintManager)
 	}
 
 	// Replace the original WndProc of parent window to steal messages
-	m_OriParentProc = GetWindowLong(hParentWnd, GWL_WNDPROC);
+	m_OriParentProc = GetWindowLongPtr(hParentWnd, GWLP_WNDPROC);
 
 #pragma warning(disable: 4311)	// temporrarily disable the type_cast warning in Win32
-	SetWindowLong(hParentWnd, GWL_WNDPROC, (LONG)ParentProc);
+	SetWindowLongPtr(hParentWnd, GWLP_WNDPROC, (LONG)ParentProc);
 #pragma warning(default: 4311)
 
 }

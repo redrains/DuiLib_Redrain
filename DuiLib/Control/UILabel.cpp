@@ -138,9 +138,8 @@ namespace DuiLib
 		if (m_bAutoCalcWidth)
 		{
 			RECT rcText = {0};
-			HFONT hOldFont = (HFONT)::SelectObject(m_pManager->GetPaintDC(), m_pManager->GetFont(m_iFont));
-			::DrawText(m_pManager->GetPaintDC(), m_sText.GetData(), -1, &rcText, DT_CALCRECT);
-			::SelectObject(m_pManager->GetPaintDC(), hOldFont);
+
+			CRenderEngine::DrawText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, m_dwTextColor, m_iFont, DT_CALCRECT | m_uTextStyle);
 			m_cxyFixed.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
 		}
 

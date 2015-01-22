@@ -24,6 +24,7 @@
 		<Attribute name="shadowdarkness" default="255" type="BYTE" comment="算法阴影的深度(相当于透明度)"/>
 		<Attribute name="shadowpositon" default="0,0" type="SIZE" comment="算法阴影的偏移量"/>
 		<Attribute name="shadowcolor" default="0x000000" type="DWORD" comment="算法阴影的颜色，RGB格式，不支持透明度，使用shadowdarkness设置透明度"/>
+		<Attribute name="gdiplustext" default="false" type="BOOL" comment="是否用gdi+渲染文字（抗锯齿效果更好，但是效率低）"/>
 	</Window>
 	<ChildLayout parent="Container" >
 		<Attribute name="xmlfile" default="" type="STRING" comment="子窗体XML布局文件"/>
@@ -87,7 +88,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
@@ -123,7 +124,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
@@ -161,7 +162,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
@@ -199,7 +200,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
@@ -237,7 +238,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
@@ -311,7 +312,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
@@ -426,7 +427,6 @@
 		<Attribute name="expland" default="false" type="BOOL" comment="是否显示下级菜单的小三角图片（需要通过Default标签设置ExplandIcon属性图片的路径）"/>
 		<Attribute name="height" default="30" type="INT" comment="菜单项高度（分割线默认高度是6）"/>
 	</MenuElement>
-	
 	<Button parent="Label" notifies="setfocus killfocus timer menu click windowinit(root)">
 		<Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
 		<Attribute name="pos" default="0,0,0,0" type="RECT" comment="位置，如果为float控件则指定位置和大小，否则只指定大小,如(0,0,100,100)"/>
@@ -473,6 +473,7 @@
 		<Attribute name="autocalcwidth" default="false" type="INT" comment="是否自动计算宽度"/>	
 		<Attribute name="bindtablayoutname" default="" type="STRING" comment="绑定TabLayout控件"/>
 		<Attribute name="bindtabindex" default="" type="INT" comment="点击后将触发绑定TabLayout控件的对应索引号"/>
+		<Attribute name="multiline" default="false" type="INT" comment="是否支持多行文字"/>
 	</Button>
 	<Option parent="Button" notifies="setfocus killfocus timer menu click selectchanged windowinit(root)">
 		<Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
@@ -780,7 +781,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
@@ -841,7 +842,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
@@ -981,7 +982,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
@@ -1017,7 +1018,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
@@ -1074,7 +1075,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
@@ -1147,7 +1148,7 @@
 		<Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
 		<Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
 		<Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
+		<Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true),同时禁用或者启用子控件"/>
 		<Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
 		<Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
 		<Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
