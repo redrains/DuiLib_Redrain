@@ -354,7 +354,7 @@ namespace DuiLib
 		}
 		else
 		{
-			m_iWindowStyls |= ~ES_NUMBER;
+			m_iWindowStyls &= ~ES_NUMBER;
 		}
 	}
 

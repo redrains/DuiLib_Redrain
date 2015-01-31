@@ -34,6 +34,7 @@ public:
     int GetFont();
     void SetFont(int index);
     void SetFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic);
+	void SetEnabled(bool bEnabled);
     LONG GetWinStyle();
     void SetWinStyle(LONG lStyle);
     DWORD GetTextColor();

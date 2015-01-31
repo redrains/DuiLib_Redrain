@@ -96,9 +96,9 @@ namespace UiLib
 				iAdjustable++;
 				sz.cx = cxExpand;
 				// Distribute remaining to last element (usually round-off left-overs)
-				if( iAdjustable == nAdjustables ) {
-					sz.cx = MAX(0, szRemaining.cx - rcPadding.right - cxFixedRemaining);
-				}
+// 				if( iAdjustable == nAdjustables ) {
+// 					sz.cx = MAX(0, szRemaining.cx - rcPadding.right - cxFixedRemaining);
+// 				}
 				if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
 				if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
 			}
@@ -106,10 +106,10 @@ namespace UiLib
 				if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
 				if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
 
-				cxFixedRemaining -= sz.cx + rcPadding.left + rcPadding.right ;
+//				cxFixedRemaining -= sz.cx + rcPadding.left + rcPadding.right ;
 			}
 
-			cxFixedRemaining -= m_iChildPadding;
+//			cxFixedRemaining -= m_iChildPadding;
 
 			sz.cy = pControl->GetFixedHeight();
 			if( sz.cy == 0 ) sz.cy = rc.bottom - rc.top - rcPadding.top - rcPadding.bottom;

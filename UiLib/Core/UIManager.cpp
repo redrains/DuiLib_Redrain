@@ -904,11 +904,13 @@ namespace UiLib {
 			   if(m_bAlphaBackground)
 			   {
 				   DWORD dwExStyle = GetWindowLong(m_hWndPaint, GWL_EXSTYLE);
-				   if((dwExStyle&WS_EX_LAYERED) != 0x80000)
-					   SetWindowLong(m_hWndPaint, GWL_EXSTYLE, dwExStyle^WS_EX_LAYERED);
+				   if((dwExStyle&WS_EX_LAYERED) != WS_EX_LAYERED)
+					   SetWindowLong(m_hWndPaint, GWL_EXSTYLE, dwExStyle | WS_EX_LAYERED);
 
 				   RECT rcClient = {0};
 				   ::GetClientRect(m_hWndPaint, &rcClient);
+				   // UpdateLayeredWindow函数使用时，刷新整个客户区
+				   rcPaint = rcClient;
 
 				   PAINTSTRUCT ps = {0};
 				   ::BeginPaint(m_hWndPaint, &ps);
@@ -989,7 +991,7 @@ namespace UiLib {
 				   SIZE szWindow = {rcClient.right - rcClient.left, rcClient.bottom - rcClient.top};
 				   POINT ptSrc = {0, 0};
 				   BLENDFUNCTION blendPixelFunction = {AC_SRC_OVER, 0, 255, AC_SRC_ALPHA};
-				   ::UpdateLayeredWindow(m_hWndPaint, NULL, &pt, &szWindow, m_hDcBackground, 
+				   ::UpdateLayeredWindow(m_hWndPaint, m_hDcPaint, &pt, &szWindow, m_hDcBackground, 
 					   &ptSrc, 0, &blendPixelFunction, ULW_ALPHA);
 				   ::EndPaint(m_hWndPaint, &ps);
 
@@ -2455,6 +2457,7 @@ namespace UiLib {
 		_tcscpy(lf.lfFaceName, pStrFontName);
 		lf.lfCharSet = DEFAULT_CHARSET;
 		lf.lfHeight = -nSize;
+		lf.lfQuality = CLEARTYPE_QUALITY;
 		if( bBold ) lf.lfWeight += FW_BOLD;
 		if( bUnderline ) lf.lfUnderline = TRUE;
 		if( bItalic ) lf.lfItalic = TRUE;
@@ -2491,6 +2494,7 @@ namespace UiLib {
 		_tcscpy(lf.lfFaceName, pStrFontName);
 		lf.lfCharSet = DEFAULT_CHARSET;
 		lf.lfHeight = -nSize;
+		lf.lfQuality = CLEARTYPE_QUALITY;
 		if( bBold ) lf.lfWeight += FW_BOLD;
 		if( bUnderline ) lf.lfUnderline = TRUE;
 		if( bItalic ) lf.lfItalic = TRUE;

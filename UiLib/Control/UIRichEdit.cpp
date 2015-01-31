@@ -1192,6 +1192,17 @@ void CRichEditUI::SetFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnd
     }
 }
 
+void CRichEditUI::SetEnabled(bool bEnabled)
+{
+	if (m_bEnabled == bEnabled) return;
+
+	if( m_pTwh ) {
+		m_pTwh->SetColor(bEnabled ? m_dwTextColor : m_pManager->GetDefaultDisabledColor());
+	}
+
+	CContainerUI::SetEnabled(bEnabled);
+}
+
 LONG CRichEditUI::GetWinStyle()
 {
     return m_lTwhStyle;
@@ -1695,7 +1706,11 @@ void CRichEditUI::DoInit()
         m_pTwh->GetTextServices()->TxSendMessage(EM_SETLANGOPTIONS, 0, 0, &lResult);
         m_pTwh->OnTxInPlaceActivate(NULL);
         m_pManager->AddMessageFilter(this);
-		if (GetText() == _T(""))
+		if (!m_bEnabled)
+		{
+			m_pTwh->SetColor(m_pManager->GetDefaultDisabledColor());
+		}
+		else if (GetText() == _T("") && !m_sTipValue.IsEmpty())
 		{
 			SetText(m_sTipValue);
 			m_pTwh->SetColor(m_dwTipValueColor);
@@ -1903,7 +1918,7 @@ void CRichEditUI::DoEvent(TEventUI& event)
     if( event.Type == UIEVENT_KILLFOCUS )  {
         if( m_pTwh ) {
             m_pTwh->OnTxInPlaceActivate(NULL);
-			if (GetText() == _T(""))
+			if (GetText() == _T("") && !m_sTipValue.IsEmpty())
 			{
 				SetText(m_sTipValue);
 				m_pTwh->SetColor(m_dwTipValueColor);
@@ -2450,6 +2465,7 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
 
 			ImmReleaseContext(GetManager()->GetPaintWindow(),hIMC);
 		}
+
 		return 0;
 	}
 

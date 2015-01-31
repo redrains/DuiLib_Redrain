@@ -1,3 +1,13 @@
+2015-1-31
+修复窗体在透明模式下，刷新不完整的bug
+
+2015-1-27
+AddFont和AddFontAt函数添加字体默认开启CLEARTYPE_QUALITY质量
+
+2015-1-23
+richedit禁用时文字会改为禁用字体颜色
+修复edit的SetNumberOnly函数bug
+
 2015-1-22
 阴影类支持64位系统
 button增加multiline属性，支持多行文字
