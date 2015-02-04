@@ -14,7 +14,8 @@ namespace DuiLib
 		m_bMouseChildEnabled(true),
 		m_pVerticalScrollBar(NULL),
 		m_pHorizontalScrollBar(NULL),
-		m_bScrollProcess(false)
+		m_bScrollProcess(false),
+		m_nScrollStepSize(0)
 	{
 		::ZeroMemory(&m_rcInset, sizeof(m_rcInset));
 	}
@@ -370,11 +371,26 @@ namespace DuiLib
 		Invalidate();
 	}
 
+	void CContainerUI::SetScrollStepSize(int nSize)
+	{
+		if (nSize >0)
+			m_nScrollStepSize = nSize;
+	}
+
+	int CContainerUI::GetScrollStepSize() const
+	{
+		return m_nScrollStepSize;
+	}
+
 	void CContainerUI::LineUp()
 	{
-		int cyLine = 8;
-		if( m_pManager ) cyLine = m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8;
-
+		int cyLine = m_nScrollStepSize;
+		if (m_nScrollStepSize == 0)
+		{
+			cyLine = 8;
+			if( m_pManager ) cyLine = m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8;
+		}
+		
 		SIZE sz = GetScrollPos();
 		sz.cy -= cyLine;
 		SetScrollPos(sz);
@@ -382,8 +398,12 @@ namespace DuiLib
 
 	void CContainerUI::LineDown()
 	{
-		int cyLine = 8;
-		if( m_pManager ) cyLine = m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8;
+		int cyLine = m_nScrollStepSize;
+		if (m_nScrollStepSize == 0)
+		{
+			cyLine = 8;
+			if( m_pManager ) cyLine = m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8;
+		}
 
 		SIZE sz = GetScrollPos();
 		sz.cy += cyLine;
@@ -424,15 +444,19 @@ namespace DuiLib
 
 	void CContainerUI::LineLeft()
 	{
+		int cxLine = m_nScrollStepSize == 0 ? 8 : m_nScrollStepSize;
+
 		SIZE sz = GetScrollPos();
-		sz.cx -= 8;
+		sz.cx -= cxLine;
 		SetScrollPos(sz);
 	}
 
 	void CContainerUI::LineRight()
 	{
+		int cxLine = m_nScrollStepSize == 0 ? 8 : m_nScrollStepSize;
+
 		SIZE sz = GetScrollPos();
-		sz.cx += 8;
+		sz.cx += cxLine;
 		SetScrollPos(sz);
 	}
 
@@ -591,6 +615,7 @@ namespace DuiLib
 			if( GetHorizontalScrollBar() ) GetHorizontalScrollBar()->ApplyAttributeList(pstrValue);
 		}
 		else if( _tcscmp(pstrName, _T("childpadding")) == 0 ) SetChildPadding(_ttoi(pstrValue));
+		else if( _tcscmp(pstrName, _T("scrollstepsize")) == 0 ) SetScrollStepSize(_ttoi(pstrValue));
 		else CControlUI::SetAttribute(pstrName, pstrValue);
 	}
 

@@ -6,7 +6,7 @@ namespace DuiLib {
 //
 //
 
-class CComboWnd : public CWindowWnd
+class CComboWnd : public CWindowWnd, public INotifyUI
 {
 public:
     void Init(CComboUI* pOwner);
@@ -14,6 +14,7 @@ public:
     void OnFinalMessage(HWND hWnd);
 
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	void Notify(TNotifyUI& msg) override;
 
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);
@@ -29,6 +30,13 @@ public:
     int m_iOldSel;
 };
 
+void CComboWnd::Notify(TNotifyUI& msg)
+{
+	if (msg.sType == _T("windowinit"))
+	{
+		EnsureVisible(m_iOldSel);
+	}
+}
 
 void CComboWnd::Init(CComboUI* pOwner)
 {
@@ -116,7 +124,7 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             m_pLayout->Add(static_cast<CControlUI*>(m_pOwner->GetItemAt(i)));
         }
         m_pm.AttachDialog(m_pLayout);
-        
+        m_pm.AddNotifier(this);
         return 0;
     }
     else if( uMsg == WM_CLOSE ) {
