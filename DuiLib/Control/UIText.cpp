@@ -125,8 +125,7 @@ namespace DuiLib
 			m_cxyFixed.cx = cXY.cx;
 		}
 
-		if( m_cxyFixed.cy != 0 ) cXY.cy = m_cxyFixed.cy;
-		return cXY;
+		return CControlUI::EstimateSize(szAvailable);
 	}
 
 	void CTextUI::PaintText(HDC hDC)

@@ -106,7 +106,6 @@ namespace UiLib
 
 	SIZE CTextUI::EstimateSize(SIZE szAvailable)
 	{
-
 		RECT rcText = { 0, 0, m_bAutoCalcWidth ? 9999 : m_cxyFixed.cx, 9999 };
 		rcText.left += m_rcTextPadding.left;
 		rcText.right -= m_rcTextPadding.right;
@@ -126,8 +125,7 @@ namespace UiLib
 			m_cxyFixed.cx = cXY.cx;
 		}
 
-		if( m_cxyFixed.cy != 0 ) cXY.cy = m_cxyFixed.cy;
-		return cXY;
+		return CControlUI::EstimateSize(szAvailable);
 	}
 
 	void CTextUI::PaintText(HDC hDC)

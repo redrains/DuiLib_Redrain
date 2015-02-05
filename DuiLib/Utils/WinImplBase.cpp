@@ -263,6 +263,7 @@ LRESULT WindowImplBase::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 #else
 	LRESULT lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 #endif
+	bHandled = FALSE;
 	return lRes;
 }
 

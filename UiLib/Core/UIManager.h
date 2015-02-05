@@ -898,6 +898,7 @@ private:
     HWND m_hwndTooltip;
     TOOLINFO m_ToolTip;
     bool m_bShowUpdateRect;
+	bool m_bIsRestore;
 	//redrain
 	RECT m_rtCaret;
 	bool m_bCaretActive;

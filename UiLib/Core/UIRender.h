@@ -51,9 +51,9 @@ public:
     static HBITMAP GenerateBitmap(CPaintManagerUI* pManager, CControlUI* pControl, RECT rc);
 
 	//alpha utilities
-	static void CheckAalphaColor(DWORD& dwColor);
-	static void ClearAalphaPixel(LPBYTE pBits, int bitsWidth, int left, int top, int right, int bottom);
-	static void RestoreAalphaColor(LPBYTE pBits, int bitsWidth, int left, int top, int right, int bottom);
+	static void CheckAlphaColor(DWORD& dwColor);
+	static void ClearAlphaPixel(LPBYTE pBits, int bitsWidth, PRECT rc);
+	static void RestoreAlphaColor(LPBYTE pBits, int bitsWidth, PRECT rc);
 };
 
 } // namespace UiLib

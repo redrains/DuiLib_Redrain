@@ -180,7 +180,7 @@ HRESULT InitDefaultCharFormat(CRichEditUI* re, CHARFORMAT2W* pcf, HFONT hfont)
     DWORD dwColor = re->GetTextColor();
 	if(re->GetManager()->IsBackgroundTransparent())
 	{
-		CRenderEngine::CheckAalphaColor(dwColor);
+		CRenderEngine::CheckAlphaColor(dwColor);
 	}
     pcf->cbSize = sizeof(CHARFORMAT2W);
     pcf->crTextColor = RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor));
@@ -633,7 +633,7 @@ HRESULT CTxtWinHost::TxGetParaFormat(const PARAFORMAT **ppPF)
 COLORREF CTxtWinHost::TxGetSysColor(int nIndex) 
 {
 	DWORD dwColor = ::GetSysColor(nIndex);
-	CRenderEngine::CheckAalphaColor(dwColor);
+	CRenderEngine::CheckAlphaColor(dwColor);
     return dwColor;
 }
 
@@ -817,7 +817,7 @@ void CTxtWinHost::SetFont(HFONT hFont)
 
 void CTxtWinHost::SetColor(DWORD dwColor)
 {
-	CRenderEngine::CheckAalphaColor(dwColor);
+	CRenderEngine::CheckAlphaColor(dwColor);
     cf.crTextColor = RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor));
     pserv->OnTxPropertyBitsChange(TXTBIT_CHARFORMATCHANGE, 
         TXTBIT_CHARFORMATCHANGE);
@@ -1509,8 +1509,8 @@ bool CRichEditUI::SetSelectionCharFormat(CHARFORMAT2 &cf)
 {
 	if(m_pManager->IsBackgroundTransparent())
 	{
-		CRenderEngine::CheckAalphaColor(cf.crTextColor);
-		CRenderEngine::CheckAalphaColor(cf.crBackColor);
+		CRenderEngine::CheckAlphaColor(cf.crTextColor);
+		CRenderEngine::CheckAlphaColor(cf.crBackColor);
 	}
     if( !m_pTwh ) return false;
     cf.cbSize = sizeof(CHARFORMAT2);

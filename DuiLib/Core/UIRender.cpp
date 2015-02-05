@@ -1050,33 +1050,42 @@ bool CRenderEngine::DrawImageString(HDC hDC, CPaintManagerUI* pManager, const RE
 void CRenderEngine::DrawColor(HDC hDC, const RECT& rc, DWORD color)
 {
     if( color <= 0x00FFFFFF ) return;
-    if( color >= 0xFF000000 )
-    {
-        ::SetBkColor(hDC, RGB(GetBValue(color), GetGValue(color), GetRValue(color)));
-        ::ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
-    }
-    else
-    {
-        // Create a new 32bpp bitmap with room for an alpha channel
-        BITMAPINFO bmi = { 0 };
-        bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-        bmi.bmiHeader.biWidth = 1;
-        bmi.bmiHeader.biHeight = 1;
-        bmi.bmiHeader.biPlanes = 1;
-        bmi.bmiHeader.biBitCount = 32;
-        bmi.bmiHeader.biCompression = BI_RGB;
-        bmi.bmiHeader.biSizeImage = 1 * 1 * sizeof(DWORD);
-        LPDWORD pDest = NULL;
-        HBITMAP hBitmap = ::CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, (LPVOID*) &pDest, NULL, 0);
-        if( !hBitmap ) return;
 
-        *pDest = color;
+	Gdiplus::Graphics graphics( hDC );
+	Gdiplus::SolidBrush brush(Gdiplus::Color((LOBYTE((color)>>24)), GetBValue(color), GetGValue(color), GetRValue(color)));
 
-        RECT rcBmpPart = {0, 0, 1, 1};
-        RECT rcCorners = {0};
-        DrawImage(hDC, hBitmap, rc, rc, rcBmpPart, rcCorners, true, 255);
-        ::DeleteObject(hBitmap);
-    }
+	graphics.FillRectangle(&brush, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+	
+// 原来的代码，填充的背景色不包含透明通道，在透明模式下输出的图片和文字会出现问题，所以改为gdi+填充背景色
+// 	if( color <= 0x00FFFFFF ) return;
+// 	if( color >= 0xFF000000 )
+// 	{
+// 		::SetBkColor(hDC, RGB(GetBValue(color), GetGValue(color), GetRValue(color)));
+// 		::ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
+// 	}
+// 	else
+// 	{
+// 		// Create a new 32bpp bitmap with room for an alpha channel
+// 		BITMAPINFO bmi = { 0 };
+// 		bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+// 		bmi.bmiHeader.biWidth = 1;
+// 		bmi.bmiHeader.biHeight = 1;
+// 		bmi.bmiHeader.biPlanes = 1;
+// 		bmi.bmiHeader.biBitCount = 32;
+// 		bmi.bmiHeader.biCompression = BI_RGB;
+// 		bmi.bmiHeader.biSizeImage = 1 * 1 * sizeof(DWORD);
+// 		LPDWORD pDest = NULL;
+// 		HBITMAP hBitmap = ::CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, (LPVOID*) &pDest, NULL, 0);
+// 		if( !hBitmap ) return;
+// 
+// 		*pDest = color;
+// 
+// 		RECT rcBmpPart = {0, 0, 1, 1};
+// 		RECT rcCorners = {0};
+// 		DrawImage(hDC, hBitmap, rc, rc, rcBmpPart, rcCorners, true, 255);
+// 		::DeleteObject(hBitmap);
+// 	}
+
 }
 
 void CRenderEngine::DrawGradient(HDC hDC, const RECT& rc, DWORD dwFirst, DWORD dwSecond, bool bVertical, int nSteps)
@@ -2011,9 +2020,9 @@ SIZE CRenderEngine::GetTextSize( HDC hDC, CPaintManagerUI* pManager , LPCTSTR ps
 	return size;
 }
 
-void CRenderEngine::CheckAalphaColor(DWORD& dwColor)
+void CRenderEngine::CheckAlphaColor(DWORD& dwColor)
 {
-	//RestoreAalphaColor认为0x00000000是真正的透明，其它都是GDI绘制导致的
+	//RestoreAlphaColor认为0x00000000是真正的透明，其它都是GDI绘制导致的
 	//所以在GDI绘制中不能用0xFF000000这个颜色值，现在处理是让它变成RGB(0,0,1)
 	//RGB(0,0,1)与RGB(0,0,0)很难分出来
 	if((0x00FFFFFF & dwColor) == 0)
@@ -2022,11 +2031,14 @@ void CRenderEngine::CheckAalphaColor(DWORD& dwColor)
 	}
 }
 
-void CRenderEngine::ClearAalphaPixel(LPBYTE pBits, int bitsWidth, int left, int top, int right, int bottom)
+void CRenderEngine::ClearAlphaPixel(LPBYTE pBits, int bitsWidth, PRECT rc)
 {
-	for(int i = top; i < bottom; ++i)
+	if(!pBits)
+		return;
+
+	for(int i = rc->top; i < rc->bottom; ++i)
 	{
-		for(int j = left; j < right; ++j)
+		for(int j = rc->left; j < rc->right; ++j)
 		{
 			int x = (i*bitsWidth + j) * 4;
 			*((unsigned int*)&pBits[x]) = 0;
@@ -2034,11 +2046,11 @@ void CRenderEngine::ClearAalphaPixel(LPBYTE pBits, int bitsWidth, int left, int 
 	}
 }
 
-void CRenderEngine::RestoreAalphaColor(LPBYTE pBits, int bitsWidth, int left, int top, int right, int bottom)
+void CRenderEngine::RestoreAlphaColor(LPBYTE pBits, int bitsWidth, PRECT rc)
 {
-	for(int i = top; i < bottom; ++i)
+	for(int i = rc->top; i < rc->bottom; ++i)
 	{
-		for(int j = left; j < right; ++j)
+		for(int j = rc->left; j < rc->right; ++j)
 		{
 			int x = (i*bitsWidth + j) * 4;
 			if((pBits[x + 3] == 0)&& (pBits[x + 0] != 0 || pBits[x + 1] != 0|| pBits[x + 2] != 0))
