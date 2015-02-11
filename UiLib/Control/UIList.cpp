@@ -1249,6 +1249,11 @@ namespace UiLib {
 			CListHeaderUI* pHeader = m_pOwner->GetHeader();
 			if( pHeader != NULL && pHeader->GetCount() > 0 ) {
 				cxNeeded = MAX(0, pHeader->EstimateSize(CSize(rc.right - rc.left, rc.bottom - rc.top)).cx);
+				if ( m_pVerticalScrollBar->IsVisible())
+				{
+					RECT rcHeader = pHeader->GetPos();
+					pHeader->SetPos(rcHeader);
+				}
 			}
 		}
 
@@ -1475,6 +1480,12 @@ namespace UiLib {
 		int iAdjustable = 0;
 		int cxFixedRemaining = cxFixed;
 
+		int nHeaderWidth = 0;
+		CListUI *pList = static_cast<CListUI*>(GetParent());
+		if (pList != NULL)
+		{
+			nHeaderWidth = GetWidth() - pList->GetVerticalScrollBar()->GetWidth();
+		}
 		for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
 			CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
 			if( !pControl->IsVisible() ) continue;
@@ -1489,7 +1500,7 @@ namespace UiLib {
 			if (m_bIsScaleHeader)
 			{
 				CListHeaderItemUI* pHeaderItem = static_cast<CListHeaderItemUI*>(pControl);
-				sz.cx = int(GetWidth() * (float)pHeaderItem->GetScale() / 100);
+				sz.cx = int(nHeaderWidth * (float)pHeaderItem->GetScale() / 100);
 			}
 			else
 			{
