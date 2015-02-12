@@ -2152,17 +2152,7 @@ void CRichEditUI::SetPos(RECT rc)
         m_pHorizontalScrollBar->SetPos(rcScrollBarPos);
     }
 
-	//     for( int it = 0; it < m_items.GetSize(); it++ ) {
-	//         CControlUI* pControl = static_cast<CControlUI*>(m_items[it]);
-	//         if( !pControl->IsVisible() ) continue;
-	//         if( pControl->IsFloat() ) {
-	//             SetFloatPos(it);
-	//         }
-	//         else {
-	//             pControl->SetPos(rc); // 所有非float子控件放大到整个客户区
-	//         }
-	//     }
-	// Determine the width of elements that are sizeable
+
 	SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
 	if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) 
 		szAvailable.cx += m_pHorizontalScrollBar->GetScrollRange();
@@ -2211,10 +2201,7 @@ void CRichEditUI::SetPos(RECT rc)
 		if( sz.cx == 0 ) {
 			iAdjustable++;
 			sz.cx = cxExpand;
-			// Distribute remaining to last element (usually round-off left-overs)
-			if( iAdjustable == nAdjustables ) {
-				sz.cx = MAX(0, szRemaining.cx - rcPadding.right - cxFixedRemaining);
-			}
+
 			if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
 			if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
 		}
@@ -2222,7 +2209,6 @@ void CRichEditUI::SetPos(RECT rc)
 			if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
 			if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
 
-			cxFixedRemaining -= sz.cx;
 		}
 
 		sz.cy = pControl->GetFixedHeight();
@@ -2231,7 +2217,7 @@ void CRichEditUI::SetPos(RECT rc)
 		if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
 		if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
 
-		RECT rcCtrl = { iPosX + rcPadding.left, rc.top + rcPadding.top, iPosX + sz.cx + rcPadding.left + rcPadding.right, rc.top + rcPadding.top + sz.cy};
+		RECT rcCtrl = { iPosX + rcPadding.left, rc.top + rcPadding.top, iPosX + sz.cx + rcPadding.left , rc.top + rcPadding.top + sz.cy};
 		pControl->SetPos(rcCtrl);
 		iPosX += sz.cx + m_iChildPadding + rcPadding.left + rcPadding.right;
 		cxNeeded += sz.cx + rcPadding.left + rcPadding.right;
@@ -2261,8 +2247,6 @@ void CRichEditUI::SetPos(RECT rc)
 		}
 	}
 	//redrain
-	// Process the scrollbar
-	ProcessScrollBar(rc, cxNeeded, 0);
 }
 
 void CRichEditUI::DoPaint(HDC hDC, const RECT& rcPaint)
