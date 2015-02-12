@@ -1,3 +1,6 @@
+2014-2-12
+修复gif控件内存泄漏bug、修复edit控件的tipvalue在加密状态下显示错误的bug
+
 2014-2-9
 完善ListHeader控件百分比计算宽度的功能
 

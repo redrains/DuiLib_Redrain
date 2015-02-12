@@ -725,22 +725,26 @@ MatchFailed:
 	{
 		DWORD mCurTextColor = m_dwTextColor;
 
-		if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
-		if(GetText() == m_sTipValue || GetText() == _T(""))	mCurTextColor = m_dwTipValueColor;
+		if( m_dwTextColor == 0 ) mCurTextColor = m_dwTextColor = m_pManager->GetDefaultFontColor();		
 		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
 
 		CDuiString sText;
-		if( m_sText.IsEmpty() ) 
-			sText = m_sTipValue;
-		else 
+		if(GetText() == m_sTipValue || GetText() == _T(""))	
+		{
+			mCurTextColor = m_dwTipValueColor;
+			sText = m_sTipValue;			
+		}
+		else
+		{
 			sText = m_sText;
 
-		if( m_bPasswordMode ) {
-			sText.Empty();
-			LPCTSTR p = m_sText.GetData();
-			while( *p != _T('\0') ) {
-				sText += m_cPasswordChar;
-				p = ::CharNext(p);
+			if( m_bPasswordMode ) {
+				sText.Empty();
+				LPCTSTR p = m_sText.GetData();
+				while( *p != _T('\0') ) {
+					sText += m_cPasswordChar;
+					p = ::CharNext(p);
+				}
 			}
 		}
 

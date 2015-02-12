@@ -35,13 +35,13 @@ using namespace DuiLib;
 #endif
 
 #ifdef _UNICODE
-#	ifdef DEBUG
+#	ifdef _DEBUG
 #		pragma comment(lib, "DuiLib_ud.lib")
 #	else
 #		pragma comment(lib, "DuiLib_u.lib")
 #	endif
 #else
-#	ifdef DEBUG
+#	ifdef _DEBUG
 #		pragma comment(lib, "DuiLib_d.lib")
 #	else
 #		pragma comment(lib, "DuiLib.lib")

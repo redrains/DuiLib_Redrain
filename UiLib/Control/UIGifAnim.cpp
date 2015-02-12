@@ -337,7 +337,9 @@ namespace UiLib
 			return NULL;
 		}
 
-		return LoadGifFromMemory(pData, dwSize);
+		Gdiplus::Image* pImage = LoadGifFromMemory(pData, dwSize);
+		delete pData;
+		return pImage;
 	}
 
 	Gdiplus::Image* CGifAnimUI::LoadGifFromMemory( LPVOID pBuf,size_t dwSize )
