@@ -148,6 +148,8 @@ public:
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);
 
+	bool IsDelayedDestroy() const;
+	void SetDelayedDestroy(bool bDelayed);
     int GetChildPadding() const;
     void SetChildPadding(int iPadding);
 

@@ -2,21 +2,21 @@
 #define UIlib_h__
 
 #ifndef UILIB_EXPORTS
-#define UILIB_API
+#	define UILIB_API
 #else
-#ifdef UILIB_EXPORTS
-#if _MSC_VER >= 1500
-#define UILIB_API __declspec(dllexport)
-#else
-#define UILIB_API 
-#endif
-#else
-#if _MSC_VER >= 1500
-#define UILIB_API __declspec(dllimport)
-#else
-#define UILIB_API 
-#endif
-#endif
+#	ifdef UILIB_EXPORTS
+#		if _MSC_VER >= 1500
+#			define UILIB_API __declspec(dllexport)
+#		else
+#			define UILIB_API 
+#		endif
+#	else
+#		if _MSC_VER >= 1500
+#			define UILIB_API __declspec(dllimport)
+#		else
+#			define UILIB_API 
+#		endif
+#	endif
 #endif
 
 #define UILIB_COMDAT __declspec(selectany) 

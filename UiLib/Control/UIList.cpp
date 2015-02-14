@@ -445,6 +445,16 @@ namespace UiLib {
 		return &m_ListInfo;
 	}
 
+	bool CListUI::IsDelayedDestroy() const
+	{
+		return m_pList->IsDelayedDestroy();
+	}
+
+	void CListUI::SetDelayedDestroy(bool bDelayed)
+	{
+		m_pList->SetDelayedDestroy(bDelayed);
+	}
+
 	int CListUI::GetChildPadding() const
 	{
 		return m_pList->GetChildPadding();

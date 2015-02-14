@@ -4,6 +4,7 @@
 #pragma once
 
 #include <map>
+#include <vector>
 namespace DuiLib {
 
 struct ContextMenuParam
@@ -162,7 +163,7 @@ public:
 		return m_pMainWndPaintManager;
 	}
 
-	virtual void SetMenuCheckInfo(map<CDuiString,bool>* pInfo)
+	virtual void SetMenuCheckInfo(std::map<CDuiString,bool>* pInfo)
 	{
 		if (pInfo != NULL)
 			m_pMenuCheckInfo = pInfo;
@@ -170,7 +171,7 @@ public:
 			m_pMenuCheckInfo = NULL;
 	}
 
-	virtual map<CDuiString,bool>* GetMenuCheckInfo() const
+	virtual std::map<CDuiString,bool>* GetMenuCheckInfo() const
 	{
 		return m_pMenuCheckInfo;
 	}
@@ -180,7 +181,7 @@ protected:
 	ReceiversVector *pReceivers_;
 
 	CPaintManagerUI* m_pMainWndPaintManager;
-	map<CDuiString,bool>* m_pMenuCheckInfo;
+	std::map<CDuiString,bool>* m_pMenuCheckInfo;
 };
 
 ////////////////////////////////////////////////////
@@ -276,11 +277,11 @@ public:
 	 *	@xml	菜单的布局文件
 	 *	@point	菜单的左上角坐标
 	 *	@pMainPaintManager	菜单的父窗体管理器指针
-	 *	@xml	保存菜单的单选和复选信息结构指针
+	 *	@pMenuCheckInfo	保存菜单的单选和复选信息结构指针
 	 *	@dwAlignment		菜单的出现位置，默认出现在鼠标的右下侧。
 	 */
     void Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
-		CPaintManagerUI* pMainPaintManager, map<CDuiString,bool>* pMenuCheckInfo = NULL,
+		CPaintManagerUI* pMainPaintManager, std::map<CDuiString,bool>* pMenuCheckInfo = NULL,
 		DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top);
     LPCTSTR GetWindowClassName() const;
     void OnFinalMessage(HWND hWnd);

@@ -1,8 +1,6 @@
 #ifndef UITreeView_h__
 #define UITreeView_h__
 
-#include <vector>
-using namespace std;
 
 #pragma once
 

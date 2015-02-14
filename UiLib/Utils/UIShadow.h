@@ -111,7 +111,7 @@ protected:
 
 	CPaintManagerUI	*m_pManager;		// 父窗体的CPaintManagerUI，用来获取素材资源和父窗体句柄
 	HWND			 m_hWnd;			// 阴影窗体的句柄
-	LONG			 m_OriParentProc;	// 子类化父窗体
+	LONG_PTR		 m_OriParentProc;	// 子类化父窗体
 	BYTE			 m_Status;
 	bool			 m_bIsImageMode;	// 是否为图片阴影模式
 	bool			 m_bIsShowShadow;	// 是否要显示阴影

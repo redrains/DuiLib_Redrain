@@ -156,7 +156,7 @@ BOOL CMenuWnd::Receive(ContextMenuParam param)
 }
 
 void CMenuWnd::Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
-					CPaintManagerUI* pMainPaintManager, map<CDuiString,bool>* pMenuCheckInfo/* = NULL*/,
+					CPaintManagerUI* pMainPaintManager, std::map<CDuiString,bool>* pMenuCheckInfo/* = NULL*/,
 					DWORD dwAlignment/* = eMenuAlignment_Left | eMenuAlignment_Top*/)
 {
 
@@ -867,9 +867,9 @@ void CMenuElementUI::SetChecked(bool bCheck/* = true*/)
 {
 	if (!m_bCheckItem || CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo() == NULL )
 		return;
-	map<CDuiString,bool>::iterator it = CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->find(GetName());
+	std::map<CDuiString,bool>::iterator it = CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->find(GetName());
 	if (it == CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->end())
-		CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->insert(map<CDuiString,bool>::value_type(GetName(),bCheck));
+		CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->insert(std::map<CDuiString,bool>::value_type(GetName(),bCheck));
 	else
 		it->second = bCheck;
 
@@ -881,7 +881,7 @@ bool CMenuElementUI::GetChecked() const
 	if (!m_bCheckItem || CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo() == NULL || CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->size() == 0)
 		return false;
 
-	map<CDuiString,bool>::iterator it = CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->find(GetName());
+	std::map<CDuiString,bool>::iterator it = CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->find(GetName());
 	if (it != CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->end())
 	{
 		return it->second;

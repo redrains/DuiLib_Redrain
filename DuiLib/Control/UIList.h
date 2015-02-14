@@ -124,6 +124,8 @@ public:
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);
 
+	bool IsDelayedDestroy() const;
+	void SetDelayedDestroy(bool bDelayed);
     int GetChildPadding() const;
     void SetChildPadding(int iPadding);
 
@@ -456,7 +458,6 @@ protected:
     UINT m_uButtonState;
     IListOwnerUI* m_pOwner;
 
-	int m_nOldCxPos;  //add by Redrain 2014.10.30
 };
 
 } // namespace DuiLib
