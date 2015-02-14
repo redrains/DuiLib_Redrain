@@ -1,6 +1,7 @@
 2015-2-14
 修复list控件SetDelayDestrory函数无效的bug
 阴影类兼容64位系统
+修复listheader控件setpos函数计算宽度的bug
 
 2015-2-12
 修复gif控件内存泄漏bug

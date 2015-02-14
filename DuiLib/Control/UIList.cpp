@@ -1238,11 +1238,13 @@ void CListHeaderUI::SetPos(RECT rc)
 	int iAdjustable = 0;
 	int cxFixedRemaining = cxFixed;
 
-	int nHeaderWidth = 0;
+	int nHeaderWidth = GetWidth();
 	CListUI *pList = static_cast<CListUI*>(GetParent());
 	if (pList != NULL)
 	{
-		nHeaderWidth = GetWidth() - pList->GetVerticalScrollBar()->GetWidth();
+		CScrollBarUI* pVScroll = pList->GetVerticalScrollBar();
+		if (pVScroll != NULL)
+		nHeaderWidth -= pVScroll->GetWidth();
 	}
 	for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
 		CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
