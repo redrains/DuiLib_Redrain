@@ -22,10 +22,14 @@
 		<Attribute name="shadowsize" default="0" type="BYTE" comment="算法阴影的宽度(-20到20)"/>
 		<Attribute name="shadowsharpness" default="255" type="BYTE" comment="算法阴影的锐度"/>
 		<Attribute name="shadowdarkness" default="255" type="BYTE" comment="算法阴影的深度(相当于透明度)"/>
-		<Attribute name="shadowpositon" default="0,0" type="SIZE" comment="算法阴影的偏移量"/>
+		<Attribute name="shadowposition" default="0,0" type="SIZE" comment="算法阴影的偏移量"/>
 		<Attribute name="shadowcolor" default="0x000000" type="DWORD" comment="算法阴影的颜色，RGB格式，不支持透明度，使用shadowdarkness设置透明度"/>
 		<Attribute name="gdiplustext" default="false" type="BOOL" comment="是否用gdi+渲染文字（抗锯齿效果更好，但是效率低）"/>
 	</Window>
+	<Include >
+		<Attribute name="source" default="" type="STRING" comment="XML布局文件"/>
+		<Attribute name="count" default="" type="INT" comment="嵌入的次数"/>
+	</Include>
 	<ChildLayout parent="Container" >
 		<Attribute name="xmlfile" default="" type="STRING" comment="子窗体XML布局文件"/>
 	</ChildLayout>
@@ -524,7 +528,7 @@
 		<Attribute name="selectedhotimage" default="" type="STRING" comment="选中鼠标悬浮的的状态图片"/>
 		<Attribute name="selectedpushedimage" default="" type="STRING" comment="选中鼠标按下的的状态图片"/>
 		<Attribute name="foreimage" default="" type="STRING" comment="前景图片"/>
-		<Attribute name="slectedforeimage" default="" type="STRING" comment="选中的前景图片"/>
+		<Attribute name="selectedforeimage" default="" type="STRING" comment="选中的前景图片"/>
 		<Attribute name="hottextcolor" default="0x00000000" type="DWORD" comment="鼠标悬浮字体颜色，0表示不使用此颜色,如(0xFFFF0000)"/>
 		<Attribute name="pushedtextcolor" default="0x00000000" type="DWORD" comment="鼠标按下字体颜色，0表示不使用此颜色,如(0xFFFF0000)"/>
 		<Attribute name="focusedtextcolor" default="0x00000000" type="DWORD" comment="获得焦点字体颜色，0表示不使用此颜色,如(0xFFFF0000)"/>

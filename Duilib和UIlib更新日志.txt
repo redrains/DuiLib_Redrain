@@ -1,3 +1,7 @@
+2015-3-7
+修复ListContainerElementUI控件SetPos函数判断不足的bug
+修复CListBodyUI控件SetPos对m_pVerticalScrollBar判断不足的bug
+
 2015-2-14
 修复list控件SetDelayDestrory函数无效的bug
 阴影类兼容64位系统

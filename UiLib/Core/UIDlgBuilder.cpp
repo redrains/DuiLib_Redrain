@@ -466,7 +466,7 @@ namespace UiLib
 						else if( _tcscmp(pstrName, _T("shadowdarkness")) == 0 ) {
 							pManager->GetShadow()->SetDarkness(_ttoi(pstrValue));
 						}
-						else if( _tcscmp(pstrName, _T("shadowpositon")) == 0 ) {
+						else if( _tcscmp(pstrName, _T("shadowposition")) == 0 ) {
 							LPTSTR pstr = NULL;
 							int cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
 							int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr); 

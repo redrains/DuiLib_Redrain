@@ -1259,7 +1259,7 @@ namespace UiLib {
 			CListHeaderUI* pHeader = m_pOwner->GetHeader();
 			if( pHeader != NULL && pHeader->GetCount() > 0 ) {
 				cxNeeded = MAX(0, pHeader->EstimateSize(CSize(rc.right - rc.left, rc.bottom - rc.top)).cx);
-				if ( m_pVerticalScrollBar->IsVisible())
+				if ( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible())
 				{
 					RECT rcHeader = pHeader->GetPos();
 					pHeader->SetPos(rcHeader);
@@ -3288,7 +3288,7 @@ namespace UiLib {
 		if( m_pOwner == NULL ) return;		
 
 		CListUI* pList = static_cast<CListUI*>(m_pOwner);
-		if (pList == NULL) return;
+		if (pList == NULL ||  _tcscmp(_T("ListUI"), pList->GetClass()) != 0 ) return;
 
 		CListHeaderUI *pHeader = pList->GetHeader();
 		if (pHeader == NULL || !pHeader->IsVisible())

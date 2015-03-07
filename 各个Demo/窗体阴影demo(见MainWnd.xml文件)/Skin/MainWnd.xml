@@ -2,7 +2,7 @@
 <!-- 图片阴影 -->
 <Window size="840,600" sizebox="4,4,4,4" caption="0,0,0,75" mininfo="840,600" showshadow="true" shadowimage="shadow.png" shadowcorner="23,13,23,33">
 <!-- 算法阴影 -->
-<!-- <Window size="840,600" sizebox="4,4,4,4" caption="0,0,0,75" mininfo="840,600" showshadow="true" shadowsize="5" shadowpositon="1,1" shadowcolor="#333333"> -->
+<!-- <Window size="840,600" sizebox="4,4,4,4" caption="0,0,0,75" mininfo="840,600" showshadow="true" shadowsize="5" shadowposition="1,1" shadowcolor="#333333"> -->
 
 
 <Font name="微软雅黑" size="13"/>
