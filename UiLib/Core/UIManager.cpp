@@ -980,7 +980,7 @@ namespace UiLib {
 				{
 					m_bIsRestore = true;
 				}
-
+				return true;
 			}
 			break;
 		case WM_PRINTCLIENT:

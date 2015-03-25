@@ -930,7 +930,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 			{
 				m_bIsRestore = true;
 			}
-
+        return true;
 		}
 		break;
     case WM_GETMINMAXINFO:

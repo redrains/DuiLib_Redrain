@@ -496,7 +496,7 @@ namespace UiLib
 			m_pVerticalScrollBar = new CScrollBarUI;
 			m_pVerticalScrollBar->SetOwner(this);
 			m_pVerticalScrollBar->SetManager(m_pManager, NULL, false);
-			m_pVerticalScrollBar->SetVisible(false);    //这里被修改了  Redrain
+//			m_pVerticalScrollBar->SetVisible(false);    //这里被修改了  Redrain
 			if ( m_pManager ) {
 				LPCTSTR pDefaultAttributes = m_pManager->GetDefaultAttributeList(_T("VScrollBar"));
 				if( pDefaultAttributes ) {
@@ -514,7 +514,7 @@ namespace UiLib
 			m_pHorizontalScrollBar->SetHorizontal(true);
 			m_pHorizontalScrollBar->SetOwner(this);
 			m_pHorizontalScrollBar->SetManager(m_pManager, NULL, false);
-			m_pVerticalScrollBar->SetVisible(false);    //这里被修改了  Redrain
+//			m_pHorizontalScrollBar->SetVisible(false);    //这里被修改了  Redrain
 			if ( m_pManager ) {
 				LPCTSTR pDefaultAttributes = m_pManager->GetDefaultAttributeList(_T("HScrollBar"));
 				if( pDefaultAttributes ) {

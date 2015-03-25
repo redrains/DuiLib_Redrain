@@ -86,15 +86,14 @@ namespace UiLib
 	{
 		LRESULT lRes = 0;
 		BOOL bHandled = TRUE;
-		/**xpBug
-		DWORD ProcessId;
+		//*xpBug
+
 		if(WM_NOTIFY==uMsg)
 		{
 			::SetFocus(m_hWnd);
 		}
 		if( uMsg == WM_KILLFOCUS )
 		{
-			::OutputDebugString("WM_KILLFOCUS\n");
 			if( uMsg == WM_KILLFOCUS )
 			{
 				//这里肯可能需要优化，因为FindWindow找出来的窗口不一定是本进程的窗口
@@ -129,14 +128,13 @@ namespace UiLib
 						!(pt.x>=rt.top&&pt.x<=rt.bottom)
 						)
 					{
-						::OutputDebugString("CLose\n");
 						lRes= OnKillFocus(uMsg,wParam, lParam,bHandled);
 					}
 
 				}
 			}
 		}
-		xpBug***/
+		//xpBug**
 		if( uMsg == WM_KILLFOCUS )
 		{
 			lRes = OnKillFocus(uMsg, wParam, lParam, bHandled);
