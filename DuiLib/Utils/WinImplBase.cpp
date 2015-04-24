@@ -119,6 +119,7 @@ LRESULT WindowImplBase::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		CDuiRect rcMonitor = oMonitor.rcMonitor;
 		rcWork.Offset(-oMonitor.rcMonitor.left, -oMonitor.rcMonitor.top);
 
+		pRect->top = pRect->left = 0;
 		pRect->right = pRect->left + rcWork.GetWidth();
 		pRect->bottom = pRect->top + rcWork.GetHeight();
 		return WVR_REDRAW;
@@ -216,7 +217,7 @@ LRESULT WindowImplBase::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 {
 	SIZE szRoundCorner = m_PaintManager.GetRoundCorner();
 #if defined(WIN32) && !defined(UNDER_CE)
-	if( !::IsIconic(*this) /*&& (szRoundCorner.cx != 0 || szRoundCorner.cy != 0)*/ ) {
+	if( !::IsIconic(*this) ) {
 		CDuiRect rcWnd;
 		::GetWindowRect(*this, &rcWnd);
 		rcWnd.Offset(-rcWnd.left, -rcWnd.top);

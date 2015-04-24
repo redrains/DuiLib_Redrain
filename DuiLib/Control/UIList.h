@@ -203,6 +203,7 @@ protected:
     CListBodyUI* m_pList;
     CListHeaderUI* m_pHeader;
     TListInfoUI m_ListInfo;
+
 };
 
 /////////////////////////////////////////////////////////////////////////////////////

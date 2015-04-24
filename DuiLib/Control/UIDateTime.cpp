@@ -86,57 +86,46 @@ namespace DuiLib
 	{
 		LRESULT lRes = 0;
 		BOOL bHandled = TRUE;
-		//*xpBug
-		if(WM_NOTIFY==uMsg)
+
+		if( uMsg == WM_NOTIFY)
 		{
 			::SetFocus(m_hWnd);
 		}
+		// 根据网络博客所知bug修复
 		if( uMsg == WM_KILLFOCUS )
-		{
-			if( uMsg == WM_KILLFOCUS )
+		{		
+			HWND hCanlender=::FindWindow( MONTHCAL_CLASS, NULL);
+			if(::IsWindow(hCanlender))
 			{
-				//这里肯可能需要优化，因为FindWindow找出来的窗口不一定是本进程的窗口
-				HWND hh=::FindWindow(_T("SysMonthCal32"),NULL);
-				//Isdel=true;
-				if(::IsWindow(hh))
+				MCHITTESTINFO hitInfo;
+				memset(&hitInfo,0,sizeof(hitInfo));
+				GetCursorPos(&hitInfo.pt);
+				::ScreenToClient(hCanlender,&hitInfo.pt);
+				hitInfo.cbSize=sizeof(hitInfo);
+				MonthCal_HitTest(hCanlender,&hitInfo);
+				//下一个月
+				if(hitInfo.uHit==MCHT_TITLEBTNNEXT)
 				{
-					MCHITTESTINFO pp;
-					memset(&pp,0,sizeof(pp));
-					GetCursorPos(&pp.pt);
-					::ScreenToClient(hh,&pp.pt);
-					pp.cbSize=sizeof(pp);
-					MonthCal_HitTest(hh,&pp);
-					//下一个月
-					if(pp.uHit==MCHT_TITLEBTNNEXT)
-					{
-						return 1;
-					}
-					//上一个月
-					if(pp.uHit==MCHT_TITLEBTNPREV)
-					{
-						return 1;
-					}
-				}else
+					return 1;
+				}
+				//上一个月
+				if(hitInfo.uHit==MCHT_TITLEBTNPREV)
 				{
-					POINT pt;
-					::GetCursorPos(&pt); 
-					RECT rt;
-					::GetWindowRect(m_hWnd,&rt);
-					if(
-						!(pt.x>=rt.left&&pt.x<=rt.right)||
-						!(pt.x>=rt.top&&pt.x<=rt.bottom)
-						)
-					{
-						lRes= OnKillFocus(uMsg,wParam, lParam,bHandled);
-					}
-
+					return 1;
 				}
 			}
-		}
-		//xpBug**
-		if( uMsg == WM_KILLFOCUS )
-		{
-			lRes = OnKillFocus(uMsg, wParam, lParam, bHandled);
+			else
+			{
+				POINT pt;
+				::GetCursorPos(&pt); 
+				RECT rcWnd;
+				::GetWindowRect(m_hWnd,&rcWnd);
+				if(	!( pt.x >= rcWnd.left && pt.x <= rcWnd.right )||
+					!( pt.x >= rcWnd.top && pt.x <= rcWnd.bottom ))
+				{
+					lRes= OnKillFocus(uMsg,wParam, lParam,bHandled);
+				}
+			}
 		}
 		else if (uMsg == WM_KEYUP && (wParam == VK_DELETE || wParam == VK_BACK))
 		{
@@ -161,20 +150,7 @@ namespace DuiLib
 		// 			::InvalidateRect(m_hWnd, &rcClient, FALSE);
 		// 		}
 		//	}
-		//	else if( uMsg == WM_KEYDOWN && TCHAR(wParam) == VK_RETURN ) {
-		// 		m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_RETURN);
-		//	}
-		// 		else if( uMsg == OCM__BASE + WM_CTLCOLOREDIT  || uMsg == OCM__BASE + WM_CTLCOLORSTATIC ) {
-		// 			if( m_pOwner->GetNativeEditBkColor() == 0xFFFFFFFF ) return NULL;
-		// 			::SetBkMode((HDC)wParam, TRANSPARENT);
-		// 			DWORD dwTextColor = m_pOwner->GetTextColor();
-		// 			::SetTextColor((HDC)wParam, RGB(GetBValue(dwTextColor),GetGValue(dwTextColor),GetRValue(dwTextColor)));
-		// 			if( m_hBkBrush == NULL ) {
-		// 				DWORD clrColor = m_pOwner->GetNativeEditBkColor();
-		// 				m_hBkBrush = ::CreateSolidBrush(RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
-		// 			}
-		// 			return (LRESULT)m_hBkBrush;
-		// 		}
+
 		else bHandled = FALSE;
 		if( !bHandled ) return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 		return lRes;
@@ -193,20 +169,6 @@ namespace DuiLib
 		return lRes;
 	}
 
-	// LRESULT CDateTimeWnd::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
-	// {
-	// 	if( !m_bInit ) return 0;
-	// 	if( m_pOwner == NULL ) return 0;
-	// 	// Copy text back
-	// 	int cchLen = ::GetWindowTextLength(m_hWnd) + 1;
-	// 	LPTSTR pstr = static_cast<LPTSTR>(_alloca(cchLen * sizeof(TCHAR)));
-	// 	ASSERT(pstr);
-	// 	if( pstr == NULL ) return 0;
-	// 	::GetWindowText(m_hWnd, pstr, cchLen);
-	// 	m_pOwner->m_sText = pstr;
-	// 	m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_TEXTCHANGED);
-	// 	return 0;
-	// }
 
 	//////////////////////////////////////////////////////////////////////////
 	//
