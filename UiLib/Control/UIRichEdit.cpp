@@ -1758,6 +1758,11 @@ void CRichEditUI::OnTxNotify(DWORD iNotify, void *pv)
 {
 	switch(iNotify)
 	{ 
+	case EN_CHANGE:
+		{
+			GetManager()->SendNotify(this, DUI_MSGTYPE_TEXTCHANGED);
+		}
+		break;
 	case EN_DROPFILES:   
 	case EN_MSGFILTER:   
 	case EN_OLEOPFAILED:   

@@ -1,3 +1,6 @@
+2015-4-29
+给RichEdit控件增加textchanged通知消息
+
 2015-4-24
 修复DateTime在xp下无法使用的BUG
 
