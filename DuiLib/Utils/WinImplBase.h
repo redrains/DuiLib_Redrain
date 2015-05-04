@@ -38,7 +38,6 @@ namespace DuiLib
 		virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam);
 
 		CPaintManagerUI m_PaintManager;
-		static LPBYTE m_lpResourceZIPBuffer;
 
 	public:
 		virtual UINT GetClassStyle() const;
