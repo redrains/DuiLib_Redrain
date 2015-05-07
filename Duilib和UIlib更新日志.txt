@@ -1,3 +1,6 @@
+2015-5-7
+修复容器控件rightbordersize和bottombordersize显示错误的bug
+
 2015-5-4
 修复WindowImplBase类OnCreate函数加载资源时的内存泄漏bug
 
