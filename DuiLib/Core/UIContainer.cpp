@@ -694,8 +694,6 @@ namespace DuiLib
 		RECT rcTemp = { 0 };
 		if( !::IntersectRect(&rcTemp, &rcPaint, &m_rcItem) ) return;
 
-		++rcTemp.right;
-		++rcTemp.bottom;
 		CRenderClip clip;
 		CRenderClip::GenerateClip(hDC, rcTemp, clip);
 		CControlUI::DoPaint(hDC, rcPaint);

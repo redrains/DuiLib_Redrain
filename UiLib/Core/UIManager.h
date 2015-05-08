@@ -673,8 +673,7 @@ public:
 	int GetTransparent() const;
     void SetTransparent(int nOpacity);
     void SetBackgroundTransparent(bool bTrans);
-    bool IsShowUpdateRect() const;
-    void SetShowUpdateRect(bool show);
+
 	//redrain
 	bool IsBackgroundTransparent();
 	bool ShowCaret(bool bShow);
@@ -887,18 +886,18 @@ private:
     static CControlUI* CALLBACK __FindControlsFromClass(CControlUI* pThis, LPVOID pData);
 
 private:
-    HWND m_hWndPaint;
-	int m_nOpacity;
-    HDC m_hDcPaint;
-	LPBYTE m_pBmpBackgroundBits;
-    HDC m_hDcOffscreen;
-    HDC m_hDcBackground;
-    HBITMAP m_hbmpOffscreen;
-    HBITMAP m_hbmpBackground;
-    HWND m_hwndTooltip;
-    TOOLINFO m_ToolTip;
-    bool m_bShowUpdateRect;
-	bool m_bIsRestore;
+	HWND	m_hWndPaint;	//所附加的窗体的句柄
+	int		m_nOpacity;		//窗体透明度
+	HDC		m_hDcPaint;		//窗体DC
+	HDC		m_hDcOffscreen;
+	HBITMAP m_hbmpOffscreen;
+	LPBYTE	m_pBmpOffscreenBits;
+	RECT	m_rcInvalidate;			// 半透明异形窗体中，保存刷新区域
+	bool	m_bIsRestore;
+
+	HWND	m_hwndTooltip;
+	TOOLINFO m_ToolTip;
+
 	//redrain
 	RECT m_rtCaret;
 	bool m_bCaretActive;

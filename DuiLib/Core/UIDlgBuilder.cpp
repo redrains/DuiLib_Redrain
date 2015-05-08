@@ -178,9 +178,6 @@ CControlUI* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, CPaintMana
                         int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr); 
                         pManager->SetMaxInfo(cx, cy);
                     }
-                    else if( _tcscmp(pstrName, _T("showdirty")) == 0 ) {
-                        pManager->SetShowUpdateRect(_tcscmp(pstrValue, _T("true")) == 0);
-                    } 
                     else if( _tcscmp(pstrName, _T("alpha")) == 0 ) {
                         pManager->SetTransparent(_ttoi(pstrValue));
                     } 

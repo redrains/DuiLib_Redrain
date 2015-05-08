@@ -1,3 +1,8 @@
+2015-5-8
+去掉2015-5-7的修复代码，对半透明窗体有影响
+优化整理了半透明异形窗体的代码
+去掉showdirty属性
+
 2015-5-7
 修复容器控件rightbordersize和bottombordersize显示错误的bug
 
