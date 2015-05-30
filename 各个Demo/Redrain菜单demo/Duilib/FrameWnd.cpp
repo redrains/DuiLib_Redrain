@@ -51,6 +51,38 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 			//pMenu->Init(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo, eMenuAlignment_Right );
 			//左上侧打开菜单
 			//pMenu->Init(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo, eMenuAlignment_Right | eMenuAlignment_Bottom);
+
+			// 先获取到根项，然后就可以使用rootMenu插到到菜单内的任意子菜单项，然后做添加删除操作
+			CMenuUI* rootMenu = pMenu->GetMenuUI();
+			if (rootMenu != NULL)
+			{
+				CMenuElementUI* pNew = new CMenuElementUI;
+				pNew->SetName(_T("Menu_Dynamic"));
+				pNew->SetText(_T("动态一级菜单"));
+				pNew->SetShowExplandIcon(true);
+				pNew->SetIcon(_T("WebSit.png"));
+				pNew->SetIconSize(16,16);
+
+
+				CMenuElementUI* pSubNew = new CMenuElementUI;
+				pSubNew->SetText(_T("动态二级菜单"));
+				pSubNew->SetName(_T("Menu_Dynamic"));
+				pSubNew->SetIcon(_T("Virus.png"));
+				pSubNew->SetIconSize(16,16);
+				pNew->Add(pSubNew);
+				
+
+				rootMenu->Add(pNew);
+
+
+				CMenuElementUI* pNew2 = new CMenuElementUI;
+				pNew2->SetName(_T("Menu_Dynamic"));
+				pNew2->SetText(_T("动态一级菜单2"));
+				rootMenu->AddAt(pNew2,2);
+			}
+
+			// 动态添加后重新设置菜单的大小
+			pMenu->ResizeMenu();
 		}
 		else if (msg.pSender->GetName() == _T("Menu_btn") )
 		{
@@ -67,7 +99,7 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 	 if (uMsg == WM_MENUCLICK)
 	 {
 		 CDuiString *strMenuName = (CDuiString*)wParam;
-		 bool bChecked = (bool)lParam;		 
+		 BOOL bChecked = (BOOL)lParam;		 
 
 		 if ( *strMenuName == _T("Menu_Test1")) 
 		 {
@@ -94,6 +126,10 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 			 {
 				 MessageBox(m_hWnd, L"你取消Menu_Test3", L"", 0);
 			 }			 
+		 }
+		 else if ( *strMenuName == _T("Menu_Dynamic")) 
+		 {
+			 MessageBox(m_hWnd, L"你单击了动态添加菜单", L"", 0);		 
 		 }
 
 		 delete strMenuName;

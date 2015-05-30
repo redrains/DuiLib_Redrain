@@ -294,6 +294,15 @@ public:
 
 	BOOL Receive(ContextMenuParam param);
 
+	// 获取根菜单控件，用于动态添加子菜单
+	CMenuUI* GetMenuUI();
+
+	// 重新调整菜单的大小
+	void ResizeMenu();
+
+	// 重新调整子菜单的大小
+	void ResizeSubMenu();
+
 public:
 
 	POINT			m_BasedPoint;
