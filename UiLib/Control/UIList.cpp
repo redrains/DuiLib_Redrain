@@ -1261,7 +1261,9 @@ namespace UiLib {
 				cxNeeded = MAX(0, pHeader->EstimateSize(CSize(rc.right - rc.left, rc.bottom - rc.top)).cx);
 				if ( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible())
 				{
+					int nOffset = m_pHorizontalScrollBar->GetScrollPos();
 					RECT rcHeader = pHeader->GetPos();
+					rcHeader.left = rc.left - nOffset;
 					pHeader->SetPos(rcHeader);
 				}
 			}
@@ -3166,7 +3168,6 @@ namespace UiLib {
 		if( event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_RBUTTONDOWN )
 		{
 			if( IsEnabled() ){
-				//           m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
 				Select();
 				Invalidate();
 			}
@@ -3198,6 +3199,23 @@ namespace UiLib {
 				Invalidate();
 			}
 			return;
+		}
+		if( event.Type == UIEVENT_TIMER )
+		{
+			m_pManager->SendNotify(this, DUI_MSGTYPE_TIMER, event.wParam, event.lParam);
+			return;
+		}
+		if( event.Type == UIEVENT_TIMER )
+		{
+			m_pManager->SendNotify(this, DUI_MSGTYPE_TIMER, event.wParam, event.lParam);
+			return;
+		}
+		if( event.Type == UIEVENT_CONTEXTMENU )
+		{
+			if( IsContextMenuUsed() ) {
+				m_pManager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
+				return;
+			}
 		}
 
 		// An important twist: The list-item will send the event not to its immediate
