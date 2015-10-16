@@ -20,3 +20,6 @@
 **by:Redrain  2014.11.4QQ:491646717**
 
 blog:[http://blog.csdn.net/zhuhongshu?viewmode=contents](http://blog.csdn.net/zhuhongshu?viewmode=contents)
+
+# DuiLib和UiLib更新日志
+[Duilib和UIlib更新日志](./Duilib和UIlib更新日志.txt)
