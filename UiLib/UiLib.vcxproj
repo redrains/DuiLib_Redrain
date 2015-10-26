@@ -69,6 +69,7 @@
     <IntDir>..\Temp\Ui2010_Debug_u\</IntDir>
     <TargetName>UiLib_ud</TargetName>
     <GenerateManifest>false</GenerateManifest>
+    <LibraryPath>D:\Workspace\Git\GuiLib-OwenYi\UiLib\wke;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static_Debug_2010|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -81,6 +82,7 @@
     <OutDir>..\dll\</OutDir>
     <IntDir>..\Temp\Ui2010_Release_u\</IntDir>
     <TargetName>UiLib_u</TargetName>
+    <LibraryPath>D:\Workspace\Git\GuiLib-OwenYi\UiLib\wke;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static_Release_2010|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -106,6 +108,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\CommonFile\$(Configuration)\</AdditionalLibraryDirectories>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <OutputFile>../dll/UiLib_ud.dll</OutputFile>
+      <AdditionalDependencies>wke.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -178,6 +181,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\CommonFile\$(Configuration)\</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>../dll/UiLib_u.dll</OutputFile>
+      <AdditionalDependencies>wke.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -245,6 +249,7 @@
     <ClCompile Include="Control\UIText.cpp" />
     <ClCompile Include="Control\UITreeView.cpp" />
     <ClCompile Include="Control\UIWebBrowser.cpp" />
+    <ClCompile Include="Control\UIWkeWindowlessBrowser.cpp" />
     <ClCompile Include="Core\UIBase.cpp" />
     <ClCompile Include="Core\UIContainer.cpp" />
     <ClCompile Include="Core\UIControl.cpp" />
@@ -317,6 +322,7 @@
     <ClInclude Include="Control\UIText.h" />
     <ClInclude Include="Control\UITreeView.h" />
     <ClInclude Include="Control\UIWebBrowser.h" />
+    <ClInclude Include="Control\UIWkeWindowlessBrowser.h" />
     <ClInclude Include="Core\UIBase.h" />
     <ClInclude Include="Core\UIContainer.h" />
     <ClInclude Include="Core\UIControl.h" />

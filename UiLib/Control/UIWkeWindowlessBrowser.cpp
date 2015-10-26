@@ -2,7 +2,7 @@
 #include "UIWkeWindowlessBrowser.h"
 
 
-namespace DuiLib
+namespace UiLib
 {
 CWkeWindowlessUI::CWkeWindowlessUI(void):m_webView(NULL)
 {
@@ -19,7 +19,7 @@ LPCTSTR CWkeWindowlessUI::GetClass() const
 }
 LPVOID CWkeWindowlessUI::GetInterface(LPCTSTR pstrName)
 {
-	if( _tcscmp(pstrName, DUI_CTR_WKEWINDOWLESSBROWSER) == 0 ) return static_cast<CWkeWindowlessUI*>(this);
+	if( _tcscmp(pstrName, _T(DUI_CTR_WKEWINDOWLESSBROWSER)) == 0 ) return static_cast<CWkeWindowlessUI*>(this);
 	return CControlUI::GetInterface(pstrName);
 }
 
