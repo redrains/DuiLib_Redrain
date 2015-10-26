@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="gb2312"?>
 <VisualStudioUserFile
 	ProjectType="Visual C++"
 	Version="9.00"
-	ShowAllFiles="true"
+	ShowAllFiles="false"
 	>
 	<Configurations>
 		<Configuration
-			Name="UnicodeDebug|Win32"
+			Name="Debug|Win32"
 			>
 			<DebugSettings
 				Command=""
@@ -15,7 +15,7 @@
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"
-				RemoteMachine="REDRAIN-PC"
+				RemoteMachine="MININT-GO0D0T0"
 				RemoteCommand=""
 				HttpUrl=""
 				PDBPath=""
@@ -34,7 +34,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="UnicodeRelease|Win32"
+			Name="Release|Win32"
 			>
 			<DebugSettings
 				Command=""
@@ -43,7 +43,7 @@
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"
-				RemoteMachine="REDRAIN-PC"
+				RemoteMachine="MININT-GO0D0T0"
 				RemoteCommand=""
 				HttpUrl=""
 				PDBPath=""
