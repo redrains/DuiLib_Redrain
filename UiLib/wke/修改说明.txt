@@ -1,0 +1,159 @@
+ Webkit浏览器控件        作者：相建(QQ:848861075 快樂每一天) 
+
+ WkeWindowlessBrowser   基于Webkit内核的浏览器控件
+ 该控件没有依赖子窗体，因此使用起来也没有任何束缚
+
+
+修改部分
+1.UIManager.h  的EVENTTYPE_UI枚举，添加两个事件，因为浏览器要用到这两个个消息
+
+typedef enum EVENTTYPE_UI
+{
+    UIEVENT__FIRST = 1,
+    UIEVENT__KEYBEGIN,
+    UIEVENT_KEYDOWN,
+    UIEVENT_KEYUP,
+    UIEVENT_CHAR,
+    UIEVENT_SYSKEY,
+    UIEVENT__KEYEND,
+    UIEVENT__MOUSEBEGIN,
+    UIEVENT_MOUSEMOVE,
+    UIEVENT_MOUSELEAVE,
+    UIEVENT_MOUSEENTER,
+    UIEVENT_MOUSEHOVER,
+    UIEVENT_BUTTONDOWN,
+    UIEVENT_BUTTONUP,
+    UIEVENT_RBUTTONDOWN,
+	UIEVENT_RBUTTONUP,    //右键弹起事件（新增）
+    UIEVENT_DBLCLICK,
+    UIEVENT_CONTEXTMENU,
+    UIEVENT_SCROLLWHEEL,
+    UIEVENT__MOUSEEND,
+    UIEVENT_KILLFOCUS,
+    UIEVENT_SETFOCUS,
+    UIEVENT_WINDOWSIZE,
+    UIEVENT_SETCURSOR,
+    UIEVENT_TIMER,
+    UIEVENT_NOTIFY,
+    UIEVENT_COMMAND,
+	UIEVENT_IME_STARTCOMPOSITION,  //输入法事件（新增）
+    UIEVENT__LAST,
+};
+
+
+
+
+
+
+
+2. CPaintManagerUI类MessageHandler消息处理的修改
+
+
+case WM_IME_STARTCOMPOSITION:      //输入法
+		{
+			if( m_pFocus == NULL ) break;
+			TEventUI event = { 0 };
+			event.Type = UIEVENT_IME_STARTCOMPOSITION;
+			event.wParam = wParam;
+			event.lParam = lParam;
+			m_pFocus->Event(event);
+		}
+		break;
+
+
+case WM_RBUTTONUP:                 //右键弹起
+		{
+			POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+			m_ptLastMousePos = pt;
+			if( m_pEventClick == NULL ) break;
+			ReleaseCapture();
+			TEventUI event = { 0 };
+			event.Type = UIEVENT_BUTTONUP;
+			event.pSender = m_pEventClick;
+			event.wParam = wParam;
+			event.lParam = lParam;
+			event.ptMouse = pt;
+			event.wKeyState = (WORD)wParam;
+			event.dwTimestamp = ::GetTickCount();
+			m_pEventClick->Event(event);
+			m_pEventClick = NULL;
+		}
+		break;
+
+
+ case UIEVENT_SCROLLWHEEL: //鼠标滚轮
+        {
+             POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+			POINT ptMouse = pt;
+            ::ScreenToClient(m_hWndPaint, &pt);
+            m_ptLastMousePos = pt;
+            CControlUI* pControl = FindControl(pt);
+            if( pControl == NULL ) break;
+            if( pControl->GetManager() != this ) break;
+            int zDelta = (int) (short) HIWORD(wParam);
+            TEventUI event = { 0 };
+            event.Type = UIEVENT_SCROLLWHEEL;
+            event.pSender = pControl;
+			event.ptMouse = ptMouse;
+			CDuiString str = pControl->GetClass();
+			if (_tcsicmp(pControl->GetClass(),_T("WkeWindowlessUI"))==0)
+				event.wParam = wParam;
+			else
+				event.wParam = MAKELPARAM(zDelta < 0 ? SB_LINEDOWN : SB_LINEUP, 0);
+            event.lParam = lParam;
+            event.wKeyState = MapKeyState();
+            event.dwTimestamp = ::GetTickCount();
+            pControl->Event(event);
+            // Let's make sure that the scroll item below the cursor is the same as before...
+            ::SendMessage(m_hWndPaint, WM_MOUSEMOVE, 0, (LPARAM) MAKELPARAM(m_ptLastMousePos.x, m_ptLastMousePos.y));
+               break;
+  case WM_KEYDOWN:
+        {
+            if( m_pFocus == NULL ) break;
+            TEventUI event = { 0 };
+            event.Type = UIEVENT_KEYDOWN;
+			event.wParam = wParam;
+			event.lParam = lParam;
+            event.chKey = (TCHAR)wParam;
+            event.ptMouse = m_ptLastMousePos;
+            event.wKeyState = MapKeyState();
+            event.dwTimestamp = ::GetTickCount();
+            m_pFocus->Event(event);
+            m_pEventKey = m_pFocus;
+        }
+        break;
+    case WM_KEYUP:
+        {
+            if( m_pEventKey == NULL ) break;
+            TEventUI event = { 0 };
+            event.Type = UIEVENT_KEYUP;
+			event.wParam = wParam;
+			event.lParam = lParam;
+            event.chKey = (TCHAR)wParam;
+            event.ptMouse = m_ptLastMousePos;
+            event.wKeyState = MapKeyState();
+            event.dwTimestamp = ::GetTickCount();
+            m_pEventKey->Event(event);
+            m_pEventKey = NULL;
+        }
+        break;
+
+
+
+
+3.使用方法
+
+	CWkeWindowlessUI* pWkeWeb = (CWkeWindowlessUI*)m_PaintManager.FindControl(L"web");
+        
+        pWkeWeb->InitBrowser(3);   //初始化，参数为定时器ID号，尽量不要重复
+        
+        pWkeWeb->LoadUrl(L"www.baidu.com");   //加载页面
+
+
+4.如果想用网页做背景，可以修改CWkeWindowlessUI继承CContainerUI，里面就可以加入布局，并可以添加子控件了
+
+
+5. wke.h里面很多函数，还没有封装为控件的成员函数，如果用到，请自行封装
+
+
+7. plugins为浏览器插件，放入bin目录
