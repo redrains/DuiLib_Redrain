@@ -11,13 +11,12 @@
 
 #ifndef WKE_WINDOWLESS_BROWSER_H
 #define WKE_WINDOWLESS_BROWSER_H
-#include "wke\wke.h"
-namespace UiLib
+
+namespace DuiLib
 {
 
 
 #pragma once
-#define DUI_CTR_WKEWINDOWLESSBROWSER "WkeWindowless"
 	class UILIB_API CWkeWindowlessUI : public CControlUI ,public _wkeBufHandler 
 	{
 	public:

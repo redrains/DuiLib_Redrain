@@ -678,61 +678,6 @@ namespace UiLib {
 		}
 		// Custom handling of events
 		switch( uMsg ) {
-		case WM_IME_STARTCOMPOSITION:      //ÊäÈë·¨
-			{
-				if( m_pFocus == NULL ) break;
-				TEventUI event = { 0 };
-				event.Type = UIEVENT_IME_STARTCOMPOSITION;
-				event.wParam = wParam;
-				event.lParam = lParam;
-				m_pFocus->Event(event);
-			}
-			break;
-		case WM_RBUTTONUP:                 //ÓÒ¼üµ¯Æð
-			{
-				POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-				m_ptLastMousePos = pt;
-				if( m_pEventClick == NULL ) break;
-				ReleaseCapture();
-				TEventUI event = { 0 };
-				event.Type = UIEVENT_BUTTONUP;
-				event.pSender = m_pEventClick;
-				event.wParam = wParam;
-				event.lParam = lParam;
-				event.ptMouse = pt;
-				event.wKeyState = (WORD)wParam;
-				event.dwTimestamp = ::GetTickCount();
-				m_pEventClick->Event(event);
-				m_pEventClick = NULL;
-			}
-			break;
-		case UIEVENT_SCROLLWHEEL: //Êó±ê¹öÂÖ
-			{
-				POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-				POINT ptMouse = pt;
-				::ScreenToClient(m_hWndPaint, &pt);
-				m_ptLastMousePos = pt;
-				CControlUI* pControl = FindControl(pt);
-				if( pControl == NULL ) break;
-				if( pControl->GetManager() != this ) break;
-				int zDelta = (int) (short) HIWORD(wParam);
-				TEventUI event = { 0 };
-				event.Type = UIEVENT_SCROLLWHEEL;
-				event.pSender = pControl;
-				event.ptMouse = ptMouse;
-				CDuiString str = pControl->GetClass();
-				if (_tcsicmp(pControl->GetClass(),_T("WkeWindowlessUI"))==0)
-					event.wParam = wParam;
-				else
-					event.wParam = MAKELPARAM(zDelta < 0 ? SB_LINEDOWN : SB_LINEUP, 0);
-				event.lParam = lParam;
-				event.wKeyState = MapKeyState();
-				event.dwTimestamp = ::GetTickCount();
-				pControl->Event(event);
-				// Let's make sure that the scroll item below the cursor is the same as before...
-				::SendMessage(m_hWndPaint, WM_MOUSEMOVE, 0, (LPARAM) MAKELPARAM(m_ptLastMousePos.x, m_ptLastMousePos.y));
-			}
-				break;
 		case WM_APP + 1:
 			{
 				for( int i = 0; i < m_aDelayedCleanup.GetSize(); i++ ) 
@@ -1319,8 +1264,6 @@ namespace UiLib {
 				if( m_pFocus == NULL ) break;
 				TEventUI event = { 0 };
 				event.Type = UIEVENT_KEYDOWN;
-				event.wParam = wParam;//add for wke
-				event.lParam = lParam;//add for wke
 				event.chKey = (TCHAR)wParam;
 				event.ptMouse = m_ptLastMousePos;
 				event.wKeyState = MapKeyState();
@@ -1334,8 +1277,6 @@ namespace UiLib {
 				if( m_pEventKey == NULL ) break;
 				TEventUI event = { 0 };
 				event.Type = UIEVENT_KEYUP;
-				event.wParam = wParam;//add for wke
-				event.lParam = lParam;//add for wke
 				event.chKey = (TCHAR)wParam;
 				event.ptMouse = m_ptLastMousePos;
 				event.wKeyState = MapKeyState();

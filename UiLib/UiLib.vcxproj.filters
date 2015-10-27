@@ -186,9 +186,6 @@
     <ClCompile Include="Control\UIMenu.cpp">
       <Filter>源文件\Control</Filter>
     </ClCompile>
-    <ClCompile Include="Control\UIWkeWindowlessBrowser.cpp">
-      <Filter>源文件\Control</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
@@ -348,9 +345,6 @@
       <Filter>头文件\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIMenu.h">
-      <Filter>头文件\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIWkeWindowlessBrowser.h">
       <Filter>头文件\Control</Filter>
     </ClInclude>
   </ItemGroup>
