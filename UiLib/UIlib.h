@@ -102,6 +102,6 @@
 
 #include "Utils/WinImplBase.h"
 #include "Utils/IWindowBase.h"
-
+#include "Control/WkeWebkit.h"
 namespace DuiLib = UiLib;
 #endif // UIlib_h__
