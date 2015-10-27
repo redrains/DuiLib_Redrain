@@ -9,7 +9,6 @@ Global
 		DLL_Release_2010|Win32 = DLL_Release_2010|Win32
 		Static_Debug_2010|Win32 = Static_Debug_2010|Win32
 		Static_Release_2010|Win32 = Static_Release_2010|Win32
-		Static_release_StaticMFC_2010|Win32 = Static_release_StaticMFC_2010|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8F14DEA1-BE9F-4F17-A5E5-15B4191200EF}.DLL_Debug_2010|Win32.ActiveCfg = Static_Release_2010|Win32
@@ -20,8 +19,6 @@ Global
 		{8F14DEA1-BE9F-4F17-A5E5-15B4191200EF}.Static_Debug_2010|Win32.Build.0 = Static_Debug_2010|Win32
 		{8F14DEA1-BE9F-4F17-A5E5-15B4191200EF}.Static_Release_2010|Win32.ActiveCfg = Static_Release_2010|Win32
 		{8F14DEA1-BE9F-4F17-A5E5-15B4191200EF}.Static_Release_2010|Win32.Build.0 = Static_Release_2010|Win32
-		{8F14DEA1-BE9F-4F17-A5E5-15B4191200EF}.Static_release_StaticMFC_2010|Win32.ActiveCfg = Static_release_StaticMFC_2010|Win32
-		{8F14DEA1-BE9F-4F17-A5E5-15B4191200EF}.Static_release_StaticMFC_2010|Win32.Build.0 = Static_release_StaticMFC_2010|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
