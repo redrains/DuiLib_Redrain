@@ -43,7 +43,15 @@ protected:
 	bool		 m_bInit;
 
 };
-
+///////////////////////////////////////////  
+//网页加载状态改变的回调  
+class UILIB_API CWkeWebkitLoadCallback  
+{  
+public:  
+    virtual void    OnLoadFailed()=0;  
+    virtual void    OnLoadComplete()=0;  
+    virtual void    OnDocumentReady()=0;  
+};  
 
 class UILIB_API CWkeWebkitUI :public CControlUI
 {
@@ -64,17 +72,25 @@ public:
 	void	SetPos(RECT rc);
 	void	DoEvent(TEventUI& event);	
 	void	SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-
+	wkeWebView  GetWebView(); 
 	void	SetURL( wstring strValue);
 	void	SetFile(wstring strValue);
 	wstring RunJS(wstring strValue);
 	void	SetClientHandler(const wkeClientHandler* handler);
+	void    SetLoadCallback( CWkeWebkitLoadCallback* pCallback ) ;
+	CWkeWebkitLoadCallback* GetLoadCallback()  ;
 
 	void	GoBack();
 	void	GoForward();
 
+	
+    void    StartCheckThread();  
+    void    StopCheckThread(); 
+
 protected:
 	CWkeWebkitWnd *m_pWindow;
+	CWkeWebkitLoadCallback*     m_pLoadCallback;
+	HANDLE      m_hCheckThread;
 };
 
 }

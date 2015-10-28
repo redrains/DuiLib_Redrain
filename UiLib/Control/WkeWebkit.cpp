@@ -95,7 +95,7 @@ LRESULT CWkeWebkitWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
 	m_pWebView->setBufHandler(this);
 
-// 	hander.onTitleChanged = onTitleChanged;   //Ĭ�Ϲر���֪ͨ����ı�Ļص�����
+// 	hander.onTitleChanged = onTitleChanged;   //Ä¬ÈÏ¹Ø±ÕÁËÍ¨Öª±êÌâ¸Ä±äµÄ»Øµ÷º¯Êý
 // 	hander.onURLChanged = onURLChanged;
 // 	m_pWebView->setClientHandler(&hander);
 
@@ -336,13 +336,44 @@ LRESULT CWkeWebkitWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }
-
+///////////////////////////////////////////////////  
+//网页加载状态监测线程  
+DWORD WINAPI CheckThreadFun(LPVOID lpParam)  
+{  
+    CWkeWebkitUI* pWebkitUI=(CWkeWebkitUI*)lpParam;  
+    wkeWebView  pWebView=pWebkitUI->GetWebView();  
+    if ( NULL == pWebView )  
+        return 1;  
+    CWkeWebkitLoadCallback* pCallback=pWebkitUI->GetLoadCallback();  
+    if ( NULL == pCallback )  
+        return 1;  
+    bool bOver=false;  
+    while( !pWebView->isLoaded() )  
+    {  
+        if ( !bOver && pWebView->isDocumentReady() )  
+        {  
+            pCallback->OnDocumentReady();  
+            bOver=true;  
+        }  
+        if ( pWebView->isLoadFailed() )  
+        {  
+            pCallback->OnLoadFailed();  
+            return 1;  
+        }  
+        ::Sleep(30);  
+    }  
+    if ( pWebView->isLoadComplete() )  
+        pCallback->OnLoadComplete();  
+    return 0;  
+}  
 ///////////////////////////////////////////////////////////////////////////////
 //////////////
 //////////////
 
 CWkeWebkitUI::CWkeWebkitUI(void):
-m_pWindow(NULL)
+m_pWindow(NULL),
+m_pLoadCallback(NULL),
+m_hCheckThread(0)
 {
 
 }
@@ -350,11 +381,39 @@ m_pWindow(NULL)
 
 CWkeWebkitUI::~CWkeWebkitUI(void)
 {	
+	StopCheckThread(); 
 	if (m_pWindow != NULL)
 	{
 		m_pWindow->Close();
 	}
 }
+
+void CWkeWebkitUI::SetLoadCallback( CWkeWebkitLoadCallback* pCallback )  
+{  
+    m_pLoadCallback=pCallback;  
+}  
+
+CWkeWebkitLoadCallback* CWkeWebkitUI::GetLoadCallback()  
+{  
+    return m_pLoadCallback;  
+}  
+
+void CWkeWebkitUI::StartCheckThread()  
+{  
+    StopCheckThread();  
+    m_hCheckThread=::CreateThread(NULL, 0, CheckThreadFun, this, 0, NULL);  
+}  
+
+void CWkeWebkitUI::StopCheckThread()  
+{  
+    if ( m_hCheckThread )  
+    {  
+        if ( ::WaitForSingleObject(m_hCheckThread, 10) != WAIT_OBJECT_0 )  
+            ::TerminateThread(m_hCheckThread, 0);  
+        ::CloseHandle(m_hCheckThread);  
+        m_hCheckThread = NULL;  
+    }  
+}  
 
 void CWkeWebkitUI::WkeWebkit_Init()
 {
@@ -365,7 +424,10 @@ void CWkeWebkitUI::WkeWebkit_Shutdown()
 {
 	wkeShutdown();
 }
-
+wkeWebView CWkeWebkitUI::GetWebView()  
+{  
+	return m_pWindow->m_pWebView;  
+}  
 void CWkeWebkitUI::SetVisible(bool bVisible)
 {
 	CControlUI::SetVisible(bVisible);
@@ -425,14 +487,22 @@ void CWkeWebkitUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
 void CWkeWebkitUI::SetURL( wstring strValue)
 {
-	m_pWindow->m_strUrl = strValue;
-	m_pWindow->m_pWebView->loadURL(strValue.c_str());
+	if (m_pWindow && m_pWindow->m_pWebView)
+	{
+		m_pWindow->m_strUrl = strValue;
+		m_pWindow->m_pWebView->loadURL(strValue.c_str());
+		StartCheckThread();
+	}
 }
 
 void CWkeWebkitUI::SetFile( wstring strValue)
 {
-	m_pWindow->m_strUrl = strValue;
-	m_pWindow->m_pWebView->loadFile(strValue.c_str());
+	if (m_pWindow && m_pWindow->m_pWebView)
+	{
+		m_pWindow->m_strUrl = strValue;
+		m_pWindow->m_pWebView->loadFile(strValue.c_str());
+		StartCheckThread();
+	}
 }
 
 wstring CWkeWebkitUI::RunJS(wstring strValue)
