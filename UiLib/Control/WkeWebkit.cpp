@@ -373,7 +373,8 @@ DWORD WINAPI CheckThreadFun(LPVOID lpParam)
 CWkeWebkitUI::CWkeWebkitUI(void):
 m_pWindow(NULL),
 m_pLoadCallback(NULL),
-m_hCheckThread(0)
+m_hCheckThread(0),
+m_startUrl(_T("www.baidu.com"))
 {
 
 }
@@ -448,6 +449,7 @@ void CWkeWebkitUI::DoInit()
 	{
 		m_pWindow->Init(this);
 		m_pWindow->ShowWindow();
+		SetURL(m_startUrl);
 	}	
 }
 
@@ -482,6 +484,11 @@ void CWkeWebkitUI::SetPos(RECT rc)
 
 void CWkeWebkitUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
+	if (_tcscmp(pstrName, _T("starturl")) == 0)
+	{
+		m_startUrl = pstrValue;
+		return;
+	}
 	CControlUI::SetAttribute(pstrName,pstrValue);
 }
 

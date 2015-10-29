@@ -91,6 +91,7 @@ protected:
 	CWkeWebkitWnd *m_pWindow;
 	CWkeWebkitLoadCallback*     m_pLoadCallback;
 	HANDLE      m_hCheckThread;
+	wstring	m_startUrl;
 };
 
 }
