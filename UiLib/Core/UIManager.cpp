@@ -81,7 +81,7 @@ namespace UiLib {
 		m_bOffscreenPaint(true),
 		m_bAlphaBackground(false),
 		m_bIsRestore(false),
-
+		m_hwndTooltip(NULL),
 		m_uTimerID(0x1000),
 		m_pRoot(NULL),
 		m_pFocus(NULL),
