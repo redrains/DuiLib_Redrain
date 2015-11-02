@@ -771,6 +771,12 @@ void CMenuElementUI::DoEvent(TEventUI& event)
 			}
 			else
 			{
+				// Moved from bellow by watertoeast, 2015-11-2
+				ContextMenuParam param;
+				param.hWnd = m_pManager->GetPaintWindow();
+				param.wParam = 1;
+				CMenuWnd::GetGlobalContextMenuObserver().RBroadcast(param);
+				// 
 				SetChecked(!GetChecked());
 				if (CMenuWnd::GetGlobalContextMenuObserver().GetManager() != NULL)
 				{
@@ -778,10 +784,6 @@ void CMenuElementUI::DoEvent(TEventUI& event)
 					if (!PostMessage(CMenuWnd::GetGlobalContextMenuObserver().GetManager()->GetPaintWindow(), WM_MENUCLICK, (WPARAM)(strPost), (LPARAM)(GetChecked() == TRUE)))
 						delete strPost;
 				}
-				ContextMenuParam param;
-				param.hWnd = m_pManager->GetPaintWindow();
-				param.wParam = 1;
-				CMenuWnd::GetGlobalContextMenuObserver().RBroadcast(param);
 			}
         }
 

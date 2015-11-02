@@ -66,6 +66,13 @@ STDMETHODIMP UiLib::CWebBrowserUI::Invoke( DISPID dispIdMember, REFIID riid, LCI
 
 	switch(dispIdMember)
 	{
+		// add by watertoeast, 2015-11-2
+	case DISPID_DOCUMENTCOMPLETE:
+		DocumentComplete(
+			pDispParams->rgvarg[1].pdispVal,
+			pDispParams->rgvarg[0].pvarVal);
+		break;
+		// 
 	case DISPID_BEFORENAVIGATE2:
 		BeforeNavigate2(
 			pDispParams->rgvarg[6].pdispVal,
@@ -216,6 +223,16 @@ void UiLib::CWebBrowserUI::NavigateComplete2( IDispatch *pDisp,VARIANT *&url )
 		m_pWebBrowserEventHandler->NavigateComplete2(pDisp,url);
 	}
 }
+
+// add by watertoeast, 2015-11-2 
+void UiLib::CWebBrowserUI::DocumentComplete( IDispatch *pDisp,VARIANT *&url )
+{
+	if (m_pWebBrowserEventHandler)
+	{
+		m_pWebBrowserEventHandler->DocumentComplete(pDisp,url);
+	}
+}
+// 
 
 void UiLib::CWebBrowserUI::ProgressChange( LONG nProgress, LONG nProgressMax )
 {

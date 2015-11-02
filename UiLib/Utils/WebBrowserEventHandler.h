@@ -15,6 +15,7 @@ namespace UiLib
 		virtual void BeforeNavigate2( IDispatch *pDisp,VARIANT *&url,VARIANT *&Flags,VARIANT *&TargetFrameName,VARIANT *&PostData,VARIANT *&Headers,VARIANT_BOOL *&Cancel ) {}
 		virtual void NavigateError(IDispatch *pDisp,VARIANT * &url,VARIANT *&TargetFrameName,VARIANT *&StatusCode,VARIANT_BOOL *&Cancel) {}
 		virtual void NavigateComplete2(IDispatch *pDisp,VARIANT *&url){}
+		virtual void DocumentComplete(IDispatch *pDisp,VARIANT *&url){} // add by watertoeast, 2015-11-2
 		virtual void ProgressChange(LONG nProgress, LONG nProgressMax){}
 		virtual void NewWindow3(IDispatch **pDisp, VARIANT_BOOL *&Cancel, DWORD dwFlags, BSTR bstrUrlContext, BSTR bstrUrl){}
 		virtual void CommandStateChange(long Command,VARIANT_BOOL Enable){};
