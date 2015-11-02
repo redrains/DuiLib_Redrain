@@ -7,6 +7,7 @@ typedef DWORD ZRESULT;
 #define CloseZip(hz) CloseZipU(hz)
 extern HZIP OpenZipU(void *z,unsigned int len,DWORD flags);
 extern ZRESULT CloseZipU(HZIP hz);
+#pragma init_seg(lib) // add by watertoeast, 2015-11-2
 
 namespace UiLib {
 

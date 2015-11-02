@@ -668,7 +668,7 @@ namespace UiLib
 					Add(pNode);
 			}
 		}
-		else
+		// else // commented by watertoeast, 2015-11-2
 
 		pControl->SetTreeView(this);
 		return true;
