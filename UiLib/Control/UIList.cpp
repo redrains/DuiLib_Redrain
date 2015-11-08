@@ -401,8 +401,6 @@ namespace UiLib {
 		{
 			return (int)m_aSelItems.GetAt(0);
 		}
-
-		return -1;
 	}
 
 	bool CListUI::SelectItem(int iIndex, bool bTakeFocus)
