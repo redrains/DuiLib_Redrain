@@ -1,3 +1,6 @@
+# watertoeast Redrain Duilib
+修正在使用过程中发现的bug。
+blog http://watertoeast.blog.51cto.com/
 # Redrain DuiLib
 我自己使用的Duilib和Uilib库中，修复了我在博客中说明的所有bug以及很多还没有去说明的bug，同样也包含别人修复过的bug。修复的部分bug可以看"Duilib和UIlib更新日志.txt"，完整的修复过程描述请看我博客。
 
