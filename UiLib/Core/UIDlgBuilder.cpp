@@ -630,6 +630,7 @@ namespace UiLib
 					else if( _tcscmp(pstrClass, DUI_CTR_TABLAYOUT) == 0 )         pControl = new CTabLayoutUI;
 					else if( _tcscmp(pstrClass, DUI_CTR_SCROLLBAR) == 0 )         pControl = new CScrollBarUI; 
 					else if( _tcscmp(pstrClass, DUI_CTR_CHARTVIEW) == 0 )         pControl = new CChartViewUI; 
+					else if( _tcscmp(pstrClass, DUI_CTR_WKEWEBKIT) == 0 )         pControl = new CWkeWebkitUI;//wke webkit
 					break;
 				case 10:
 					if( _tcscmp(pstrClass, DUI_CTR_LISTHEADER) == 0 )             pControl = new CListHeaderUI;
