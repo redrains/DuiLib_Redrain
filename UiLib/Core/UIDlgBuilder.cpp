@@ -497,7 +497,7 @@ namespace UiLib
 				}
 			}
 		}
-		if(pManager->GetCurStylesName().IsEmpty() && pManager->GetStylesCount() > 0)
+		if(NULL!=pManager && pManager->GetCurStylesName().IsEmpty() && pManager->GetStylesCount() > 0)
 			pManager->SetCurStyles(0);
 		return _Parse(&root, pParent, pManager);
 	}
