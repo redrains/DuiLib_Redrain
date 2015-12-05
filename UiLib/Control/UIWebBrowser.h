@@ -64,6 +64,7 @@ namespace UiLib
 		void ProgressChange(LONG nProgress, LONG nProgressMax);
 		void NewWindow3(IDispatch **pDisp, VARIANT_BOOL *&Cancel, DWORD dwFlags, BSTR bstrUrlContext, BSTR bstrUrl);
 		void CommandStateChange(long Command,VARIANT_BOOL Enable);
+		HRESULT StatusTextChange(IN BSTR bstrStatusText);
 
 	public:
 		virtual LPCTSTR GetClass() const;
