@@ -1711,11 +1711,6 @@ void CRichEditUI::DoInit()
 		{
 			m_pTwh->SetColor(m_pManager->GetDefaultDisabledColor());
 		}
-		else if (GetText() == _T("") && !m_sTipValue.IsEmpty())
-		{
-			SetText(m_sTipValue);
-			m_pTwh->SetColor(m_dwTipValueColor);
-		}
     }
 
 	m_bInited= true;
@@ -1910,11 +1905,6 @@ void CRichEditUI::DoEvent(TEventUI& event)
 	if( event.Type == UIEVENT_SETFOCUS ) {
 		if( m_pTwh ) {
 			m_pTwh->OnTxInPlaceActivate(NULL);
-			if (GetText() == m_sTipValue)
-			{
-				SetText(_T(""));
-				m_pTwh->SetColor(m_dwTextColor);
-			}
 			m_pTwh->GetTextServices()->TxSendMessage(WM_SETFOCUS, 0, 0, 0);
 		}
 		m_bFocused = true;
@@ -1924,11 +1914,6 @@ void CRichEditUI::DoEvent(TEventUI& event)
 	if( event.Type == UIEVENT_KILLFOCUS )  {
 		if( m_pTwh ) {
 			m_pTwh->OnTxInPlaceActivate(NULL);
-			if (GetText() == _T("") && !m_sTipValue.IsEmpty())
-			{
-				SetText(m_sTipValue);
-				m_pTwh->SetColor(m_dwTipValueColor);
-			}
 			m_pTwh->GetTextServices()->TxSendMessage(WM_KILLFOCUS, 0, 0, 0);
 		}
 		m_bFocused = false;
@@ -2301,6 +2286,13 @@ void CRichEditUI::DoPaint(HDC hDC, const RECT& rcPaint)
             }
         }
     }
+
+	if (GetTextLength() == 0 && !m_sTipValue.IsEmpty())
+	{
+		RECT rc;
+		m_pTwh->GetControlRect(&rc);
+		CRenderEngine::DrawText(hDC, m_pManager, rc, m_sTipValue, m_dwTipValueColor, m_iFont, DT_VCENTER);
+	}
 
     if( m_items.GetSize() > 0 ) {
         RECT rc = m_rcItem;
