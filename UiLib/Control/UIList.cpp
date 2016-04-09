@@ -1261,7 +1261,7 @@ namespace UiLib {
 				cxNeeded = MAX(0, pHeader->EstimateSize(CSize(rc.right - rc.left, rc.bottom - rc.top)).cx);
 				if ( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible())
 				{
-					int nOffset = m_pHorizontalScrollBar->GetScrollPos();
+					int nOffset = (NULL!=m_pHorizontalScrollBar)?m_pHorizontalScrollBar->GetScrollPos():0; // modify by watertoeast, 2015-11-2
 					RECT rcHeader = pHeader->GetPos();
 					rcHeader.left = rc.left - nOffset;
 					pHeader->SetPos(rcHeader);

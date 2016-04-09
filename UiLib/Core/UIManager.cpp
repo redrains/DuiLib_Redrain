@@ -7,6 +7,7 @@ typedef DWORD ZRESULT;
 #define CloseZip(hz) CloseZipU(hz)
 extern HZIP OpenZipU(void *z,unsigned int len,DWORD flags);
 extern ZRESULT CloseZipU(HZIP hz);
+#pragma init_seg(lib) // add by watertoeast, 2015-11-2
 
 namespace UiLib {
 
@@ -81,7 +82,7 @@ namespace UiLib {
 		m_bOffscreenPaint(true),
 		m_bAlphaBackground(false),
 		m_bIsRestore(false),
-
+		m_hwndTooltip(NULL),
 		m_uTimerID(0x1000),
 		m_pRoot(NULL),
 		m_pFocus(NULL),
