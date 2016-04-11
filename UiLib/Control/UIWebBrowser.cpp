@@ -33,8 +33,10 @@ bool UiLib::CWebBrowserUI::DoCreateControl()
 
 void UiLib::CWebBrowserUI::ReleaseControl()
 {
+	ASSERT(NULL != this->GetManager());
+
 	m_bCreated=false;
-	GetManager()->RemoveTranslateAccelerator(this);
+	this->GetManager()->RemoveTranslateAccelerator(this);
 	RegisterEventHandler(FALSE);
 }
 
@@ -102,6 +104,7 @@ STDMETHODIMP UiLib::CWebBrowserUI::Invoke( DISPID dispIdMember, REFIID riid, LCI
 			pDispParams->rgvarg[0].pboolVal);
 		break;
 	case DISPID_STATUSTEXTCHANGE:
+		StatusTextChange(pDispParams->rgvarg[0].bstrVal);
 		break;
 		//  	case DISPID_NEWWINDOW2:
 		//  		break;
@@ -729,4 +732,15 @@ HRESULT STDMETHODCALLTYPE UiLib::CWebBrowserUI::Exec( __RPC__in_opt const GUID *
 		hr = OLECMDERR_E_UNKNOWNGROUP;
 	}
 	return (hr);
+}
+
+HRESULT UiLib::CWebBrowserUI::StatusTextChange(BSTR bstrStatusText)
+{
+	HRESULT hr = S_OK;
+	if (m_pWebBrowserEventHandler)
+	{
+		m_pWebBrowserEventHandler->StatusTextChange(bstrStatusText);
+	}
+
+	return hr;
 }

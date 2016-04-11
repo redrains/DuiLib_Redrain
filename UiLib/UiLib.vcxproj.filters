@@ -5,50 +5,56 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="源文件\Control">
+      <UniqueIdentifier>{e57b41cc-046d-4598-83dc-156d7cdb211c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Core">
+      <UniqueIdentifier>{f4a97594-e7c9-4b24-ac63-b17ad0e03cd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Layout">
+      <UniqueIdentifier>{44ec8626-ffb4-4aeb-8c58-0130a44e2794}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Utils">
+      <UniqueIdentifier>{08ad8f28-3a65-4452-861a-5aff541c0244}</UniqueIdentifier>
+    </Filter>
     <Filter Include="头文件">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="头文件\Control">
-      <UniqueIdentifier>{cefbb01d-7841-44f8-9f95-3a787dba6a8a}</UniqueIdentifier>
+      <UniqueIdentifier>{fb24693e-586f-42d5-9d8d-ce5d9c0ad00c}</UniqueIdentifier>
     </Filter>
     <Filter Include="头文件\Core">
-      <UniqueIdentifier>{a461e41d-1107-4dd4-ab76-6d62b1a15016}</UniqueIdentifier>
+      <UniqueIdentifier>{f85513f4-4a21-4ba5-ab1d-1a08af44b7df}</UniqueIdentifier>
     </Filter>
     <Filter Include="头文件\Layout">
-      <UniqueIdentifier>{43028b15-8ad3-42c7-a4bd-d9442bfaac40}</UniqueIdentifier>
+      <UniqueIdentifier>{f746e127-61aa-4594-9b49-0cdb3c4c1d06}</UniqueIdentifier>
     </Filter>
     <Filter Include="头文件\Utils">
-      <UniqueIdentifier>{0aada63a-aa28-4379-953c-53bd8f4e29cf}</UniqueIdentifier>
+      <UniqueIdentifier>{8e4357a9-ebeb-4d80-aba2-0339503094f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Control">
-      <UniqueIdentifier>{93ce461f-2fb3-4c01-8ee9-037d05fbfd09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Core">
-      <UniqueIdentifier>{d161ab8d-db86-40b0-b0e2-11dd9c486691}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Layout">
-      <UniqueIdentifier>{ee4bff2e-2d6d-4957-a7c0-968c7d6127c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Utils">
-      <UniqueIdentifier>{805fbaef-84ac-4105-b926-b689730bb2a6}</UniqueIdentifier>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="UIlib.cpp">
+    <ClCompile Include="StdAfx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Control\UIWebBrowser.cpp">
-      <Filter>源文件\Control</Filter>
+    <ClCompile Include="UIlib.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Control\UIActiveX.cpp">
       <Filter>源文件\Control</Filter>
     </ClCompile>
+    <ClCompile Include="Control\UIAnimation.cpp">
+      <Filter>源文件\Control</Filter>
+    </ClCompile>
     <ClCompile Include="Control\UIButton.cpp">
+      <Filter>源文件\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIChartView.cpp">
       <Filter>源文件\Control</Filter>
     </ClCompile>
     <ClCompile Include="Control\UICheckBox.cpp">
@@ -60,13 +66,28 @@
     <ClCompile Include="Control\UIComboBox.cpp">
       <Filter>源文件\Control</Filter>
     </ClCompile>
+    <ClCompile Include="Control\UIDateTime.cpp">
+      <Filter>源文件\Control</Filter>
+    </ClCompile>
     <ClCompile Include="Control\UIEdit.cpp">
+      <Filter>源文件\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIFadeButton.cpp">
+      <Filter>源文件\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIFlash.cpp">
+      <Filter>源文件\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIGifAnim.cpp">
       <Filter>源文件\Control</Filter>
     </ClCompile>
     <ClCompile Include="Control\UILabel.cpp">
       <Filter>源文件\Control</Filter>
     </ClCompile>
     <ClCompile Include="Control\UIList.cpp">
+      <Filter>源文件\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIMenu.cpp">
       <Filter>源文件\Control</Filter>
     </ClCompile>
     <ClCompile Include="Control\UIOption.cpp">
@@ -87,6 +108,12 @@
     <ClCompile Include="Control\UIText.cpp">
       <Filter>源文件\Control</Filter>
     </ClCompile>
+    <ClCompile Include="Control\UITreeView.cpp">
+      <Filter>源文件\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIWebBrowser.cpp">
+      <Filter>源文件\Control</Filter>
+    </ClCompile>
     <ClCompile Include="Core\UIBase.cpp">
       <Filter>源文件\Core</Filter>
     </ClCompile>
@@ -99,6 +126,9 @@
     <ClCompile Include="Core\UIDlgBuilder.cpp">
       <Filter>源文件\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\UIDxAnimation.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
     <ClCompile Include="Core\UIManager.cpp">
       <Filter>源文件\Core</Filter>
     </ClCompile>
@@ -107,6 +137,15 @@
     </ClCompile>
     <ClCompile Include="Core\UIRender.cpp">
       <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\UITimer.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Layout\UIAnimationTabLayout.cpp">
+      <Filter>源文件\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="Layout\UIChildLayout.cpp">
+      <Filter>源文件\Layout</Filter>
     </ClCompile>
     <ClCompile Include="Layout\UIHorizontalLayout.cpp">
       <Filter>源文件\Layout</Filter>
@@ -120,71 +159,32 @@
     <ClCompile Include="Layout\UIVerticalLayout.cpp">
       <Filter>源文件\Layout</Filter>
     </ClCompile>
-    <ClCompile Include="Layout\UIChildLayout.cpp">
-      <Filter>源文件\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Utils.cpp">
-      <Filter>源文件\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\XUnzip.cpp">
-      <Filter>源文件\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\UIDelegate.cpp">
-      <Filter>源文件\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\stb_image.c">
-      <Filter>源文件\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\IWindowBase.cpp">
-      <Filter>源文件\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UITreeView.cpp">
-      <Filter>源文件\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIFadeButton.cpp">
-      <Filter>源文件\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIAnimation.cpp">
-      <Filter>源文件\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\UIDxAnimation.cpp">
-      <Filter>源文件\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIGifAnim.cpp">
-      <Filter>源文件\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\WinImplBase.cpp">
-      <Filter>源文件\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIChartView.cpp">
-      <Filter>源文件\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\UITimer.cpp">
-      <Filter>源文件\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="StdAfx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\DuiAutoComplete.cpp">
       <Filter>源文件\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\DuiTrayIcon.cpp">
       <Filter>源文件\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Control\UIFlash.cpp">
-      <Filter>源文件\Control</Filter>
+    <ClCompile Include="Utils\IWindowBase.cpp">
+      <Filter>源文件\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Control\UIDateTime.cpp">
-      <Filter>源文件\Control</Filter>
+    <ClCompile Include="Utils\stb_image.c">
+      <Filter>源文件\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Layout\UIAnimationTabLayout.cpp">
-      <Filter>源文件\Layout</Filter>
+    <ClCompile Include="Utils\UIDelegate.cpp">
+      <Filter>源文件\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\UIShadow.cpp">
       <Filter>源文件\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Control\UIMenu.cpp">
-      <Filter>源文件\Control</Filter>
+    <ClCompile Include="Utils\Utils.cpp">
+      <Filter>源文件\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\WinImplBase.cpp">
+      <Filter>源文件\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\XUnzip.cpp">
+      <Filter>源文件\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,19 +194,49 @@
     <ClInclude Include="UIlib.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Control\UIActiveX.h">
+      <Filter>头文件\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIAnimation.h">
+      <Filter>头文件\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIButton.h">
+      <Filter>头文件\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIChartView.h">
+      <Filter>头文件\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UICheckBox.h">
+      <Filter>头文件\Control</Filter>
+    </ClInclude>
     <ClInclude Include="Control\UICombo.h">
       <Filter>头文件\Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIComboBox.h">
       <Filter>头文件\Control</Filter>
     </ClInclude>
+    <ClInclude Include="Control\UIDateTime.h">
+      <Filter>头文件\Control</Filter>
+    </ClInclude>
     <ClInclude Include="Control\UIEdit.h">
+      <Filter>头文件\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIFadeButton.h">
+      <Filter>头文件\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIFlash.h">
+      <Filter>头文件\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIGifAnim.h">
       <Filter>头文件\Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UILabel.h">
       <Filter>头文件\Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIList.h">
+      <Filter>头文件\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIMenu.h">
       <Filter>头文件\Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIOption.h">
@@ -227,22 +257,28 @@
     <ClInclude Include="Control\UIText.h">
       <Filter>头文件\Control</Filter>
     </ClInclude>
+    <ClInclude Include="Control\UITreeView.h">
+      <Filter>头文件\Control</Filter>
+    </ClInclude>
     <ClInclude Include="Control\UIWebBrowser.h">
       <Filter>头文件\Control</Filter>
     </ClInclude>
-    <ClInclude Include="Control\UIActiveX.h">
-      <Filter>头文件\Control</Filter>
+    <ClInclude Include="Core\UIBase.h">
+      <Filter>头文件\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Control\UIButton.h">
-      <Filter>头文件\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UICheckBox.h">
-      <Filter>头文件\Control</Filter>
+    <ClInclude Include="Core\UIContainer.h">
+      <Filter>头文件\Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\UIControl.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Core\UIDefine.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Core\UIDlgBuilder.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\UIDxAnimation.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\UIManager.h">
@@ -254,16 +290,10 @@
     <ClInclude Include="Core\UIRender.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\UIBase.h">
+    <ClInclude Include="Core\UITimer.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\UIContainer.h">
-      <Filter>头文件\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Layout\UITileLayout.h">
-      <Filter>头文件\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="Layout\UIVerticalLayout.h">
+    <ClInclude Include="Layout\UIAnimationTabLayout.h">
       <Filter>头文件\Layout</Filter>
     </ClInclude>
     <ClInclude Include="Layout\UIChildLayout.h">
@@ -275,55 +305,19 @@
     <ClInclude Include="Layout\UITabLayout.h">
       <Filter>头文件\Layout</Filter>
     </ClInclude>
+    <ClInclude Include="Layout\UITileLayout.h">
+      <Filter>头文件\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="Layout\UIVerticalLayout.h">
+      <Filter>头文件\Layout</Filter>
+    </ClInclude>
     <ClInclude Include="Utils\downloadmgr.h">
       <Filter>头文件\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\UIDelegate.h">
+    <ClInclude Include="Utils\DuiAutoComplete.h">
       <Filter>头文件\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Utils.h">
-      <Filter>头文件\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\WebBrowserEventHandler.h">
-      <Filter>头文件\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\IWindowBase.h">
-      <Filter>头文件\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\WinImplBase.h">
-      <Filter>头文件\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UITreeView.h">
-      <Filter>头文件\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIFadeButton.h">
-      <Filter>头文件\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIAnimation.h">
-      <Filter>头文件\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Internal.h">
-      <Filter>头文件\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\UIDxAnimation.h">
-      <Filter>头文件\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIGifAnim.h">
-      <Filter>头文件\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\UIDefine.h">
-      <Filter>头文件\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIChartView.h">
-      <Filter>头文件\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\UITimer.h">
-      <Filter>头文件\Core</Filter>
     </ClInclude>
     <ClInclude Include="Utils\DuiPointer.h">
-      <Filter>头文件\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\DuiAutoComplete.h">
       <Filter>头文件\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\DuiTrayIcon.h">
@@ -332,25 +326,29 @@
     <ClInclude Include="Utils\FlashEventHandler.h">
       <Filter>头文件\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Control\UIFlash.h">
-      <Filter>头文件\Control</Filter>
+    <ClInclude Include="Utils\Internal.h">
+      <Filter>头文件\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Control\UIDateTime.h">
-      <Filter>头文件\Control</Filter>
+    <ClInclude Include="Utils\IWindowBase.h">
+      <Filter>头文件\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="layout\UIAnimationTabLayout.h">
-      <Filter>头文件\Layout</Filter>
+    <ClInclude Include="Utils\UIDelegate.h">
+      <Filter>头文件\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\UIShadow.h">
       <Filter>头文件\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Control\UIMenu.h">
-      <Filter>头文件\Control</Filter>
+    <ClInclude Include="Utils\Utils.h">
+      <Filter>头文件\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\WebBrowserEventHandler.h">
+      <Filter>头文件\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\WinImplBase.h">
+      <Filter>头文件\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Utils\flash11.tlh">
-      <Filter>头文件\Utils</Filter>
-    </None>
+    <None Include="ReadMe.txt" />
   </ItemGroup>
 </Project>

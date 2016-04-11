@@ -847,7 +847,7 @@ namespace UiLib
 			//			SetItemExpand(pFolder->GetCheck(),pItem);
 			return true;
 		}
-		return false;
+		return true; // 原来是return false，如果是false，itemclick等其他事件无法使用委托。改成return true
 	}
 
 

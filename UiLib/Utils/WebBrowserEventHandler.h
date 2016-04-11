@@ -129,6 +129,13 @@ namespace UiLib
 			return S_OK;
 		}
 
+		virtual HRESULT StatusTextChange(
+			/* [in] */ BSTR bstrStatusText
+			)
+		{
+			return S_OK;
+		}
+
 		// 	virtual HRESULT STDMETHODCALLTYPE GetOverrideKeyPath( 
 		// 		/* [annotation][out] */ 
 		// 		__deref_out  LPOLESTR *pchKey,
