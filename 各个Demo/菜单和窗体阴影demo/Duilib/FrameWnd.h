@@ -33,5 +33,6 @@ public:
 private:
 	CDuiString		m_strXMLPath;
 
+	CMenuWnd		*m_pMenu;
 	map<CDuiString,bool> m_MenuCheckInfo; //保存菜单的单选复选信息
 };
