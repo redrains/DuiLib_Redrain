@@ -230,9 +230,23 @@ void CControlUI::SetBorderRound(SIZE cxyRound)
     Invalidate();
 }
 
-bool CControlUI::DrawImage(HDC hDC, LPCTSTR pStrImage, LPCTSTR pStrModify)
+bool CControlUI::DrawImage(HDC hDC, CImageAttribute& image, LPCTSTR pStrModify)
 {
-    return CRenderEngine::DrawImageString(hDC, m_pManager, m_rcItem, m_rcPaint, pStrImage, pStrModify);
+	return DrawImage(hDC, image, m_rcItem, pStrModify);
+}
+
+bool CControlUI::DrawImage(HDC hDC, CImageAttribute& image, const RECT& rcDest, LPCTSTR pStrModify /*= NULL*/)
+{
+	if (!image.LoadImage(m_pManager))
+		return false;
+
+	if (pStrModify != NULL)
+	{
+		CImageAttribute modifyImage = image;
+		modifyImage.ModifyAttribute(pStrModify);
+		return CRenderEngine::DrawImage(hDC, m_pManager, rcDest, m_rcPaint, modifyImage);
+	}
+	return CRenderEngine::DrawImage(hDC, m_pManager, rcDest, m_rcPaint, image);
 }
 
 const RECT& CControlUI::GetPos() const
@@ -928,8 +942,7 @@ void CControlUI::PaintBkColor(HDC hDC)
 
 void CControlUI::PaintBkImage(HDC hDC)
 {
-    if( m_sBkImage.IsEmpty() ) return;
-    if( !DrawImage(hDC, (LPCTSTR)m_sBkImage) ) m_sBkImage.Empty();
+    DrawImage(hDC, m_sBkImage);
 }
 
 void CControlUI::PaintStatusImage(HDC hDC)

@@ -2052,29 +2052,32 @@ void CRichEditUI::PaintStatusImage(HDC hDC)
 	if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
 	else m_uButtonState &= ~ UISTATE_DISABLED;
 
-	if( (m_uButtonState & UISTATE_DISABLED) != 0 ) {
-		if( !m_sDisabledImage.IsEmpty() ) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sDisabledImage) ) m_sDisabledImage.Empty();
-			else return;
+	if ((m_uButtonState & UISTATE_DISABLED) != 0)
+	{
+		if (m_sDisabledImage.IsLoadSuccess())
+		{
+			DrawImage(hDC, m_sDisabledImage);
+			return;
 		}
 	}
-	else if( (m_uButtonState & UISTATE_FOCUSED) != 0 ) {
-		if( !m_sFocusedImage.IsEmpty() ) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sFocusedImage) ) m_sFocusedImage.Empty();
-			else return;
+	else if ((m_uButtonState & UISTATE_HOT) != 0)
+	{
+		if (m_sHotImage.IsLoadSuccess())
+		{
+			DrawImage(hDC, m_sHotImage);
+			return;
 		}
 	}
-	else if( (m_uButtonState & UISTATE_HOT ) != 0 ) {
-		if( !m_sHotImage.IsEmpty() ) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sHotImage) ) m_sHotImage.Empty();
-			else return;
+	else if ((m_uButtonState & UISTATE_FOCUSED) != 0)
+	{
+		if (m_sFocusedImage.IsLoadSuccess())
+		{
+			DrawImage(hDC, m_sFocusedImage);
+			return;
 		}
 	}
 
-	if( !m_sNormalImage.IsEmpty() ) {
-		if( !DrawImage(hDC, (LPCTSTR)m_sNormalImage) ) m_sNormalImage.Empty();
-		else return;
-	}
+	DrawImage(hDC, m_sNormalImage);
 }
 
 SIZE CRichEditUI::EstimateSize(SIZE szAvailable)
@@ -2268,7 +2271,8 @@ void CRichEditUI::DoPaint(HDC hDC, const RECT& rcPaint)
             NULL, 	   				// Call back function
             NULL,					// Call back parameter
             0);				        // What view of the object
-        if( m_bVScrollBarFixing ) {
+        if( m_bVScrollBarFixing )
+		{
             LONG lWidth = rc.right - rc.left + m_pVerticalScrollBar->GetFixedWidth();
             LONG lHeight = 0;
             SIZEL szExtent = { -1, -1 };
@@ -2281,7 +2285,8 @@ void CRichEditUI::DoPaint(HDC hDC, const RECT& rcPaint)
                 &szExtent,
                 &lWidth,
                 &lHeight);
-            if( lHeight <= rc.bottom - rc.top ) {
+            if( lHeight <= rc.bottom - rc.top ) 
+			{
                 NeedUpdate();
             }
         }
@@ -2492,7 +2497,8 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
 #else
     else if( (uMsg >= WM_KEYFIRST && uMsg <= WM_KEYLAST) || uMsg == WM_CHAR || uMsg == WM_IME_CHAR ) {
 #endif
-        if( !IsFocused() ) return 0;
+        if(!IsFocused()) 
+			return 0;
     }
     else if( uMsg == WM_CONTEXTMENU ) {
         POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };

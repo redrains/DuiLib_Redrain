@@ -165,10 +165,10 @@ protected:
 	UINT m_chLeadByte; // use when we are in _fAccumulateDBC mode
 
 	UINT m_uButtonState;
-	CDuiString m_sNormalImage;
-	CDuiString m_sHotImage;
-	CDuiString m_sFocusedImage;
-	CDuiString m_sDisabledImage;
+	CImageAttribute m_sNormalImage;
+	CImageAttribute m_sHotImage;
+	CImageAttribute m_sFocusedImage;
+	CImageAttribute m_sDisabledImage;
 	RECT m_rcTextPadding;
 	CDuiString m_sTipValue;
 	DWORD m_dwTipValueColor;

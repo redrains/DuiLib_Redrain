@@ -47,7 +47,8 @@ public:
     void SetColorHSL(bool bColorHSL);
     SIZE GetBorderRound() const;
     void SetBorderRound(SIZE cxyRound);
-    bool DrawImage(HDC hDC, LPCTSTR pStrImage, LPCTSTR pStrModify = NULL);
+	bool DrawImage(HDC hDC, CImageAttribute& image, LPCTSTR pStrModify = NULL);
+	bool DrawImage(HDC hDC, CImageAttribute& image, const RECT& rcDest, LPCTSTR pStrModify = NULL);
 
 	//±ß¿òÏà¹Ø
 	int GetBorderSize() const;
@@ -201,8 +202,8 @@ protected:
     DWORD m_dwBackColor;
     DWORD m_dwBackColor2;
     DWORD m_dwBackColor3;
-    CDuiString m_sBkImage;
-	CDuiString m_sForeImage;
+	CImageAttribute m_sBkImage;
+	CImageAttribute m_sForeImage;
     DWORD m_dwBorderColor;
 	DWORD m_dwFocusBorderColor;
     bool m_bColorHSL;

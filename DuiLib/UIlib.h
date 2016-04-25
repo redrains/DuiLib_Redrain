@@ -44,6 +44,7 @@
 #include "Core/UIDefine.h"
 #include "Core/UIManager.h"
 #include "Core/UIBase.h"
+#include "Core/UIImageAttribute.h"
 #include "Core/UIControl.h"
 #include "Core/UIContainer.h"
 #include "Core/UIMarkup.h"
@@ -75,7 +76,6 @@
 #include "Control/UIProgress.h"
 #include "Control/UISlider.h"
 
-#include "Control/UIComboBox.h"
 #include "Control/UIRichEdit.h"
 #include "Control/UIDateTime.h"
 

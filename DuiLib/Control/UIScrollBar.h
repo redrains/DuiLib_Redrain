@@ -108,40 +108,38 @@ namespace DuiLib
 		int m_nLastScrollOffset;
 		int m_nScrollRepeatDelay;
 
-		CDuiString m_sBkNormalImage;
-		CDuiString m_sBkHotImage;
-		CDuiString m_sBkPushedImage;
-		CDuiString m_sBkDisabledImage;
+		CImageAttribute m_sBkNormalImage;
+		CImageAttribute m_sBkHotImage;
+		CImageAttribute m_sBkPushedImage;
+		CImageAttribute m_sBkDisabledImage;
 
 		bool m_bShowButton1;
 		RECT m_rcButton1;
 		UINT m_uButton1State;
-		CDuiString m_sButton1NormalImage;
-		CDuiString m_sButton1HotImage;
-		CDuiString m_sButton1PushedImage;
-		CDuiString m_sButton1DisabledImage;
+		CImageAttribute m_sButton1NormalImage;
+		CImageAttribute m_sButton1HotImage;
+		CImageAttribute m_sButton1PushedImage;
+		CImageAttribute m_sButton1DisabledImage;
 
 		bool m_bShowButton2;
 		RECT m_rcButton2;
 		UINT m_uButton2State;
-		CDuiString m_sButton2NormalImage;
-		CDuiString m_sButton2HotImage;
-		CDuiString m_sButton2PushedImage;
-		CDuiString m_sButton2DisabledImage;
+		CImageAttribute m_sButton2NormalImage;
+		CImageAttribute m_sButton2HotImage;
+		CImageAttribute m_sButton2PushedImage;
+		CImageAttribute m_sButton2DisabledImage;
 
 		RECT m_rcThumb;
 		UINT m_uThumbState;
-		CDuiString m_sThumbNormalImage;
-		CDuiString m_sThumbHotImage;
-		CDuiString m_sThumbPushedImage;
-		CDuiString m_sThumbDisabledImage;
+		CImageAttribute m_sThumbNormalImage;
+		CImageAttribute m_sThumbHotImage;
+		CImageAttribute m_sThumbPushedImage;
+		CImageAttribute m_sThumbDisabledImage;
 
-		CDuiString m_sRailNormalImage;
-		CDuiString m_sRailHotImage;
-		CDuiString m_sRailPushedImage;
-		CDuiString m_sRailDisabledImage;
-
-		CDuiString m_sImageModify;
+		CImageAttribute m_sRailNormalImage;
+		CImageAttribute m_sRailHotImage;
+		CImageAttribute m_sRailPushedImage;
+		CImageAttribute m_sRailDisabledImage;
 	};
 }
 

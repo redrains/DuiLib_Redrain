@@ -216,6 +216,8 @@ public:
     static void SetHSL(bool bUseHSL, short H, short S, short L); // H:0~360, S:0~200, L:0~200 
     static void ReloadSkin();
     static bool LoadPlugin(LPCTSTR pstrModuleName);
+	static TImageInfo* LoadImage(STRINGorID bitmap, LPCTSTR type = NULL, DWORD mask = 0);
+	static void FreeImage(const TImageInfo* bitmap);
     static CStdPtrArray* GetPlugins();
 
     bool UseParentResource(CPaintManagerUI* pm);
@@ -318,7 +320,7 @@ public:
     CStdPtrArray* GetSubControlsByClass();
 
     static void MessageLoop();
-    static bool TranslateMessage(const LPMSG pMsg);
+    static bool TranslateMessage(const MSG* pMsg);
 	static void Term();
 
     bool MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);

@@ -795,64 +795,75 @@ namespace DuiLib
 		if( !IsEnabled() ) m_uThumbState |= UISTATE_DISABLED;
 		else m_uThumbState &= ~ UISTATE_DISABLED;
 
-		if( (m_uThumbState & UISTATE_DISABLED) != 0 ) {
-			if( !m_sBkDisabledImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sBkDisabledImage) ) m_sBkDisabledImage.Empty();
-				else return;
+		if( (m_uThumbState & UISTATE_DISABLED) != 0 ) 
+		{
+			if( m_sBkDisabledImage.IsLoadSuccess() ) 
+			{
+				DrawImage(hDC, m_sBkDisabledImage);
+				return;
 			}
 		}
-		else if( (m_uThumbState & UISTATE_PUSHED) != 0 ) {
-			if( !m_sBkPushedImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sBkPushedImage) ) m_sBkPushedImage.Empty();
-				else return;
+		else if( (m_uThumbState & UISTATE_PUSHED) != 0 )
+		{
+			if (m_sBkPushedImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sBkPushedImage);
+				return;
 			}
 		}
-		else if( (m_uThumbState & UISTATE_HOT) != 0 ) {
-			if( !m_sBkHotImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sBkHotImage) ) m_sBkHotImage.Empty();
-				else return;
+		else if( (m_uThumbState & UISTATE_HOT) != 0 ) 
+		{
+			if (m_sBkHotImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sBkHotImage);
+				return;
 			}
 		}
 
-		if( !m_sBkNormalImage.IsEmpty() ) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sBkNormalImage) ) m_sBkNormalImage.Empty();
-			else return;
-		}
+		DrawImage(hDC, m_sBkNormalImage);
 	}
 
 	void CScrollBarUI::PaintButton1(HDC hDC)
 	{
-		if( !m_bShowButton1 ) return;
+		if (!m_bShowButton1) return;
 
-		if( !IsEnabled() ) m_uButton1State |= UISTATE_DISABLED;
-		else m_uButton1State &= ~ UISTATE_DISABLED;
+		if (!IsEnabled()) m_uButton1State |= UISTATE_DISABLED;
+		else m_uButton1State &= ~UISTATE_DISABLED;
 
-		m_sImageModify.Empty();
-		m_sImageModify.SmallFormat(_T("dest='%d,%d,%d,%d'"), m_rcButton1.left - m_rcItem.left, \
-			m_rcButton1.top - m_rcItem.top, m_rcButton1.right - m_rcItem.left, m_rcButton1.bottom - m_rcItem.top);
+		RECT rcDest = {	m_rcButton1.left - m_rcItem.left,
+			m_rcButton1.top - m_rcItem.top,
+			m_rcButton1.right - m_rcItem.left,
+			m_rcButton1.bottom - m_rcItem.top};
 
-		if( (m_uButton1State & UISTATE_DISABLED) != 0 ) {
-			if( !m_sButton1DisabledImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sButton1DisabledImage, (LPCTSTR)m_sImageModify) ) m_sButton1DisabledImage.Empty();
-				else return;
+		if( (m_uButton1State & UISTATE_DISABLED) != 0 ) 
+		{
+			if( m_sButton1DisabledImage.IsLoadSuccess() ) 
+			{
+				DrawImage(hDC, m_sButton1DisabledImage, rcDest);
+				return;
 			}
 		}
-		else if( (m_uButton1State & UISTATE_PUSHED) != 0 ) {
-			if( !m_sButton1PushedImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sButton1PushedImage, (LPCTSTR)m_sImageModify) ) m_sButton1PushedImage.Empty();
-				else return;
+		else if( (m_uButton1State & UISTATE_PUSHED) != 0 ) 
+		{
+			if (m_sButton1PushedImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sButton1PushedImage, rcDest);
+				return;
 			}
 		}
-		else if( (m_uButton1State & UISTATE_HOT) != 0 ) {
-			if( !m_sButton1HotImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sButton1HotImage, (LPCTSTR)m_sImageModify) ) m_sButton1HotImage.Empty();
-				else return;
+		else if( (m_uButton1State & UISTATE_HOT) != 0 ) 
+		{
+			if (m_sButton1HotImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sButton1HotImage, rcDest);
+				return;
 			}
 		}
 
-		if( !m_sButton1NormalImage.IsEmpty() ) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sButton1NormalImage, (LPCTSTR)m_sImageModify) ) m_sButton1NormalImage.Empty();
-			else return;
+		if (m_sButton1NormalImage.IsLoadSuccess())
+		{
+			DrawImage(hDC, m_sButton1NormalImage, rcDest);
+			return;
 		}
 
 		DWORD dwBorderColor = 0xFF85E4FF;
@@ -867,32 +878,40 @@ namespace DuiLib
 		if( !IsEnabled() ) m_uButton2State |= UISTATE_DISABLED;
 		else m_uButton2State &= ~ UISTATE_DISABLED;
 
-		m_sImageModify.Empty();
-		m_sImageModify.SmallFormat(_T("dest='%d,%d,%d,%d'"), m_rcButton2.left - m_rcItem.left, \
-			m_rcButton2.top - m_rcItem.top, m_rcButton2.right - m_rcItem.left, m_rcButton2.bottom - m_rcItem.top);
+		RECT rcDest = { m_rcButton2.left - m_rcItem.left,
+			m_rcButton2.top - m_rcItem.top,
+			m_rcButton2.right - m_rcItem.left,
+			m_rcButton2.bottom - m_rcItem.top };
 
-		if( (m_uButton2State & UISTATE_DISABLED) != 0 ) {
-			if( !m_sButton2DisabledImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sButton2DisabledImage, (LPCTSTR)m_sImageModify) ) m_sButton2DisabledImage.Empty();
-				else return;
+		if( (m_uButton2State & UISTATE_DISABLED) != 0 ) 
+		{
+			if (m_sButton2DisabledImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sButton2DisabledImage, rcDest);
+				return;
 			}
 		}
-		else if( (m_uButton2State & UISTATE_PUSHED) != 0 ) {
-			if( !m_sButton2PushedImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sButton2PushedImage, (LPCTSTR)m_sImageModify) ) m_sButton2PushedImage.Empty();
-				else return;
+		else if( (m_uButton2State & UISTATE_PUSHED) != 0 ) 
+		{
+			if (m_sButton2PushedImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sButton2PushedImage, rcDest);
+				return;
 			}
 		}
-		else if( (m_uButton2State & UISTATE_HOT) != 0 ) {
-			if( !m_sButton2HotImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sButton2HotImage, (LPCTSTR)m_sImageModify) ) m_sButton2HotImage.Empty();
-				else return;
+		else if( (m_uButton2State & UISTATE_HOT) != 0 ) 
+		{
+			if (m_sButton2HotImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sButton2HotImage, rcDest);
+				return;
 			}
 		}
 
-		if( !m_sButton2NormalImage.IsEmpty() ) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sButton2NormalImage, (LPCTSTR)m_sImageModify) ) m_sButton2NormalImage.Empty();
-			else return;
+		if (m_sButton2NormalImage.IsLoadSuccess())
+		{
+			DrawImage(hDC, m_sButton2NormalImage, rcDest);
+			return;
 		}
 
 		DWORD dwBorderColor = 0xFF85E4FF;
@@ -906,32 +925,40 @@ namespace DuiLib
 		if( !IsEnabled() ) m_uThumbState |= UISTATE_DISABLED;
 		else m_uThumbState &= ~ UISTATE_DISABLED;
 
-		m_sImageModify.Empty();
-		m_sImageModify.SmallFormat(_T("dest='%d,%d,%d,%d'"), m_rcThumb.left - m_rcItem.left, \
-			m_rcThumb.top - m_rcItem.top, m_rcThumb.right - m_rcItem.left, m_rcThumb.bottom - m_rcItem.top);
+		RECT rcDest = { m_rcThumb.left - m_rcItem.left,
+			m_rcThumb.top - m_rcItem.top,
+			m_rcThumb.right - m_rcItem.left,
+			m_rcThumb.bottom - m_rcItem.top };
 
-		if( (m_uThumbState & UISTATE_DISABLED) != 0 ) {
-			if( !m_sThumbDisabledImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sThumbDisabledImage, (LPCTSTR)m_sImageModify) ) m_sThumbDisabledImage.Empty();
-				else return;
+		if( (m_uThumbState & UISTATE_DISABLED) != 0 ) 
+		{
+			if( m_sThumbDisabledImage.IsLoadSuccess() )
+			{
+				DrawImage(hDC, m_sThumbDisabledImage, rcDest);
+				return;
 			}
 		}
-		else if( (m_uThumbState & UISTATE_PUSHED) != 0 ) {
-			if( !m_sThumbPushedImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sThumbPushedImage, (LPCTSTR)m_sImageModify) ) m_sThumbPushedImage.Empty();
-				else return;
+		else if( (m_uThumbState & UISTATE_PUSHED) != 0 ) 
+		{
+			if (m_sThumbPushedImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sThumbPushedImage, rcDest);
+				return;
 			}
 		}
-		else if( (m_uThumbState & UISTATE_HOT) != 0 ) {
-			if( !m_sThumbHotImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sThumbHotImage, (LPCTSTR)m_sImageModify) ) m_sThumbHotImage.Empty();
-				else return;
+		else if( (m_uThumbState & UISTATE_HOT) != 0 ) 
+		{
+			if (m_sThumbHotImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sThumbHotImage, rcDest);
+				return;
 			}
 		}
 
-		if( !m_sThumbNormalImage.IsEmpty() ) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sThumbNormalImage, (LPCTSTR)m_sImageModify) ) m_sThumbNormalImage.Empty();
-			else return;
+		if (m_sThumbNormalImage.IsLoadSuccess())
+		{
+			DrawImage(hDC, m_sThumbNormalImage, rcDest);
+			return;
 		}
 
 		DWORD dwBorderColor = 0xFF85E4FF;
@@ -945,43 +972,51 @@ namespace DuiLib
 		if( !IsEnabled() ) m_uThumbState |= UISTATE_DISABLED;
 		else m_uThumbState &= ~ UISTATE_DISABLED;
 
-		m_sImageModify.Empty();
-		if( !m_bHorizontal ) {
-			m_sImageModify.SmallFormat(_T("dest='%d,%d,%d,%d'"), m_rcThumb.left - m_rcItem.left, \
-				(m_rcThumb.top + m_rcThumb.bottom) / 2 - m_rcItem.top - m_cxyFixed.cx / 2, \
-				m_rcThumb.right - m_rcItem.left, \
-				(m_rcThumb.top + m_rcThumb.bottom) / 2 - m_rcItem.top + m_cxyFixed.cx - m_cxyFixed.cx / 2);
+		RECT rcDest;
+		if( !m_bHorizontal ) 
+		{
+			rcDest.left = m_rcThumb.left - m_rcItem.left;
+			rcDest.top = (m_rcThumb.top + m_rcThumb.bottom) / 2 - m_rcItem.top - m_cxyFixed.cx / 2;
+			rcDest.right = m_rcThumb.right - m_rcItem.left;
+			rcDest.bottom = (m_rcThumb.top + m_rcThumb.bottom) / 2 - m_rcItem.top + m_cxyFixed.cx - m_cxyFixed.cx / 2;
 		}
-		else {
-			m_sImageModify.SmallFormat(_T("dest='%d,%d,%d,%d'"), \
-				(m_rcThumb.left + m_rcThumb.right) / 2 - m_rcItem.left - m_cxyFixed.cy / 2, \
-				m_rcThumb.top - m_rcItem.top, \
-				(m_rcThumb.left + m_rcThumb.right) / 2 - m_rcItem.left + m_cxyFixed.cy - m_cxyFixed.cy / 2, \
-				m_rcThumb.bottom - m_rcItem.top);
-		}
-
-		if( (m_uThumbState & UISTATE_DISABLED) != 0 ) {
-			if( !m_sRailDisabledImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sRailDisabledImage, (LPCTSTR)m_sImageModify) ) m_sRailDisabledImage.Empty();
-				else return;
-			}
-		}
-		else if( (m_uThumbState & UISTATE_PUSHED) != 0 ) {
-			if( !m_sRailPushedImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sRailPushedImage, (LPCTSTR)m_sImageModify) ) m_sRailPushedImage.Empty();
-				else return;
-			}
-		}
-		else if( (m_uThumbState & UISTATE_HOT) != 0 ) {
-			if( !m_sRailHotImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sRailHotImage, (LPCTSTR)m_sImageModify) ) m_sRailHotImage.Empty();
-				else return;
-			}
+		else 
+		{
+			rcDest.left = (m_rcThumb.left + m_rcThumb.right) / 2 - m_rcItem.left - m_cxyFixed.cy / 2;
+			rcDest.top = m_rcThumb.top - m_rcItem.top;
+			rcDest.right = (m_rcThumb.left + m_rcThumb.right) / 2 - m_rcItem.left + m_cxyFixed.cy - m_cxyFixed.cy / 2;
+			rcDest.bottom = m_rcThumb.bottom - m_rcItem.top;
 		}
 
-		if( !m_sRailNormalImage.IsEmpty() ) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sRailNormalImage, (LPCTSTR)m_sImageModify) ) m_sRailNormalImage.Empty();
-			else return;
+		if( (m_uThumbState & UISTATE_DISABLED) != 0 )
+		{
+			if( m_sRailDisabledImage.IsLoadSuccess() ) 
+			{
+				DrawImage(hDC, m_sRailDisabledImage, rcDest);
+				return;
+			}
+		}
+		else if( (m_uThumbState & UISTATE_PUSHED) != 0 )
+		{
+			if (m_sRailPushedImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sRailPushedImage, rcDest);
+				return;
+			}
+		}
+		else if( (m_uThumbState & UISTATE_HOT) != 0 ) 
+		{
+			if (m_sRailHotImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sRailHotImage, rcDest);
+				return;
+			}
+		}
+
+		if (m_sRailNormalImage.IsLoadSuccess())
+		{
+			DrawImage(hDC, m_sRailNormalImage, rcDest);
+			return;
 		}
 	}
 }

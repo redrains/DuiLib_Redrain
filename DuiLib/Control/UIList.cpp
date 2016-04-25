@@ -1660,25 +1660,39 @@ void CListHeaderItemUI::PaintStatusImage(HDC hDC)
     if( IsFocused() ) m_uButtonState |= UISTATE_FOCUSED;
     else m_uButtonState &= ~ UISTATE_FOCUSED;
 
-    if( (m_uButtonState & UISTATE_PUSHED) != 0 ) {
-        if( m_sPushedImage.IsEmpty() && !m_sNormalImage.IsEmpty() ) DrawImage(hDC, (LPCTSTR)m_sNormalImage);
-        if( !DrawImage(hDC, (LPCTSTR)m_sPushedImage) ) m_sPushedImage.Empty();
-    }
-    else if( (m_uButtonState & UISTATE_HOT) != 0 ) {
-        if( m_sHotImage.IsEmpty() && !m_sNormalImage.IsEmpty() ) DrawImage(hDC, (LPCTSTR)m_sNormalImage);
-        if( !DrawImage(hDC, (LPCTSTR)m_sHotImage) ) m_sHotImage.Empty();
-    }
-    else if( (m_uButtonState & UISTATE_FOCUSED) != 0 ) {
-        if( m_sFocusedImage.IsEmpty() && !m_sNormalImage.IsEmpty() ) DrawImage(hDC, (LPCTSTR)m_sNormalImage);
-        if( !DrawImage(hDC, (LPCTSTR)m_sFocusedImage) ) m_sFocusedImage.Empty();
-    }
-    else {
-        if( !m_sNormalImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)m_sNormalImage) ) m_sNormalImage.Empty();
-        }
-    }
+	do 
+	{
+		if ((m_uButtonState & UISTATE_PUSHED) != 0)
+		{
+			if (m_sPushedImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sPushedImage);
+				break;
+			}			
+		}
+		else if ((m_uButtonState & UISTATE_HOT) != 0)
+		{
+			if (m_sHotImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sHotImage);
+				break;
+			}
+		}
+		else if ((m_uButtonState & UISTATE_FOCUSED) != 0)
+		{
+			if (m_sFocusedImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sFocusedImage);
+				break;
+			}
+		}
+		
+		DrawImage(hDC, m_sNormalImage);
+	} while (0);
+ 
 
-    if( !m_sSepImage.IsEmpty() ) {
+	if (m_sSepImage.IsLoadSuccess())
+	{
         RECT rcThumb = GetThumbRect();
         rcThumb.left -= m_rcItem.left;
         rcThumb.top -= m_rcItem.top;
@@ -1687,7 +1701,7 @@ void CListHeaderItemUI::PaintStatusImage(HDC hDC)
 
         m_sSepImageModify.Empty();
         m_sSepImageModify.SmallFormat(_T("dest='%d,%d,%d,%d'"), rcThumb.left, rcThumb.top, rcThumb.right, rcThumb.bottom);
-        if( !DrawImage(hDC, (LPCTSTR)m_sSepImage, (LPCTSTR)m_sSepImageModify) ) m_sSepImage.Empty();
+		DrawImage(hDC, m_sSepImage, (LPCTSTR)m_sSepImageModify);
     }
 }
 
@@ -1916,39 +1930,39 @@ void CListElementUI::DrawItemBk(HDC hDC, const RECT& rcItem)
         CRenderEngine::DrawColor(hDC, m_rcItem, GetAdjustColor(iBackColor));
     }
 
-    if( !IsEnabled() ) {
-        if( !pInfo->sDisabledImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)pInfo->sDisabledImage) ) pInfo->sDisabledImage.Empty();
-            else return;
+    if( !IsEnabled() ) 
+	{
+        if( pInfo->sDisabledImage.IsLoadSuccess() ) 
+		{
+            if(DrawImage(hDC, pInfo->sDisabledImage) )
+				return;
         }
     }
-    if( IsSelected() ) {
-        if( !pInfo->sSelectedImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)pInfo->sSelectedImage) ) pInfo->sSelectedImage.Empty();
-            else return;
-        }
+    if( IsSelected() ) 
+	{
+		if (pInfo->sSelectedImage.IsLoadSuccess())
+		{
+			if (DrawImage(hDC, pInfo->sSelectedImage))
+				return;
+		}
     }
-    if( (m_uButtonState & UISTATE_HOT) != 0 ) {
-        if( !pInfo->sHotImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)pInfo->sHotImage) ) pInfo->sHotImage.Empty();
-            else return;
-        }
-    }
-
-    if( !m_sBkImage.IsEmpty() ) {
-        if( !pInfo->bAlternateBk || m_iIndex % 2 == 0 ) {
-            if( !DrawImage(hDC, (LPCTSTR)m_sBkImage) ) m_sBkImage.Empty();
-        }
-    }
-
-    if( m_sBkImage.IsEmpty() ) {
-        if( !pInfo->sBkImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)pInfo->sBkImage) ) pInfo->sBkImage.Empty();
-            else return;
-        }
+    if( (m_uButtonState & UISTATE_HOT) != 0 ) 
+	{
+		if (pInfo->sHotImage.IsLoadSuccess())
+		{
+			if (DrawImage(hDC, pInfo->sHotImage))
+				return;
+		}
     }
 
-    if ( pInfo->dwLineColor != 0 ) {
+	if (pInfo->sBkImage.IsLoadSuccess())
+	{
+		if (DrawImage(hDC, pInfo->sBkImage))
+			return;
+	}
+
+    if ( pInfo->dwLineColor != 0 ) 
+	{
         RECT rcLine = { m_rcItem.left, m_rcItem.bottom - 1, m_rcItem.right, m_rcItem.bottom - 1 };
         CRenderEngine::DrawLine(hDC, rcLine, 1, GetAdjustColor(pInfo->dwLineColor));
     }
@@ -2537,38 +2551,49 @@ void CListContainerElementUI::DrawItemBk(HDC hDC, const RECT& rcItem)
         CRenderEngine::DrawColor(hDC, m_rcItem, GetAdjustColor(iBackColor));
     }
 
-    if( !IsEnabled() ) {
-        if( !pInfo->sDisabledImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)pInfo->sDisabledImage) ) pInfo->sDisabledImage.Empty();
-            else return;
+    if( !IsEnabled() ) 
+	{
+        if( pInfo->sDisabledImage.IsLoadSuccess() ) 
+		{
+            if( DrawImage(hDC, pInfo->sDisabledImage) ) 
+				return;
         }
     }
-    if( IsSelected() ) {
-        if( !pInfo->sSelectedImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)pInfo->sSelectedImage) ) pInfo->sSelectedImage.Empty();
-            else return;
-        }
+    if( IsSelected() ) 
+	{
+		if (pInfo->sSelectedImage.IsLoadSuccess())
+		{
+			if (DrawImage(hDC, pInfo->sSelectedImage))
+				return;
+		}
     }
-    if( (m_uButtonState & UISTATE_HOT) != 0 ) {
-        if( !pInfo->sHotImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)pInfo->sHotImage) ) pInfo->sHotImage.Empty();
-            else return;
-        }
+    if( (m_uButtonState & UISTATE_HOT) != 0 ) 
+	{
+		if (pInfo->sHotImage.IsLoadSuccess())
+		{
+			if (DrawImage(hDC, pInfo->sHotImage))
+				return;
+		}
     }
-    if( !m_sBkImage.IsEmpty() ) {
-        if( !pInfo->bAlternateBk || m_iIndex % 2 == 0 ) {
-            if( !DrawImage(hDC, (LPCTSTR)m_sBkImage) ) m_sBkImage.Empty();
+    if( m_sBkImage.IsLoadSuccess() ) 
+	{
+        if( !pInfo->bAlternateBk || m_iIndex % 2 == 0 ) 
+		{
+            DrawImage(hDC, m_sBkImage);
         }
     }
 
-    if( m_sBkImage.IsEmpty() ) {
-        if( !pInfo->sBkImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)pInfo->sBkImage) ) pInfo->sBkImage.Empty();
-            else return;
+	if (!m_sBkImage.IsLoadSuccess())
+	{
+        if( pInfo->sBkImage.IsLoadSuccess() )
+		{
+            DrawImage(hDC, pInfo->sBkImage);
+				return;
         }
     }
 
-    if ( pInfo->dwLineColor != 0 ) {
+    if ( pInfo->dwLineColor != 0 ) 
+	{
         RECT rcLine = { m_rcItem.left, m_rcItem.bottom - 1, m_rcItem.right, m_rcItem.bottom - 1 };
         CRenderEngine::DrawLine(hDC, rcLine, 1, GetAdjustColor(pInfo->dwLineColor));
     }

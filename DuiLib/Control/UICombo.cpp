@@ -915,35 +915,40 @@ void CComboUI::PaintStatusImage(HDC hDC)
     if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
     else m_uButtonState &= ~ UISTATE_DISABLED;
 
-    if( (m_uButtonState & UISTATE_DISABLED) != 0 ) {
-        if( !m_sDisabledImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)m_sDisabledImage) ) m_sDisabledImage.Empty();
-            else return;
-        }
+    if( (m_uButtonState & UISTATE_DISABLED) != 0 )
+	{
+		if (m_sDisabledImage.IsLoadSuccess())
+		{
+			DrawImage(hDC, m_sDisabledImage);
+			return;
+		}
     }
-    else if( (m_uButtonState & UISTATE_PUSHED) != 0 ) {
-        if( !m_sPushedImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)m_sPushedImage) ) m_sPushedImage.Empty();
-            else return;
-        }
+    else if( (m_uButtonState & UISTATE_PUSHED) != 0 ) 
+	{
+		if (m_sPushedImage.IsLoadSuccess())
+		{
+			DrawImage(hDC, m_sPushedImage);
+			return;
+		}
     }
-    else if( (m_uButtonState & UISTATE_HOT) != 0 ) {
-        if( !m_sHotImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)m_sHotImage) ) m_sHotImage.Empty();
-            else return;
-        }
+    else if( (m_uButtonState & UISTATE_HOT) != 0 ) 
+	{
+		if (m_sHotImage.IsLoadSuccess())
+		{
+			DrawImage(hDC, m_sHotImage);
+			return;
+		}
     }
-    else if( (m_uButtonState & UISTATE_FOCUSED) != 0 ) {
-        if( !m_sFocusedImage.IsEmpty() ) {
-            if( !DrawImage(hDC, (LPCTSTR)m_sFocusedImage) ) m_sFocusedImage.Empty();
-            else return;
-        }
+    else if( (m_uButtonState & UISTATE_FOCUSED) != 0 )
+	{
+		if (m_sFocusedImage.IsLoadSuccess())
+		{
+			DrawImage(hDC, m_sFocusedImage);
+			return;
+		}
     }
 
-    if( !m_sNormalImage.IsEmpty() ) {
-        if( !DrawImage(hDC, (LPCTSTR)m_sNormalImage) ) m_sNormalImage.Empty();
-        else return;
-    }
+    DrawImage(hDC, m_sNormalImage);
 }
 
 void CComboUI::PaintText(HDC hDC)

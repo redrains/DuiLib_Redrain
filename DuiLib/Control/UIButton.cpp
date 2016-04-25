@@ -390,64 +390,63 @@ namespace DuiLib
 		if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
 		else m_uButtonState &= ~ UISTATE_DISABLED;
 
-		if( (m_uButtonState & UISTATE_DISABLED) != 0 ) {
-			if( !m_sDisabledImage.IsEmpty() )
+		do 
+		{
+			if ((m_uButtonState & UISTATE_DISABLED) != 0)
 			{
-				if( !DrawImage(hDC, (LPCTSTR)m_sDisabledImage) ) m_sDisabledImage.Empty();
-				else goto Label_ForeImage;
-			}
-		}
-		else if( (m_uButtonState & UISTATE_PUSHED) != 0 ) {
-			if( !m_sPushedImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sPushedImage) ){
-					m_sPushedImage.Empty();
-				}
-				if( !m_sPushedForeImage.IsEmpty() )
+				if (m_sDisabledImage.IsLoadSuccess())
 				{
-					if( !DrawImage(hDC, (LPCTSTR)m_sPushedForeImage) )
-						m_sPushedForeImage.Empty();
+					DrawImage(hDC, m_sDisabledImage);
+					break;
+				}
+			}
+			else if ((m_uButtonState & UISTATE_PUSHED) != 0)
+			{
+				if (m_sPushedImage.IsLoadSuccess())
+				{
+					DrawImage(hDC, m_sPushedImage);
+					if (m_sPushedForeImage.IsLoadSuccess())
+					{
+						DrawImage(hDC, m_sPushedForeImage);
+						return;
+					}
+					else
+						break;
+				}
+			}
+			else if ((m_uButtonState & UISTATE_HOT) != 0)
+			{
+				if (m_sHotImage.IsLoadSuccess())
+				{
+					DrawImage(hDC, m_sHotImage);
+					
+					if (m_sHotForeImage.IsLoadSuccess())
+					{
+						DrawImage(hDC, m_sHotForeImage);
+						return;
+					}
+					else
+						break;
+				}
+				else if (m_dwHotBkColor != 0)
+				{
+					CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwHotBkColor));
 					return;
 				}
-				else goto Label_ForeImage;
 			}
-		}
-		else if( (m_uButtonState & UISTATE_HOT) != 0 ) {
-			if( !m_sHotImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sHotImage) ){
-					m_sHotImage.Empty();
-				}
-				if( !m_sHotForeImage.IsEmpty() ) {
-					if( !DrawImage(hDC, (LPCTSTR)m_sHotForeImage) )
-						m_sHotForeImage.Empty();
+			else if ((m_uButtonState & UISTATE_FOCUSED) != 0)
+			{
+				if (m_sFocusedImage.IsLoadSuccess())
+				{
+					DrawImage(hDC, m_sFocusedImage);
 					return;
 				}
-				else goto Label_ForeImage;
 			}
-			else if(m_dwHotBkColor != 0) {
-				CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwHotBkColor));
-				return;
-			}
-		}
-		else if( (m_uButtonState & UISTATE_FOCUSED) != 0 ) {
-			if( !m_sFocusedImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sFocusedImage) ) m_sFocusedImage.Empty();
-				else goto Label_ForeImage;
-			}
-		}
 
-		if( !m_sNormalImage.IsEmpty() ) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sNormalImage) ) m_sNormalImage.Empty();
-			else goto Label_ForeImage;
-		}
+			DrawImage(hDC, m_sNormalImage);
+		} while (0);
 
-		if(!m_sForeImage.IsEmpty() )
-			goto Label_ForeImage;
 
-		return;
-
-Label_ForeImage:
-		if(!m_sForeImage.IsEmpty() ) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sForeImage) ) m_sForeImage.Empty();
-		}
+		DrawImage(hDC, m_sForeImage);
 	}
 }

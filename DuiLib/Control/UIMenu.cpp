@@ -233,8 +233,8 @@ void CMenuWnd::OnFinalMessage(HWND hWnd)
 		m_pOwner->m_pWindow = NULL;
 		m_pOwner->m_uButtonState &= ~ UISTATE_PUSHED;
 		m_pOwner->Invalidate();
+		delete this;
 	}
-    delete this;
 }
 
 LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -600,18 +600,17 @@ void CMenuElementUI::DoPaint(HDC hDC, const RECT& rcPaint)
 
 void CMenuElementUI::DrawItemIcon(HDC hDC, const RECT& rcItem)
 {
-	if ( m_strIcon != _T("") )
-	{
-		
+	if ( m_icon.IsLoadSuccess() )
+	{	
 		if (!(m_bCheckItem && !GetChecked()))
-		{
-			CDuiString pStrImage;
-			pStrImage.Format(_T("file='%s' dest='%d,%d,%d,%d'"), m_strIcon.GetData(), 
+		{	
+			CDuiString strModify;
+			strModify.Format(_T("dest='%d,%d,%d,%d'"),
 				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx)/2,
 				(m_cxyFixed.cy - m_szIconSize.cy)/2,
 				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx)/2 + m_szIconSize.cx,
 				(m_cxyFixed.cy - m_szIconSize.cy)/2 + m_szIconSize.cy);
-			CRenderEngine::DrawImageString(hDC, m_pManager, m_rcItem, m_rcPaint, pStrImage, _T(""));
+			DrawImage(hDC, m_icon, strModify);
 		}			
 	}
 }
@@ -620,16 +619,21 @@ void CMenuElementUI::DrawItemExpland(HDC hDC, const RECT& rcItem)
 {
 	if (m_bShowExplandIcon)
 	{
-		CDuiString strExplandIcon;
-		strExplandIcon = GetManager()->GetDefaultAttributeList(_T("ExplandIcon"));
-		CDuiString strBkImage;
-		strBkImage.Format(_T("file='%s' dest='%d,%d,%d,%d'"), strExplandIcon.GetData(), 
+		if (!m_expandIcon.IsLoadSuccess())
+		{
+			CDuiString strExplandIcon;
+			strExplandIcon = GetManager()->GetDefaultAttributeList(_T("ExplandIcon"));
+			m_expandIcon.SetAttributeString(strExplandIcon);
+		}
+		
+		CDuiString strModify;
+		strModify.Format(_T("dest='%d,%d,%d,%d'"),
 			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2,
 			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2,
 			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE,
 			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE);
 
-		CRenderEngine::DrawImageString(hDC, m_pManager, m_rcItem, m_rcPaint, strBkImage, _T(""));
+		DrawImage(hDC, m_expandIcon, strModify);
 	}
 }
 
@@ -873,8 +877,8 @@ RECT CMenuElementUI::GetLinePadding() const
 
 void CMenuElementUI::SetIcon(LPCTSTR strIcon)
 {
-	if ( strIcon != _T("") )
-		m_strIcon = strIcon;
+	if (strIcon != _T(""))
+		m_icon.SetAttributeString(strIcon);
 }
 
 void CMenuElementUI::SetIconSize(LONG cx, LONG cy)

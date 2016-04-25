@@ -43,24 +43,23 @@ namespace DuiLib
 		LPCTSTR GetThumbPushedImage() const;
 		void SetThumbPushedImage(LPCTSTR pStrImage);
 
-		void DoEvent(TEventUI& event);//2014.7.28 redrain
+		void DoEvent(TEventUI& event);
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 		void PaintStatusImage(HDC hDC);
 
-		void SetValue(int nValue);//2014.7.28 redrain
-		void SetCanSendMove(bool bCanSend);//2014.7.28 redrain
-		bool GetCanSendMove() const;//2014.7.28 redrain
+		void SetValue(int nValue);
+		void SetCanSendMove(bool bCanSend);
+		bool GetCanSendMove() const;
 	protected:
 		SIZE m_szThumb;
 		UINT m_uButtonState;
 		int m_nStep;
 
-		CDuiString m_sThumbImage;
-		CDuiString m_sThumbHotImage;
-		CDuiString m_sThumbPushedImage;
+		CImageAttribute m_sThumbImage;
+		CImageAttribute m_sThumbHotImage;
+		CImageAttribute m_sThumbPushedImage;
 
-		CDuiString m_sImageModify;
-		bool	   m_bSendMove;//2014.7.28 redrain
+		bool	   m_bSendMove;
 	};
 }
 

@@ -356,13 +356,14 @@ protected:
 
 	bool		m_bDrawLine;	//画分隔线
 	DWORD		m_dwLineColor;  //分隔线颜色
-	RECT		m_rcLinePadding;	//分割线的左右边距
+	RECT		m_rcLinePadding;//分割线的左右边距
 
 	SIZE		m_szIconSize; 	//画图标
-	CDuiString	m_strIcon;
 	bool		m_bCheckItem;
+	CImageAttribute m_icon;
 
 	bool		m_bShowExplandIcon;
+	CImageAttribute m_expandIcon;
 };
 
 } // namespace DuiLib

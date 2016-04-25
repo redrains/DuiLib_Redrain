@@ -2,11 +2,11 @@
 <VisualStudioUserFile
 	ProjectType="Visual C++"
 	Version="9.00"
-	ShowAllFiles="true"
+	ShowAllFiles="false"
 	>
 	<Configurations>
 		<Configuration
-			Name="UnicodeDebug|Win32"
+			Name="Debug|Win32"
 			>
 			<DebugSettings
 				Command=""
@@ -34,7 +34,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="UnicodeRelease|Win32"
+			Name="Release|Win32"
 			>
 			<DebugSettings
 				Command=""

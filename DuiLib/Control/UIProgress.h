@@ -36,7 +36,7 @@ namespace DuiLib
 		int m_nMin;
 		int m_nValue;
 
-		CDuiString m_sForeImage;
+		CImageAttribute m_sForeImage;
 		CDuiString m_sForeImageModify;
 	};
 

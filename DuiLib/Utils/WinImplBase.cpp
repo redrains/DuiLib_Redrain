@@ -28,7 +28,6 @@ LRESULT WindowImplBase::ResponseDefaultKeyEvent(WPARAM wParam)
 	}
 	else if (wParam == VK_ESCAPE)
 	{
-	//	Close();
 		return TRUE;
 	}
 
@@ -38,21 +37,6 @@ LRESULT WindowImplBase::ResponseDefaultKeyEvent(WPARAM wParam)
 UINT WindowImplBase::GetClassStyle() const
 {
 	return CS_DBLCLKS;
-}
-
-UILIB_RESOURCETYPE WindowImplBase::GetResourceType() const
-{
-	return UILIB_FILE;
-}
-
-CDuiString WindowImplBase::GetZIPFileName() const
-{
-	return _T("");
-}
-
-LPCTSTR WindowImplBase::GetResourceID() const
-{
-	return _T("");
 }
 
 CControlUI* WindowImplBase::CreateControl(LPCTSTR pstrClass)
@@ -285,53 +269,9 @@ LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	m_PaintManager.AddPreMessageFilter(this);
 
 	CDialogBuilder builder;
-	if (m_PaintManager.GetResourcePath().IsEmpty())
-	{	// 允许更灵活的资源路径定义
-		CDuiString strResourcePath=m_PaintManager.GetInstancePath();
-		strResourcePath+=GetSkinFolder().GetData();
-		m_PaintManager.SetResourcePath(strResourcePath.GetData());
-	}
-
-	switch(GetResourceType())
-	{
-	case UILIB_ZIP:
-		m_PaintManager.SetResourceZip(GetZIPFileName().GetData(), true);
-		break;
-	case UILIB_ZIPRESOURCE:
-		{
-			HRSRC hResource = ::FindResource(m_PaintManager.GetResourceDll(), GetResourceID(), _T("ZIPRES"));
-			if( hResource == NULL )
-				return 0L;
-			DWORD dwSize = 0;
-			HGLOBAL hGlobal = ::LoadResource(m_PaintManager.GetResourceDll(), hResource);
-			if( hGlobal == NULL ) 
-			{
-#if defined(WIN32) && !defined(UNDER_CE)
-				::FreeResource(hResource);
-#endif
-				return 0L;
-			}
-			dwSize = ::SizeofResource(m_PaintManager.GetResourceDll(), hResource);
-			if( dwSize == 0 )
-				return 0L;
-
-			m_PaintManager.SetResourceZip((LPBYTE)::LockResource(hGlobal), dwSize);
-
-#if defined(WIN32) && !defined(UNDER_CE)
-			::FreeResource(hResource);
-#endif
-		}
-		break;
-	}
 
 	CControlUI* pRoot=NULL;
-	if (GetResourceType()==UILIB_RESOURCE)
-	{
-		STRINGorID xml(_ttoi(GetSkinFile().GetData()));
-		pRoot = builder.Create(xml, _T("xml"), this, &m_PaintManager);
-	}
-	else
-		pRoot = builder.Create(GetSkinFile().GetData(), (UINT)0, this, &m_PaintManager);
+	pRoot = builder.Create(GetSkinFile().GetData(), (UINT)0, this, &m_PaintManager);
 	ASSERT(pRoot);
 	if (pRoot==NULL)
 	{

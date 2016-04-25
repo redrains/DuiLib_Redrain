@@ -1,12 +1,54 @@
 #include "StdAfx.h"
 #include <zmouse.h>
 
+
+///////////////////////////////////////////////////////////////////////////////////////
 DECLARE_HANDLE(HZIP);	// An HZIP identifies a zip file that has been opened
 typedef DWORD ZRESULT;
+typedef struct
+{
+	int index;                 // index of this file within the zip
+	char name[MAX_PATH];       // filename within the zip
+	DWORD attr;                // attributes, as in GetFileAttributes.
+	FILETIME atime, ctime, mtime;// access, create, modify filetimes
+	long comp_size;            // sizes of item, compressed and uncompressed. These
+	long unc_size;             // may be -1 if not yet known (e.g. being streamed in)
+} ZIPENTRY;
+typedef struct
+{
+	int index;                 // index of this file within the zip
+	TCHAR name[MAX_PATH];      // filename within the zip
+	DWORD attr;                // attributes, as in GetFileAttributes.
+	FILETIME atime, ctime, mtime;// access, create, modify filetimes
+	long comp_size;            // sizes of item, compressed and uncompressed. These
+	long unc_size;             // may be -1 if not yet known (e.g. being streamed in)
+} ZIPENTRYW;
 #define OpenZip OpenZipU
 #define CloseZip(hz) CloseZipU(hz)
-extern HZIP OpenZipU(void *z,unsigned int len,DWORD flags);
+extern HZIP OpenZipU(void *z, unsigned int len, DWORD flags);
 extern ZRESULT CloseZipU(HZIP hz);
+#ifdef _UNICODE
+#define ZIPENTRY ZIPENTRYW
+#define GetZipItem GetZipItemW
+#define FindZipItem FindZipItemW
+#else
+#define GetZipItem GetZipItemA
+#define FindZipItem FindZipItemA
+#endif
+extern ZRESULT GetZipItemA(HZIP hz, int index, ZIPENTRY *ze);
+extern ZRESULT GetZipItemW(HZIP hz, int index, ZIPENTRYW *ze);
+extern ZRESULT FindZipItemA(HZIP hz, const TCHAR *name, bool ic, int *index, ZIPENTRY *ze);
+extern ZRESULT FindZipItemW(HZIP hz, const TCHAR *name, bool ic, int *index, ZIPENTRYW *ze);
+extern ZRESULT UnzipItem(HZIP hz, int index, void *dst, unsigned int len, DWORD flags);
+///////////////////////////////////////////////////////////////////////////////////////
+
+extern "C"
+{
+	extern unsigned char *stbi_load_from_memory(unsigned char const *buffer, int len, int *x, int *y, \
+		int *comp, int req_comp);
+	extern void     stbi_image_free(void *retval_from_stbi_load);
+
+};
 
 namespace DuiLib {
 
@@ -324,6 +366,160 @@ bool CPaintManagerUI::LoadPlugin(LPCTSTR pstrModuleName)
     return false;
 }
 
+TImageInfo* CPaintManagerUI::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask)
+{
+	LPBYTE pData = NULL;
+	DWORD dwSize = 0;
+
+	do
+	{
+		if (type == NULL) {
+			CDuiString sFile = CPaintManagerUI::GetResourcePath();
+			if (CPaintManagerUI::GetResourceZip().IsEmpty()) {
+				sFile += bitmap.m_lpstr;
+				HANDLE hFile = ::CreateFile(sFile.GetData(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, \
+					FILE_ATTRIBUTE_NORMAL, NULL);
+				if (hFile == INVALID_HANDLE_VALUE) break;
+				dwSize = ::GetFileSize(hFile, NULL);
+				if (dwSize == 0) break;
+
+				DWORD dwRead = 0;
+				pData = new BYTE[dwSize];
+				::ReadFile(hFile, pData, dwSize, &dwRead, NULL);
+				::CloseHandle(hFile);
+
+				if (dwRead != dwSize) {
+					delete[] pData;
+					pData = NULL;
+					break;
+				}
+			}
+			else {
+				sFile += CPaintManagerUI::GetResourceZip();
+				HZIP hz = NULL;
+				if (CPaintManagerUI::IsCachedResourceZip()) hz = (HZIP)CPaintManagerUI::GetResourceZipHandle();
+				else hz = OpenZip((void*)sFile.GetData(), 0, 2);
+				if (hz == NULL) break;
+				ZIPENTRY ze;
+				int i;
+				if (FindZipItem(hz, bitmap.m_lpstr, true, &i, &ze) != 0) break;
+				dwSize = ze.unc_size;
+				if (dwSize == 0) break;
+				pData = new BYTE[dwSize];
+				int res = UnzipItem(hz, i, pData, dwSize, 3);
+				if (res != 0x00000000 && res != 0x00000600) {
+					delete[] pData;
+					pData = NULL;
+					if (!CPaintManagerUI::IsCachedResourceZip()) CloseZip(hz);
+					break;
+				}
+				if (!CPaintManagerUI::IsCachedResourceZip()) CloseZip(hz);
+			}
+		}
+		else {
+			HRSRC hResource = ::FindResource(CPaintManagerUI::GetResourceDll(), bitmap.m_lpstr, type);
+			if (hResource == NULL) break;
+			HGLOBAL hGlobal = ::LoadResource(CPaintManagerUI::GetResourceDll(), hResource);
+			if (hGlobal == NULL) {
+				FreeResource(hResource);
+				break;
+			}
+
+			dwSize = ::SizeofResource(CPaintManagerUI::GetResourceDll(), hResource);
+			if (dwSize == 0) break;
+			pData = new BYTE[dwSize];
+			::CopyMemory(pData, (LPBYTE)::LockResource(hGlobal), dwSize);
+			::FreeResource(hResource);
+		}
+	} while (0);
+
+	while (!pData)
+	{
+		//读不到图片, 则直接去读取bitmap.m_lpstr指向的路径
+		HANDLE hFile = ::CreateFile(bitmap.m_lpstr, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, \
+			FILE_ATTRIBUTE_NORMAL, NULL);
+		if (hFile == INVALID_HANDLE_VALUE) break;
+		dwSize = ::GetFileSize(hFile, NULL);
+		if (dwSize == 0) break;
+
+		DWORD dwRead = 0;
+		pData = new BYTE[dwSize];
+		::ReadFile(hFile, pData, dwSize, &dwRead, NULL);
+		::CloseHandle(hFile);
+
+		if (dwRead != dwSize) {
+			delete[] pData;
+			pData = NULL;
+		}
+		break;
+	}
+	if (!pData)
+	{
+		//::MessageBox(0, _T("读取图片数据失败！"), _T("抓BUG"), MB_OK);
+		return NULL;
+	}
+
+	LPBYTE pImage = NULL;
+	int x, y, n;
+	pImage = stbi_load_from_memory(pData, dwSize, &x, &y, &n, 4);
+	delete[] pData;
+	if (!pImage)
+	{
+		return NULL;
+	}
+
+	bool bAlphaChannel = false;
+	LPBYTE pDest = NULL;
+	HBITMAP hBitmap = CRenderEngine::CreateBitmap(NULL, x, y, &pDest);
+	if (!hBitmap) 
+	{
+		return NULL;
+	}
+
+	for (int i = 0; i < x * y; i++)
+	{
+		pDest[i * 4 + 3] = pImage[i * 4 + 3];
+		if (pDest[i * 4 + 3] < 255)
+		{
+			pDest[i * 4] = (BYTE)(DWORD(pImage[i * 4 + 2])*pImage[i * 4 + 3] / 255);
+			pDest[i * 4 + 1] = (BYTE)(DWORD(pImage[i * 4 + 1])*pImage[i * 4 + 3] / 255);
+			pDest[i * 4 + 2] = (BYTE)(DWORD(pImage[i * 4])*pImage[i * 4 + 3] / 255);
+			bAlphaChannel = true;
+		}
+		else
+		{
+			pDest[i * 4] = pImage[i * 4 + 2];
+			pDest[i * 4 + 1] = pImage[i * 4 + 1];
+			pDest[i * 4 + 2] = pImage[i * 4];
+		}
+
+		if (*(DWORD*)(&pDest[i * 4]) == mask) {
+			pDest[i * 4] = (BYTE)0;
+			pDest[i * 4 + 1] = (BYTE)0;
+			pDest[i * 4 + 2] = (BYTE)0;
+			pDest[i * 4 + 3] = (BYTE)0;
+			bAlphaChannel = true;
+		}
+	}
+
+	stbi_image_free(pImage);
+
+	TImageInfo* data = new TImageInfo;
+	data->hBitmap = hBitmap;
+	data->nX = x;
+	data->nY = y;
+	data->alphaChannel = bAlphaChannel;
+	return data;
+}
+
+void CPaintManagerUI::FreeImage(const TImageInfo* bitmap)
+{
+	if (bitmap->hBitmap) {
+		::DeleteObject(bitmap->hBitmap);
+	}
+	delete bitmap;
+}
+
 CStdPtrArray* CPaintManagerUI::GetPlugins()
 {
     return &m_aPlugins;
@@ -586,7 +782,8 @@ bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam,
            // Tabbing between controls
            if( wParam == VK_TAB ) {
                if( m_pFocus && m_pFocus->IsVisible() && m_pFocus->IsEnabled() && _tcsstr(m_pFocus->GetClass(), _T("RichEditUI")) != NULL ) {
-                   if( static_cast<CRichEditUI*>(m_pFocus)->IsWantTab() ) return false;
+                   if( static_cast<CRichEditUI*>(m_pFocus)->IsWantTab() ) 
+					   return false;
                }
                SetNextTabControl(::GetKeyState(VK_SHIFT) >= 0);
                return true;
@@ -790,19 +987,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 			   if(m_bOffscreenPaint && m_hbmpOffscreen == NULL)
 			   {
 				   m_hDcOffscreen = ::CreateCompatibleDC(m_hDcPaint);
-				   BITMAPINFO bmi;
-				   ::ZeroMemory(&bmi, sizeof(BITMAPINFO));
-				   bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-				   bmi.bmiHeader.biWidth = nClientWidth;
-				   bmi.bmiHeader.biHeight = -nClientHeight;
-				   bmi.bmiHeader.biPlanes = 1;
-				   bmi.bmiHeader.biBitCount = 32;
-				   bmi.bmiHeader.biCompression = BI_RGB;
-				   bmi.bmiHeader.biSizeImage = nClientWidth * nClientHeight * 4;
-				   bmi.bmiHeader.biClrUsed = 0;
-				   m_hbmpOffscreen = ::CreateDIBSection(m_hDcPaint, &bmi, DIB_RGB_COLORS,
-					   (void**)&m_pBmpOffscreenBits, NULL, 0);
-
+				   m_hbmpOffscreen = CRenderEngine::CreateBitmap(m_hDcPaint, nClientWidth, nClientHeight, &m_pBmpOffscreenBits);
 				   ASSERT(m_hDcOffscreen);
 				   ASSERT(m_hbmpOffscreen);
 			   }
@@ -2071,11 +2256,11 @@ const TImageInfo* CPaintManagerUI::AddImage(LPCTSTR bitmap, LPCTSTR type, DWORD 
         if( isdigit(*bitmap) ) {
             LPTSTR pstr = NULL;
             int iIndex = _tcstol(bitmap, &pstr, 10);
-            data = CRenderEngine::LoadImage(iIndex, type, mask);
+            data = CPaintManagerUI::LoadImage(iIndex, type, mask);
         }
     }
     else {
-        data = CRenderEngine::LoadImage(bitmap, NULL, mask);
+		data = CPaintManagerUI::LoadImage(bitmap, NULL, mask);
     }
 
     if( !data ) return NULL;
@@ -2113,7 +2298,7 @@ bool CPaintManagerUI::RemoveImage(LPCTSTR bitmap)
     const TImageInfo* data = GetImage(bitmap);
     if( !data ) return false;
 
-    CRenderEngine::FreeImage(data) ;
+	CPaintManagerUI::FreeImage(data);
 
     return m_mImageHash.Remove(bitmap);
 }
@@ -2125,7 +2310,7 @@ void CPaintManagerUI::RemoveAllImages()
         if(LPCTSTR key = m_mImageHash.GetAt(i)) {
             data = static_cast<TImageInfo*>(m_mImageHash.Find(key, false));
 			if (data) {
-				CRenderEngine::FreeImage(data);
+				CPaintManagerUI::FreeImage(data);
 			}
         }
     }
@@ -2145,11 +2330,11 @@ void CPaintManagerUI::ReloadAllImages()
                     if( isdigit(*bitmap) ) {
                         LPTSTR pstr = NULL;
                         int iIndex = _tcstol(bitmap, &pstr, 10);
-                        pNewData = CRenderEngine::LoadImage(iIndex, data->sResType.GetData(), data->dwMask);
+						pNewData = CPaintManagerUI::LoadImage(iIndex, data->sResType.GetData(), data->dwMask);
                     }
                 }
                 else {
-                    pNewData = CRenderEngine::LoadImage(bitmap, NULL, data->dwMask);
+					pNewData = CPaintManagerUI::LoadImage(bitmap, NULL, data->dwMask);
                 }
                 if( pNewData == NULL ) continue;
 
@@ -2360,7 +2545,7 @@ bool CPaintManagerUI::TranslateAccelerator(LPMSG pMsg)
 	return false;
 }
 
-bool CPaintManagerUI::TranslateMessage(const LPMSG pMsg)
+bool CPaintManagerUI::TranslateMessage(const MSG* pMsg)
 {
 	// Pretranslate Message takes care of system-wide messages, such as
 	// tabbing and shortcut key-combos. We'll look for all messages for
@@ -2380,7 +2565,7 @@ bool CPaintManagerUI::TranslateMessage(const LPMSG pMsg)
 			{
 				if(pMsg->hwnd == pT->GetPaintWindow() || hTempParent == pT->GetPaintWindow())
 				{
-					if (pT->TranslateAccelerator(pMsg))
+					if (pT->TranslateAccelerator(const_cast<LPMSG>(pMsg)))
 						return true;
 
 					pT->PreMessageHandler(pMsg->message, pMsg->wParam, pMsg->lParam, lRes);
@@ -2400,7 +2585,7 @@ bool CPaintManagerUI::TranslateMessage(const LPMSG pMsg)
 			CPaintManagerUI* pT = static_cast<CPaintManagerUI*>(m_aPreMessages[i]);
 			if(pMsg->hwnd == pT->GetPaintWindow())
 			{
-				if (pT->TranslateAccelerator(pMsg))
+				if (pT->TranslateAccelerator(const_cast<LPMSG>(pMsg)))
 					return true;
 
 				if( pT->PreMessageHandler(pMsg->message, pMsg->wParam, pMsg->lParam, lRes) ) 

@@ -111,7 +111,8 @@ namespace DuiLib
 			rc.bottom = m_rcItem.bottom - m_rcItem.top;
 		}
 
-		if( !m_sForeImage.IsEmpty() ) {
+		if( m_sForeImage.IsLoadSuccess() ) 
+		{
 			m_sForeImageModify.Empty();
 			if (m_bStretchForeImage)
 				m_sForeImageModify.SmallFormat(_T("dest='%d,%d,%d,%d'"), rc.left, rc.top, rc.right, rc.bottom);
@@ -120,8 +121,7 @@ namespace DuiLib
 				, rc.left, rc.top, rc.right, rc.bottom
 				, rc.left, rc.top, rc.right, rc.bottom);
 
-			if( !DrawImage(hDC, (LPCTSTR)m_sForeImage, (LPCTSTR)m_sForeImageModify) ) m_sForeImage.Empty();
-			else return;
+			DrawImage(hDC, m_sForeImage, m_sForeImageModify);
 		}
 	}
 

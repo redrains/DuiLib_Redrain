@@ -29,13 +29,11 @@ class UILIB_API CRenderEngine
 {
 public:
     static DWORD AdjustColor(DWORD dwColor, short H, short S, short L);
-    static TImageInfo* LoadImage(STRINGorID bitmap, LPCTSTR type = NULL, DWORD mask = 0);
-    static void FreeImage(const TImageInfo* bitmap);
-    static void DrawImage(HDC hDC, HBITMAP hBitmap, const RECT& rc, const RECT& rcPaint, \
-        const RECT& rcBmpPart, const RECT& rcCorners, bool alphaChannel, BYTE uFade = 255, 
+	static HBITMAP CreateBitmap(HDC hDC, int cx, int cy, BYTE** pBits);
+	static void DrawImage(HDC hDC, HBITMAP hBitmap, const RECT& rcDest, const RECT& rcPaint,
+        const RECT& rcSource, const RECT& rcCorner, bool isAlpha, BYTE uAlpha = 255, 
         bool hole = false, bool xtiled = false, bool ytiled = false);
-    static bool DrawImageString(HDC hDC, CPaintManagerUI* pManager, const RECT& rcItem, const RECT& rcPaint, 
-        LPCTSTR pStrImage, LPCTSTR pStrModify = NULL);
+	static bool DrawImage(HDC hDC, CPaintManagerUI* pManager, const RECT& rcControl, const RECT& rcPaint, CImageAttribute& image);
     static void DrawColor(HDC hDC, const RECT& rc, DWORD color);
     static void DrawGradient(HDC hDC, const RECT& rc, DWORD dwFirst, DWORD dwSecond, bool bVertical, int nSteps);
 
@@ -54,6 +52,7 @@ public:
 	static void CheckAlphaColor(DWORD& dwColor);
 	static void ClearAlphaPixel(LPBYTE pBits, int bitsWidth, PRECT rc);
 	static void RestoreAlphaColor(LPBYTE pBits, int bitsWidth, PRECT rc);
+
 };
 
 } // namespace DuiLib

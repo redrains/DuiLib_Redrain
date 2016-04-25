@@ -557,29 +557,32 @@ namespace DuiLib
 		if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
 		else m_uButtonState &= ~ UISTATE_DISABLED;
 
-		if( (m_uButtonState & UISTATE_DISABLED) != 0 ) {
-			if( !m_sDisabledImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sDisabledImage) ) m_sDisabledImage.Empty();
-				else return;
+		if( (m_uButtonState & UISTATE_DISABLED) != 0 )
+		{
+			if (m_sHotImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sDisabledImage);
+				return;
 			}
 		}
-		else if( (m_uButtonState & UISTATE_FOCUSED) != 0 ) {
-			if( !m_sFocusedImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sFocusedImage) ) m_sFocusedImage.Empty();
-				else return;
+		else if ((m_uButtonState & UISTATE_FOCUSED) != 0)
+		{
+			if (m_sFocusedImage.IsLoadSuccess())
+			{
+				DrawImage(hDC, m_sFocusedImage);
+				return;
 			}
 		}
-		else if( (m_uButtonState & UISTATE_HOT) != 0 ) {
-			if( !m_sHotImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sHotImage) ) m_sHotImage.Empty();
-				else return;
+		else if( (m_uButtonState & UISTATE_HOT) != 0 ) 
+		{
+			if( m_sHotImage.IsLoadSuccess() )
+			{
+				DrawImage(hDC, m_sHotImage);
+				return;
 			}
 		}
 
-		if( !m_sNormalImage.IsEmpty() ) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sNormalImage) ) m_sNormalImage.Empty();
-			else return;
-		}
+		DrawImage(hDC, m_sNormalImage);
 	}
 
 	void CEditUI::PaintText(HDC hDC)

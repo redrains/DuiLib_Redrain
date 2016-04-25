@@ -62,13 +62,13 @@ namespace DuiLib
 		DWORD m_dwPushedTextColor;
 		DWORD m_dwFocusedTextColor;
 
-		CDuiString m_sNormalImage;
-		CDuiString m_sHotImage;
-		CDuiString m_sHotForeImage;
-		CDuiString m_sPushedImage;
-		CDuiString m_sPushedForeImage;
-		CDuiString m_sFocusedImage;
-		CDuiString m_sDisabledImage;
+		CImageAttribute m_sNormalImage;
+		CImageAttribute m_sHotImage;
+		CImageAttribute m_sHotForeImage;
+		CImageAttribute m_sPushedImage;
+		CImageAttribute m_sPushedForeImage;
+		CImageAttribute m_sFocusedImage;
+		CImageAttribute m_sDisabledImage;
 
 		int			m_iBindTabIndex;
 		CDuiString	m_sBindTabLayoutName;

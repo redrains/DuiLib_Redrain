@@ -217,38 +217,41 @@ namespace DuiLib
 
 	void COptionUI::PaintStatusImage(HDC hDC)
 	{
-
-		if( (m_uButtonState & UISTATE_PUSHED) != 0 && IsSelected() && !m_sSelectedPushedImage.IsEmpty()) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sSelectedPushedImage) )
-				m_sSelectedPushedImage.Empty();
-			else goto Label_ForeImage;
-		}
-		else if( (m_uButtonState & UISTATE_HOT) != 0 && IsSelected() && !m_sSelectedHotImage.IsEmpty()) {
-			if( !DrawImage(hDC, (LPCTSTR)m_sSelectedHotImage) )
-				m_sSelectedHotImage.Empty();
-			else goto Label_ForeImage;
-		}
-		else if( (m_uButtonState & UISTATE_SELECTED) != 0 ) {
-			if( !m_sSelectedImage.IsEmpty() ) {
-				if( !DrawImage(hDC, (LPCTSTR)m_sSelectedImage) ) m_sSelectedImage.Empty();
-				else goto Label_ForeImage;
+		do 
+		{
+			if ((m_uButtonState & UISTATE_PUSHED) != 0 && IsSelected() && m_sSelectedPushedImage.IsLoadSuccess())
+			{
+			if (DrawImage(hDC, m_sSelectedPushedImage))
+				break;
 			}
-			else if(m_dwSelectedBkColor != 0) {
-				CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwSelectedBkColor));
-				return;
-			}	
-		}
+			else if ((m_uButtonState & UISTATE_HOT) != 0 && IsSelected() && m_sSelectedHotImage.IsLoadSuccess()) {
+				if (DrawImage(hDC, m_sSelectedHotImage))
+					break;
+			}
+			else if ((m_uButtonState & UISTATE_SELECTED) != 0)
+			{
+				if (m_sSelectedImage.IsLoadSuccess())
+				{
+					if (DrawImage(hDC, m_sSelectedImage))
+						break;
+				}
+				else if (m_dwSelectedBkColor != 0)
+				{
+					CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwSelectedBkColor));
+					return;
+				}
+			}
 
-		CButtonUI::PaintStatusImage(hDC);
+			CButtonUI::PaintStatusImage(hDC);
+		} while (0);
 
-Label_ForeImage:
-		if ( IsSelected() && !m_sSelectedForeImage.IsEmpty())
+		if ( IsSelected() && m_sSelectedForeImage.IsLoadSuccess())
 		{
-			if( !DrawImage(hDC, (LPCTSTR)m_sSelectedForeImage) ) m_sSelectedForeImage.Empty();
+			DrawImage(hDC, m_sSelectedForeImage);
 		}
-		else if(  !m_sForeImage.IsEmpty() ) 
+		else if( m_sForeImage.IsLoadSuccess() ) 
 		{
-			if( !DrawImage(hDC, (LPCTSTR)m_sForeImage) ) m_sForeImage.Empty();
+			DrawImage(hDC, m_sForeImage);
 		}
 
 	}
