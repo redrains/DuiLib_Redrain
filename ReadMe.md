@@ -1,9 +1,13 @@
 # Redrain DuiLib
-我自己使用的Duilib和Uilib库中，修复了我在博客中说明的所有bug以及很多还没有去说明的bug，同样也包含别人修复过的bug。修复的部分bug可以看"Duilib和UIlib更新日志.txt"，完整的修复过程描述请看我博客。
+我自己使用的Duilib库中，修复了我在博客中说明的所有bug以及很多还没有去说明的bug，同样也包含别人修复过的bug。修复的部分bug可以看"Duilib更新日志.txt"，完整的修复过程描述请看我博客。
 
 - 库里面包含我扩展过的部分控件。修复了编译duilib时出现的““IDispatchEx”: 重定义；不同的基类型”和'ICanHandleException' : 重定义错误。
 
 - 修改duilib和uilib支持半透明异形窗体，RichEdit支持在透明窗体中使用，可以显示光标。Edit控件可以支持透明窗体。增加gif控件。增加窗体阴影类，可以设置图片阴影或者算法阴影。增加菜单通用类。
+
+- 修改渲染类为Gdi+和Gdi混合方式
+
+- 优化图片属性解析功能，大幅提高程序性能
 
 - 带有文本功能的控件增加了autocalcwidth属性，可以让控件自动根据文字长度计算宽度。库中修复了relativepos属性，可以让绝对布局用起来更方便。更多属性的增强和添加，详见各个博客和提交代码的提交说明。
 
@@ -21,5 +25,5 @@
 
 blog:[http://blog.csdn.net/zhuhongshu?viewmode=contents](http://blog.csdn.net/zhuhongshu?viewmode=contents)
 
-# DuiLib和UiLib更新日志
-[Duilib和UIlib更新日志](./Duilib和UIlib更新日志.txt)
+# DuiLib更新日志
+[Duilib更新日志](./Duilib更新日志.txt)

@@ -1,3 +1,10 @@
+2016-4-25
+整理demo目录，删除dll和exe
+删除Uilib，只维护Duilib
+
+2016-4-9
+修改RichEdit的tipvalue绘制方式
+
 2015-10-10
 增加窗体动画demo
 
