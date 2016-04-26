@@ -393,50 +393,6 @@ namespace DuiLib
 		return m_cPasswordChar;
 	}
 
-	LPCTSTR CEditUI::GetNormalImage()
-	{
-		return m_normalImage.GetAttributeString();
-	}
-
-	void CEditUI::SetNormalImage(LPCTSTR pStrImage)
-	{
-		m_normalImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
-	LPCTSTR CEditUI::GetHotImage()
-	{
-		return m_hotImage.GetAttributeString();
-	}
-
-	void CEditUI::SetHotImage(LPCTSTR pStrImage)
-	{
-		m_hotImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
-	LPCTSTR CEditUI::GetFocusedImage()
-	{
-		return m_focusedImage.GetAttributeString();
-	}
-
-	void CEditUI::SetFocusedImage(LPCTSTR pStrImage)
-	{
-		m_focusedImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
-	LPCTSTR CEditUI::GetDisabledImage()
-	{
-		return m_disabledImage.GetAttributeString();
-	}
-
-	void CEditUI::SetDisabledImage(LPCTSTR pStrImage)
-	{
-		m_disabledImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
 	void CEditUI::SetNativeEditBkColor(DWORD dwBkColor)
 	{
 		m_dwEditbkColor = dwBkColor;
@@ -534,10 +490,6 @@ namespace DuiLib
 		else if( _tcscmp(pstrName, _T("password")) == 0 ) SetPasswordMode(_tcscmp(pstrValue, _T("true")) == 0);
 		else if( _tcscmp(pstrName, _T("passwordchar")) == 0 ) SetPasswordChar(*pstrValue);
 		else if( _tcscmp(pstrName, _T("maxchar")) == 0 ) SetMaxChar(_ttoi(pstrValue));
-		else if( _tcscmp(pstrName, _T("normalimage")) == 0 ) SetNormalImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("hotimage")) == 0 ) SetHotImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("tipvalue")) == 0 ) SetTipValue(pstrValue);
 		else if( _tcscmp(pstrName, _T("tipvaluecolor")) == 0 ) SetTipValueColor(pstrValue);
 		else if( _tcscmp(pstrName, _T("nativetextcolor")) == 0 ) SetNativeEditTextColor(pstrValue);
@@ -559,7 +511,7 @@ namespace DuiLib
 
 		if( (m_uButtonState & UISTATE_DISABLED) != 0 )
 		{
-			if (m_hotImage.IsLoadSuccess())
+			if (m_disabledImage.IsLoadSuccess())
 			{
 				DrawImage(hDC, m_disabledImage);
 				return;

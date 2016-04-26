@@ -279,14 +279,7 @@ public:
     void SetFont(int index);
     bool IsShowHtml();
     void SetShowHtml(bool bShowHtml = true);
-    LPCTSTR GetNormalImage() const;
-    void SetNormalImage(LPCTSTR pStrImage);
-    LPCTSTR GetHotImage() const;
-    void SetHotImage(LPCTSTR pStrImage);
-    LPCTSTR GetPushedImage() const;
-    void SetPushedImage(LPCTSTR pStrImage);
-    LPCTSTR GetFocusedImage() const;
-    void SetFocusedImage(LPCTSTR pStrImage);
+
     LPCTSTR GetSepImage() const;
     void SetSepImage(LPCTSTR pStrImage);
 	//开启百分比表头功能,百分比 redrain 2014.12.29
@@ -311,10 +304,6 @@ protected:
     UINT m_uTextStyle;
     bool m_bShowHtml;
 	RECT m_rcTextPadding;
-    CImageAttribute m_normalImage;
-	CImageAttribute m_hotImage;
-	CImageAttribute m_pushedImage;
-	CImageAttribute m_focusedImage;
 	CImageAttribute m_sepImage;
 	int m_nScale;
 };

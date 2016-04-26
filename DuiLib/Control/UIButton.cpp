@@ -170,72 +170,6 @@ namespace DuiLib
 		return m_dwFocusedTextColor;
 	}
 
-	LPCTSTR CButtonUI::GetNormalImage()
-	{
-		return m_normalImage.GetAttributeString();
-	}
-
-	void CButtonUI::SetNormalImage(LPCTSTR pStrImage)
-	{
-		m_normalImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
-	LPCTSTR CButtonUI::GetHotImage()
-	{
-		return m_hotImage.GetAttributeString();
-	}
-
-	void CButtonUI::SetHotImage(LPCTSTR pStrImage)
-	{
-		m_hotImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
-	LPCTSTR CButtonUI::GetPushedImage()
-	{
-		return m_pushedImage.GetAttributeString();
-	}
-
-	void CButtonUI::SetPushedImage(LPCTSTR pStrImage)
-	{
-		m_pushedImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
-	LPCTSTR CButtonUI::GetFocusedImage()
-	{
-		return m_focusedImage.GetAttributeString();
-	}
-
-	void CButtonUI::SetFocusedImage(LPCTSTR pStrImage)
-	{
-		m_focusedImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
-	LPCTSTR CButtonUI::GetDisabledImage()
-	{
-		return m_disabledImage.GetAttributeString();
-	}
-
-	void CButtonUI::SetDisabledImage(LPCTSTR pStrImage)
-	{
-		m_disabledImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
-	LPCTSTR CButtonUI::GetForeImage()
-	{
-		return m_foreImage.GetAttributeString();
-	}
-
-	void CButtonUI::SetForeImage( LPCTSTR pStrImage )
-	{
-		m_foreImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
 	LPCTSTR CButtonUI::GetHotForeImage()
 	{
 		return m_hotForeImage.GetAttributeString();
@@ -247,6 +181,16 @@ namespace DuiLib
 		Invalidate();
 	}
 
+	LPCTSTR CButtonUI::GetPushedForeImage()
+	{
+		return m_pushedForeImage.GetAttributeString();
+	}
+
+	void CButtonUI::SetPushedForeImage(LPCTSTR pStrImage)
+	{
+		m_pushedForeImage.SetAttributeString(pStrImage);
+		Invalidate();
+	}
 	void CButtonUI::BindTabIndex(int _BindTabIndex )
 	{
 		if( _BindTabIndex >= 0)
@@ -295,13 +239,8 @@ namespace DuiLib
 
 	void CButtonUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
-		if( _tcscmp(pstrName, _T("normalimage")) == 0 ) SetNormalImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("hotimage")) == 0 ) SetHotImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("pushedimage")) == 0 ) SetPushedImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("foreimage")) == 0 ) SetForeImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("hotforeimage")) == 0 ) SetHotForeImage(pstrValue);
+		if( _tcscmp(pstrName, _T("hotforeimage")) == 0 ) SetHotForeImage(pstrValue);
+		else if (_tcscmp(pstrName, _T("pushedforeimage")) == 0) SetPushedForeImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("bindtabindex")) == 0 ) BindTabIndex(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("bindtablayoutname")) == 0 ) BindTabLayoutName(pstrValue);
 		else if( _tcscmp(pstrName, _T("hotbkcolor")) == 0 )
@@ -449,4 +388,6 @@ namespace DuiLib
 
 		DrawImage(hDC, m_foreImage);
 	}
+
+
 }

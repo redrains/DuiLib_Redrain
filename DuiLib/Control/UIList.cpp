@@ -1425,50 +1425,6 @@ void CListHeaderItemUI::SetShowHtml(bool bShowHtml)
     Invalidate();
 }
 
-LPCTSTR CListHeaderItemUI::GetNormalImage() const
-{
-	return m_normalImage.GetAttributeString();
-}
-
-void CListHeaderItemUI::SetNormalImage(LPCTSTR pStrImage)
-{
-    m_normalImage.SetAttributeString(pStrImage);
-    Invalidate();
-}
-
-LPCTSTR CListHeaderItemUI::GetHotImage() const
-{
-    return m_hotImage.GetAttributeString();
-}
-
-void CListHeaderItemUI::SetHotImage(LPCTSTR pStrImage)
-{
-    m_hotImage.SetAttributeString(pStrImage);
-    Invalidate();
-}
-
-LPCTSTR CListHeaderItemUI::GetPushedImage() const
-{
-    return m_pushedImage.GetAttributeString();
-}
-
-void CListHeaderItemUI::SetPushedImage(LPCTSTR pStrImage)
-{
-    m_pushedImage.SetAttributeString(pStrImage);
-    Invalidate();
-}
-
-LPCTSTR CListHeaderItemUI::GetFocusedImage() const
-{
-    return m_focusedImage.GetAttributeString();
-}
-
-void CListHeaderItemUI::SetFocusedImage(LPCTSTR pStrImage)
-{
-    m_focusedImage.SetAttributeString(pStrImage);
-    Invalidate();
-}
-
 LPCTSTR CListHeaderItemUI::GetSepImage() const
 {
     return m_sepImage.GetAttributeString();
@@ -1529,10 +1485,6 @@ void CListHeaderItemUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		SetTextPadding(rcTextPadding);
 	}
     else if( _tcscmp(pstrName, _T("showhtml")) == 0 ) SetShowHtml(_tcscmp(pstrValue, _T("true")) == 0);
-    else if( _tcscmp(pstrName, _T("normalimage")) == 0 ) SetNormalImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("hotimage")) == 0 ) SetHotImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("pushedimage")) == 0 ) SetPushedImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
     else if( _tcscmp(pstrName, _T("sepimage")) == 0 ) SetSepImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("scale")) == 0 ) {
 		LPTSTR pstr = NULL;

@@ -3,12 +3,6 @@
 
 #pragma once
 
-//#include <GdiPlus.h>
-//#pragma comment( lib, "GdiPlus.lib" )
-//using namespace Gdiplus;
-//class UILIB_API Gdiplus::RectF;
-//struct UILIB_API Gdiplus::GdiplusStartupInput;
-
 namespace DuiLib
 {
 	class UILIB_API CLabelUI : public CControlUI
@@ -42,38 +36,6 @@ namespace DuiLib
 		virtual bool GetAutoCalcWidth() const;
 		virtual void SetAutoCalcWidth(bool bAutoCalcWidth);
 
-		void		SetEnabledEffect(bool _EnabledEffect);
-		bool		GetEnabledEffect();
-		void		SetText(LPCTSTR pstrText);
-		CDuiString	GetText() const;
-		void		SetTransShadow(int _TransShadow);
-		int			GetTransShadow();
-		void		SetTransShadow1(int _TransShadow);
-		int			GetTransShadow1();
-		void		SetTransText(int _TransText);
-		int			GetTransText();
-		void		SetTransText1(int _TransText);
-		int			GetTransText1();
-		void		SetTransStroke(int _TransStroke);
-		int			GetTransStroke();
-		void		SetGradientLength(int _GradientLength);
-		int			GetGradientLength();
-		void		SetShadowOffset(int _offset,int _angle);
-		void		SetTextColor1(DWORD _TextColor1);
-		DWORD		GetTextColor1();
-		void		SetTextShadowColorA(DWORD _TextShadowColorA);
-		DWORD		GetTextShadowColorA();
-		void		SetTextShadowColorB(DWORD _TextShadowColorB);
-		DWORD		GetTextShadowColorB();
-		void		SetStrokeColor(DWORD _StrokeColor);
-		DWORD		GetStrokeColor();
-		void		SetGradientAngle(int _SetGradientAngle);
-		int			GetGradientAngle();
-		void		SetEnabledStroke(bool _EnabledStroke);
-		bool		GetEnabledStroke();
-		void		SetEnabledShadow(bool _EnabledShadowe);
-		bool		GetEnabledShadow();
-		
 	protected:
 		DWORD	m_dwTextColor;
 		DWORD	m_dwDisabledTextColor;
@@ -82,26 +44,6 @@ namespace DuiLib
 		RECT	m_rcTextPadding;
 		bool	m_bShowHtml;
 		bool	m_bAutoCalcWidth;
-
-		int						m_hAlign;
-		int						m_vAlign;
-		int						m_TransShadow;
-		int						m_TransShadow1;
-		int						m_TransText;
-		int						m_TransText1;
-		int						m_TransStroke;
-		int						m_GradientLength;
-		int						m_GradientAngle;
-		bool					m_EnableEffect;
-		bool					m_EnabledStroke;
-		bool					m_EnabledShadow;
-		DWORD					m_dwTextColor1;
-		DWORD					m_dwTextShadowColorA;
-		DWORD					m_dwTextShadowColorB;
-		DWORD					m_dwStrokeColor;
-
-		CDuiString				m_TextValue;
-		ULONG_PTR				m_gdiplusToken;
 
 	};
 }

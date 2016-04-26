@@ -161,6 +161,72 @@ void CControlUI::SetBkImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
+LPCTSTR CControlUI::GetNormalImage()
+{
+	return m_normalImage.GetAttributeString();
+}
+
+void CControlUI::SetNormalImage(LPCTSTR pStrImage)
+{
+	m_normalImage.SetAttributeString(pStrImage);
+	Invalidate();
+}
+
+LPCTSTR CControlUI::GetHotImage()
+{
+	return m_hotImage.GetAttributeString();
+}
+
+void CControlUI::SetHotImage(LPCTSTR pStrImage)
+{
+	m_hotImage.SetAttributeString(pStrImage);
+	Invalidate();
+}
+
+LPCTSTR CControlUI::GetPushedImage()
+{
+	return m_pushedImage.GetAttributeString();
+}
+
+void CControlUI::SetPushedImage(LPCTSTR pStrImage)
+{
+	m_pushedImage.SetAttributeString(pStrImage);
+	Invalidate();
+}
+
+LPCTSTR CControlUI::GetFocusedImage()
+{
+	return m_focusedImage.GetAttributeString();
+}
+
+void CControlUI::SetFocusedImage(LPCTSTR pStrImage)
+{
+	m_focusedImage.SetAttributeString(pStrImage);
+	Invalidate();
+}
+
+LPCTSTR CControlUI::GetDisabledImage()
+{
+	return m_disabledImage.GetAttributeString();
+}
+
+void CControlUI::SetDisabledImage(LPCTSTR pStrImage)
+{
+	m_disabledImage.SetAttributeString(pStrImage);
+	Invalidate();
+}
+
+LPCTSTR CControlUI::GetForeImage()
+{
+	return m_foreImage.GetAttributeString();
+}
+
+void CControlUI::SetForeImage(LPCTSTR pStrImage)
+{
+	m_foreImage.SetAttributeString(pStrImage);
+	Invalidate();
+}
+
 DWORD CControlUI::GetBorderColor() const
 {
     return m_dwBorderColor;
@@ -745,7 +811,13 @@ CDuiString CControlUI::GetVirtualWnd() const
 
 void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if( _tcscmp(pstrName, _T("pos")) == 0 ) {
+	if (_tcscmp(pstrName, _T("bkimage")) == 0) SetBkImage(pstrValue);
+	else if (_tcscmp(pstrName, _T("normalimage")) == 0) SetNormalImage(pstrValue);
+	else if (_tcscmp(pstrName, _T("hotimage")) == 0) SetHotImage(pstrValue);
+	else if (_tcscmp(pstrName, _T("pushedimage")) == 0) SetPushedImage(pstrValue);
+	else if (_tcscmp(pstrName, _T("focusedimage")) == 0) SetFocusedImage(pstrValue);
+	else if (_tcscmp(pstrName, _T("disabledimage")) == 0) SetDisabledImage(pstrValue);
+    else if( _tcscmp(pstrName, _T("pos")) == 0 ) {
         RECT rcPos = { 0 };
         LPTSTR pstr = NULL;
         rcPos.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
@@ -840,7 +912,6 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         cxyRound.cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);     
         SetBorderRound(cxyRound);
     }
-    else if( _tcscmp(pstrName, _T("bkimage")) == 0 ) SetBkImage(pstrValue);
     else if( _tcscmp(pstrName, _T("width")) == 0 ) SetFixedWidth(_ttoi(pstrValue));
     else if( _tcscmp(pstrName, _T("height")) == 0 ) SetFixedHeight(_ttoi(pstrValue));
     else if( _tcscmp(pstrName, _T("minwidth")) == 0 ) SetMinWidth(_ttoi(pstrValue));

@@ -1961,51 +1961,6 @@ void CRichEditUI::DoEvent(TEventUI& event)
     CContainerUI::DoEvent(event);
 }
 
-
-LPCTSTR CRichEditUI::GetNormalImage()
-{
-	return m_normalImage.GetAttributeString();
-}
-
-void CRichEditUI::SetNormalImage(LPCTSTR pStrImage)
-{
-	m_normalImage.SetAttributeString(pStrImage);
-	Invalidate();
-}
-
-LPCTSTR CRichEditUI::GetHotImage()
-{
-	return m_hotImage.GetAttributeString();
-}
-
-void CRichEditUI::SetHotImage(LPCTSTR pStrImage)
-{
-	m_hotImage.SetAttributeString(pStrImage);
-	Invalidate();
-}
-
-LPCTSTR CRichEditUI::GetFocusedImage()
-{
-	return m_focusedImage.GetAttributeString();
-}
-
-void CRichEditUI::SetFocusedImage(LPCTSTR pStrImage)
-{
-	m_focusedImage.SetAttributeString(pStrImage);
-	Invalidate();
-}
-
-LPCTSTR CRichEditUI::GetDisabledImage()
-{
-	return m_disabledImage.GetAttributeString();
-}
-
-void CRichEditUI::SetDisabledImage(LPCTSTR pStrImage)
-{
-	m_disabledImage.SetAttributeString(pStrImage);
-	Invalidate();
-}
-
 RECT CRichEditUI::GetTextPadding() const
 {
 	return m_rcTextPadding;
@@ -2416,10 +2371,6 @@ void CRichEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetTextColor(clrColor);
     }
 	else if( _tcscmp(pstrName, _T("maxchar")) == 0 ) SetLimitText(_ttoi(pstrValue));
-	else if( _tcscmp(pstrName, _T("normalimage")) == 0 ) SetNormalImage(pstrValue);
-	else if( _tcscmp(pstrName, _T("hotimage")) == 0 ) SetHotImage(pstrValue);
-	else if( _tcscmp(pstrName, _T("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
-	else if( _tcscmp(pstrName, _T("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("textpadding")) == 0 ) {
 		RECT rcTextPadding = { 0 };
 		LPTSTR pstr = NULL;

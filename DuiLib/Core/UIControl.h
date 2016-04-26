@@ -39,8 +39,22 @@ public:
     void SetBkColor2(DWORD dwBackColor);
     DWORD GetBkColor3() const;
     void SetBkColor3(DWORD dwBackColor);
+
     LPCTSTR GetBkImage();
     void SetBkImage(LPCTSTR pStrImage);
+	LPCTSTR GetNormalImage();
+	void SetNormalImage(LPCTSTR pStrImage);
+	LPCTSTR GetHotImage();
+	void SetHotImage(LPCTSTR pStrImage);
+	LPCTSTR GetPushedImage();
+	void SetPushedImage(LPCTSTR pStrImage);
+	LPCTSTR GetFocusedImage();
+	void SetFocusedImage(LPCTSTR pStrImage);
+	LPCTSTR GetDisabledImage();
+	void SetDisabledImage(LPCTSTR pStrImage);
+	LPCTSTR GetForeImage();
+	void SetForeImage(LPCTSTR pStrImage);
+
 	DWORD GetFocusBorderColor() const;
 	void SetFocusBorderColor(DWORD dwBorderColor);
     bool IsColorHSL() const;
@@ -202,8 +216,15 @@ protected:
     DWORD m_dwBackColor;
     DWORD m_dwBackColor2;
     DWORD m_dwBackColor3;
+
 	CImageAttribute m_bkImage;
 	CImageAttribute m_foreImage;
+	CImageAttribute m_normalImage;
+	CImageAttribute m_hotImage;
+	CImageAttribute m_pushedImage;
+	CImageAttribute m_focusedImage;
+	CImageAttribute m_disabledImage;
+
     DWORD m_dwBorderColor;
 	DWORD m_dwFocusBorderColor;
     bool m_bColorHSL;

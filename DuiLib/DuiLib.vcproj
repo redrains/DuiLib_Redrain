@@ -237,10 +237,6 @@
 				RelativePath=".\UIlib.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\Utils\WinImplBase.cpp"
-				>
-			</File>
 			<Filter
 				Name="Utils"
 				>
@@ -274,6 +270,10 @@
 				</File>
 				<File
 					RelativePath=".\Utils\Utils.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Utils\WinImplBase.cpp"
 					>
 				</File>
 				<File

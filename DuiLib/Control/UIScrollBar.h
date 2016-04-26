@@ -69,15 +69,6 @@ namespace DuiLib
 		LPCTSTR GetRailDisabledImage();
 		void SetRailDisabledImage(LPCTSTR pStrImage);
 
-		LPCTSTR GetBkNormalImage();
-		void SetBkNormalImage(LPCTSTR pStrImage);
-		LPCTSTR GetBkHotImage();
-		void SetBkHotImage(LPCTSTR pStrImage);
-		LPCTSTR GetBkPushedImage();
-		void SetBkPushedImage(LPCTSTR pStrImage);
-		LPCTSTR GetBkDisabledImage();
-		void SetBkDisabledImage(LPCTSTR pStrImage);
-
 		void SetPos(RECT rc);
 		void DoEvent(TEventUI& event);
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
@@ -107,11 +98,6 @@ namespace DuiLib
 		int m_nLastScrollPos;
 		int m_nLastScrollOffset;
 		int m_nScrollRepeatDelay;
-
-		CImageAttribute m_bkNormalImage;
-		CImageAttribute m_bkHotImage;
-		CImageAttribute m_bkPushedImage;
-		CImageAttribute m_bkDisabledImage;
 
 		bool m_bShowButton1;
 		RECT m_rcButton1;

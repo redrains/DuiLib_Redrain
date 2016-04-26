@@ -34,9 +34,6 @@ namespace DuiLib
 		void SetSelectedBkColor(DWORD dwBkColor);
 		DWORD GetSelectBkColor();
 
-		LPCTSTR GetForeImage();
-		void SetForeImage(LPCTSTR pStrImage);
-
 		LPCTSTR GetSelectedForedImage();
 		void SetSelectedForedImage(LPCTSTR pStrImage);
 
@@ -61,7 +58,6 @@ namespace DuiLib
 		CImageAttribute		m_selectedImage;
 		CImageAttribute		m_selectedHotImage;
 		CImageAttribute		m_selectedPushedImage;
-		CImageAttribute		m_foreImage;
 		CImageAttribute		m_selectedForeImage;
 	};
 

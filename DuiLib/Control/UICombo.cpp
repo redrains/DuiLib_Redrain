@@ -546,61 +546,6 @@ void CComboUI::SetTextPadding(RECT rc)
     Invalidate();
 }
 
-LPCTSTR CComboUI::GetNormalImage() const
-{
-    return m_normalImage.GetAttributeString();
-}
-
-void CComboUI::SetNormalImage(LPCTSTR pStrImage)
-{
-    m_normalImage.SetAttributeString(pStrImage);
-    Invalidate();
-}
-
-LPCTSTR CComboUI::GetHotImage() const
-{
-    return m_hotImage.GetAttributeString();
-}
-
-void CComboUI::SetHotImage(LPCTSTR pStrImage)
-{
-    m_hotImage.SetAttributeString(pStrImage);
-    Invalidate();
-}
-
-LPCTSTR CComboUI::GetPushedImage() const
-{
-	return m_pushedImage.GetAttributeString();
-}
-
-void CComboUI::SetPushedImage(LPCTSTR pStrImage)
-{
-    m_pushedImage.SetAttributeString(pStrImage);
-    Invalidate();
-}
-
-LPCTSTR CComboUI::GetFocusedImage() const
-{
-	return m_focusedImage.GetAttributeString();
-}
-
-void CComboUI::SetFocusedImage(LPCTSTR pStrImage)
-{
-    m_focusedImage.SetAttributeString(pStrImage);
-    Invalidate();
-}
-
-LPCTSTR CComboUI::GetDisabledImage() const
-{
-	return m_disabledImage.GetAttributeString();
-}
-
-void CComboUI::SetDisabledImage(LPCTSTR pStrImage)
-{
-    m_disabledImage.SetAttributeString(pStrImage);
-    Invalidate();
-}
-
 TListInfoUI* CComboUI::GetListInfo()
 {
     return &m_ListInfo;
@@ -802,11 +747,6 @@ void CComboUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
         SetTextPadding(rcTextPadding);
     }
-    else if( _tcscmp(pstrName, _T("normalimage")) == 0 ) SetNormalImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("hotimage")) == 0 ) SetHotImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("pushedimage")) == 0 ) SetPushedImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
     else if( _tcscmp(pstrName, _T("dropbox")) == 0 ) SetDropBoxAttributeList(pstrValue);
 	else if( _tcscmp(pstrName, _T("dropboxsize")) == 0)
 	{

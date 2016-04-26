@@ -70,23 +70,9 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	LPCTSTR CProgressUI::GetForeImage() const
-	{
-		return m_foreImage.GetAttributeString();
-	}
-
-	void CProgressUI::SetForeImage(LPCTSTR pStrImage)
-	{
-		if( m_foreImage.GetAttributeString() == pStrImage ) return;
-
-		m_foreImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
 	void CProgressUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
-		if( _tcscmp(pstrName, _T("foreimage")) == 0 ) SetForeImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("hor")) == 0 ) SetHorizontal(_tcscmp(pstrValue, _T("true")) == 0);
+		if( _tcscmp(pstrName, _T("hor")) == 0 ) SetHorizontal(_tcscmp(pstrValue, _T("true")) == 0);
 		else if( _tcscmp(pstrName, _T("min")) == 0 ) SetMinValue(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("max")) == 0 ) SetMaxValue(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("value")) == 0 ) SetValue(_ttoi(pstrValue));

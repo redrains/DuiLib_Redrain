@@ -325,50 +325,6 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	LPCTSTR CScrollBarUI::GetBkNormalImage()
-	{
-		return m_bkNormalImage.GetAttributeString();
-	}
-
-	void CScrollBarUI::SetBkNormalImage(LPCTSTR pStrImage)
-	{
-		m_bkNormalImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
-	LPCTSTR CScrollBarUI::GetBkHotImage()
-	{
-		return m_bkHotImage.GetAttributeString();
-	}
-
-	void CScrollBarUI::SetBkHotImage(LPCTSTR pStrImage)
-	{
-		m_bkHotImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
-	LPCTSTR CScrollBarUI::GetBkPushedImage()
-	{
-		return m_bkPushedImage.GetAttributeString();
-	}
-
-	void CScrollBarUI::SetBkPushedImage(LPCTSTR pStrImage)
-	{
-		m_bkPushedImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
-	LPCTSTR CScrollBarUI::GetBkDisabledImage()
-	{
-		return m_bkDisabledImage.GetAttributeString();
-	}
-
-	void CScrollBarUI::SetBkDisabledImage(LPCTSTR pStrImage)
-	{
-		m_bkDisabledImage.SetAttributeString(pStrImage);
-		Invalidate();
-	}
-
 	void CScrollBarUI::SetPos(RECT rc)
 	{
 		CControlUI::SetPos(rc);
@@ -767,10 +723,10 @@ namespace DuiLib
 		else if( _tcscmp(pstrName, _T("railhotimage")) == 0 ) SetRailHotImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("railpushedimage")) == 0 ) SetRailPushedImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("raildisabledimage")) == 0 ) SetRailDisabledImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("bknormalimage")) == 0 ) SetBkNormalImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("bkhotimage")) == 0 ) SetBkHotImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("bkpushedimage")) == 0 ) SetBkPushedImage(pstrValue);
-		else if( _tcscmp(pstrName, _T("bkdisabledimage")) == 0 ) SetBkDisabledImage(pstrValue);
+		else if( _tcscmp(pstrName, _T("bknormalimage")) == 0 ) SetNormalImage(pstrValue);
+		else if( _tcscmp(pstrName, _T("bkhotimage")) == 0 ) SetHotImage(pstrValue);
+		else if( _tcscmp(pstrName, _T("bkpushedimage")) == 0 ) SetPushedImage(pstrValue);
+		else if( _tcscmp(pstrName, _T("bkdisabledimage")) == 0 ) SetDisabledImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("hor")) == 0 ) SetHorizontal(_tcscmp(pstrValue, _T("true")) == 0);
 		else if( _tcscmp(pstrName, _T("linesize")) == 0 ) SetLineSize(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("range")) == 0 ) SetScrollRange(_ttoi(pstrValue));
@@ -797,30 +753,30 @@ namespace DuiLib
 
 		if( (m_uThumbState & UISTATE_DISABLED) != 0 ) 
 		{
-			if( m_bkDisabledImage.IsLoadSuccess() ) 
+			if( m_disabledImage.IsLoadSuccess() ) 
 			{
-				DrawImage(hDC, m_bkDisabledImage);
+				DrawImage(hDC, m_disabledImage);
 				return;
 			}
 		}
 		else if( (m_uThumbState & UISTATE_PUSHED) != 0 )
 		{
-			if (m_bkPushedImage.IsLoadSuccess())
+			if (m_pushedImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_bkPushedImage);
+				DrawImage(hDC, m_pushedImage);
 				return;
 			}
 		}
 		else if( (m_uThumbState & UISTATE_HOT) != 0 ) 
 		{
-			if (m_bkHotImage.IsLoadSuccess())
+			if (m_hotImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_bkHotImage);
+				DrawImage(hDC, m_hotImage);
 				return;
 			}
 		}
 
-		DrawImage(hDC, m_bkNormalImage);
+		DrawImage(hDC, m_normalImage);
 	}
 
 	void CScrollBarUI::PaintButton1(HDC hDC)
