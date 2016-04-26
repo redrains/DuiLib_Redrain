@@ -34,7 +34,7 @@ void CRenderClip::GenerateRoundClip(HDC hDC, RECT rc, RECT rcItem, int width, in
     ::GetClipBox(hDC, &rcClip);
     clip.hOldRgn = ::CreateRectRgnIndirect(&rcClip);
     clip.hRgn = ::CreateRectRgnIndirect(&rc);
-    HRGN hRgnItem = ::CreateRoundRectRgn(rcItem.left, rcItem.top, rcItem.right + 1, rcItem.bottom + 1, width*2, height*2);
+    HRGN hRgnItem = ::CreateRoundRectRgn(rcItem.left, rcItem.top, rcItem.right + 1, rcItem.bottom + 1, width, height);
     ::CombineRgn(clip.hRgn, clip.hRgn, hRgnItem, RGN_AND);
     ::ExtSelectClipRgn(hDC, clip.hRgn, RGN_AND);
     clip.hDC = hDC;
@@ -680,11 +680,18 @@ void CRenderEngine::DrawColor(HDC hDC, const RECT& rc, DWORD color)
 {
     if( color <= 0x00FFFFFF ) return;
 
-	Gdiplus::Graphics graphics(hDC);
-	Gdiplus::SolidBrush brush(Gdiplus::Color((LOBYTE((color) >> 24)), GetBValue(color), GetGValue(color), GetRValue(color)));
+	if( color >= 0xFF000000 )
+	{
+	 	::SetBkColor(hDC, RGB(GetBValue(color), GetGValue(color), GetRValue(color)));
+	 	::ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
+	}
+	else
+	{
+		Gdiplus::Graphics graphics(hDC);
+		Gdiplus::SolidBrush brush(Gdiplus::Color((LOBYTE((color) >> 24)), GetBValue(color), GetGValue(color), GetRValue(color)));
 
-	graphics.FillRectangle(&brush, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-
+		graphics.FillRectangle(&brush, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+	}
 }
 
 void CRenderEngine::DrawGradient(HDC hDC, const RECT& rc, DWORD dwFirst, DWORD dwSecond, bool bVertical, int nSteps)
@@ -767,52 +774,39 @@ void CRenderEngine::DrawLine( HDC hDC, const RECT& rc, int nSize, DWORD dwPenCol
 {
 	ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
 
-	Gdiplus::Graphics graphics(hDC);
-	Gdiplus::Pen pen(Gdiplus::Color(dwPenColor), (Gdiplus::REAL)nSize);
-	pen.SetDashStyle((Gdiplus::DashStyle)nStyle);
-	graphics.DrawLine(&pen, Gdiplus::Point(rc.left, rc.top), Gdiplus::Point(rc.right, rc.bottom));
+	LOGPEN lg;
+	lg.lopnColor = RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor));
+	lg.lopnStyle = nStyle;
+	lg.lopnWidth.x = nSize;
+	HPEN hPen = CreatePenIndirect(&lg);
+	HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
+	POINT ptTemp = { 0 };
+	::MoveToEx(hDC, rc.left, rc.top, &ptTemp);
+	::LineTo(hDC, rc.right, rc.bottom);
+	::SelectObject(hDC, hOldPen);
+	::DeleteObject(hPen);
 }
 
 void CRenderEngine::DrawRect(HDC hDC, const RECT& rc, int nSize, DWORD dwPenColor)
 {
-	ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
-	Gdiplus::Graphics graphics(hDC);
-	Gdiplus::Pen pen(Gdiplus::Color(dwPenColor), (Gdiplus::REAL)nSize);
-	pen.SetAlignment(Gdiplus::PenAlignmentInset);
-
-	graphics.DrawRectangle(&pen, rc.left, rc.top, rc.right-rc.left-1, rc.bottom-rc.top-1);
+    ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
+    HPEN hPen = ::CreatePen(PS_SOLID | PS_INSIDEFRAME, nSize, RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
+    HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
+    ::SelectObject(hDC, ::GetStockObject(HOLLOW_BRUSH));
+    ::Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
+    ::SelectObject(hDC, hOldPen);
+    ::DeleteObject(hPen);
 }
 
 void CRenderEngine::DrawRoundRect(HDC hDC, const RECT& rc, int nSize, int width, int height, DWORD dwPenColor)
 {
-	ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
-	Gdiplus::Graphics graphics(hDC);
-	Gdiplus::Pen pen(Gdiplus::Color(dwPenColor), (Gdiplus::REAL)nSize);
-	pen.SetAlignment(Gdiplus::PenAlignmentInset);
-
-	Gdiplus::GraphicsPath path;
-	// 把圆角矩形分成直线、弧的组合，依次加到路径中
-	//左
-	path.AddLine(Gdiplus::Point(rc.left, rc.bottom - height), Gdiplus::Point(rc.left, rc.top + height));
-	//左上
-	path.AddArc(rc.left, rc.top, width * 2, height * 2, (Gdiplus::REAL)180, (Gdiplus::REAL)90);
-
-	//上
-	path.AddLine(Gdiplus::Point(rc.left + width, rc.top), Gdiplus::Point(rc.right - width, rc.top));
-	//右上
-	path.AddArc(rc.right - width * 2-1, rc.top, width * 2, height * 2, (Gdiplus::REAL)270, (Gdiplus::REAL)90);
-
-	//右
-	path.AddLine(Gdiplus::Point(rc.right-1, rc.top + height), Gdiplus::Point(rc.right-1, rc.bottom - height));
-	//右下
-	path.AddArc(rc.right - width * 2-1, rc.bottom - height * 2-1, width * 2, height * 2, (Gdiplus::REAL)0, (Gdiplus::REAL)90);
-
-	//下
-	path.AddLine(Gdiplus::Point(rc.right - width, rc.bottom-1), Gdiplus::Point(rc.left + width, rc.bottom-1));
-	//左下
-	path.AddArc(rc.left, rc.bottom - height * 2-1, width * 2, height * 2, (Gdiplus::REAL)90, (Gdiplus::REAL)90);
-	
-	graphics.DrawPath(&pen, &path);
+    ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
+    HPEN hPen = ::CreatePen(PS_SOLID | PS_INSIDEFRAME, nSize, RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
+    HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
+    ::SelectObject(hDC, ::GetStockObject(HOLLOW_BRUSH));
+    ::RoundRect(hDC, rc.left, rc.top, rc.right, rc.bottom, width, height);
+    ::SelectObject(hDC, hOldPen);
+    ::DeleteObject(hPen);
 }
 
 void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle)
@@ -883,7 +877,8 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTS
 		else
 		{
 			graphics.DrawString(pstrText, -1, &font, rectF, &stringFormat, &brush);
-		}		
+		}
+		
 	}
 	else
 	{
@@ -892,7 +887,9 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTS
 		HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
 		::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
 		::SelectObject(hDC, hOldFont);
+
 	}
+
 }
 
 void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, RECT* prcLinks, CDuiString* sLinks, int& nLinkRects, UINT uStyle)
@@ -1577,38 +1574,38 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, L
 
 HBITMAP CRenderEngine::GenerateBitmap(CPaintManagerUI* pManager, CControlUI* pControl, RECT rc)
 {
-    int cx = rc.right - rc.left;
-    int cy = rc.bottom - rc.top;
+	int cx = rc.right - rc.left;
+	int cy = rc.bottom - rc.top;
 
-    HDC hPaintDC = ::CreateCompatibleDC(pManager->GetPaintDC());
-    HBITMAP hPaintBitmap = ::CreateCompatibleBitmap(pManager->GetPaintDC(), rc.right, rc.bottom);
-    ASSERT(hPaintDC);
-    ASSERT(hPaintBitmap);
-    HBITMAP hOldPaintBitmap = (HBITMAP) ::SelectObject(hPaintDC, hPaintBitmap);
-    pControl->DoPaint(hPaintDC, rc);
+	HDC hPaintDC = ::CreateCompatibleDC(pManager->GetPaintDC());
+	HBITMAP hPaintBitmap = ::CreateCompatibleBitmap(pManager->GetPaintDC(), rc.right, rc.bottom);
+	ASSERT(hPaintDC);
+	ASSERT(hPaintBitmap);
+	HBITMAP hOldPaintBitmap = (HBITMAP) ::SelectObject(hPaintDC, hPaintBitmap);
+	pControl->DoPaint(hPaintDC, rc);
 
 
-    LPDWORD pDest = NULL;
-    HDC hCloneDC = ::CreateCompatibleDC(pManager->GetPaintDC());
+	LPDWORD pDest = NULL;
+	HDC hCloneDC = ::CreateCompatibleDC(pManager->GetPaintDC());
 	HBITMAP hBitmap = CRenderEngine::CreateBitmap(pManager->GetPaintDC(), cx, cy, (BYTE**)&pDest);
-    ASSERT(hCloneDC);
-    ASSERT(hBitmap);
+	ASSERT(hCloneDC);
+	ASSERT(hBitmap);
 
-    if( hBitmap != NULL )
-    {
-        HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(hCloneDC, hBitmap);
-        ::BitBlt(hCloneDC, 0, 0, cx, cy, hPaintDC, rc.left, rc.top, SRCCOPY);
-        ::SelectObject(hCloneDC, hOldBitmap);
-        ::DeleteDC(hCloneDC);  
-        ::GdiFlush();
-    }
+	if (hBitmap != NULL)
+	{
+		HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(hCloneDC, hBitmap);
+		::BitBlt(hCloneDC, 0, 0, cx, cy, hPaintDC, rc.left, rc.top, SRCCOPY);
+		::SelectObject(hCloneDC, hOldBitmap);
+		::DeleteDC(hCloneDC);
+		::GdiFlush();
+	}
 
-    // Cleanup
-    ::SelectObject(hPaintDC, hOldPaintBitmap);
-    ::DeleteObject(hPaintBitmap);
-    ::DeleteDC(hPaintDC);
+	// Cleanup
+	::SelectObject(hPaintDC, hOldPaintBitmap);
+	::DeleteObject(hPaintBitmap);
+	::DeleteDC(hPaintDC);
 
-    return hBitmap;
+	return hBitmap;
 }
 
 SIZE CRenderEngine::GetTextSize( HDC hDC, CPaintManagerUI* pManager , LPCTSTR pstrText, int iFont, UINT uStyle )
