@@ -124,24 +124,29 @@ namespace DuiLib
 		if( top > bottom ) { int iTemp = top; top = bottom; bottom = iTemp; }
 	}
 
-	void CDuiRect::Offset(int cx, int cy)
+	bool CDuiRect::Offset(int cx, int cy)
 	{
-		::OffsetRect(this, cx, cy);
+		return TRUE == ::OffsetRect(this, cx, cy);
 	}
 
-	void CDuiRect::Inflate(int cx, int cy)
+	bool CDuiRect::Inflate(int cx, int cy)
 	{
-		::InflateRect(this, cx, cy);
+		return TRUE == ::InflateRect(this, cx, cy);
 	}
 
-	void CDuiRect::Deflate(int cx, int cy)
+	bool CDuiRect::Deflate(int cx, int cy)
 	{
-		::InflateRect(this, -cx, -cy);
+		return TRUE == ::InflateRect(this, -cx, -cy);
 	}
 
-	void CDuiRect::Union(CDuiRect& rc)
+	bool CDuiRect::Intersect(const CDuiRect& rc)
 	{
-		::UnionRect(this, this, &rc);
+		return TRUE == ::IntersectRect(this, this, &rc);
+	}
+
+	bool CDuiRect::Union(const CDuiRect& rc)
+	{
+		return TRUE == ::UnionRect(this, this, &rc);
 	}
 
 

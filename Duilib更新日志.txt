@@ -1,6 +1,7 @@
 2016-4-26
-修改RenderEngine为Gdi+核心
-同时保留RenderEngine的Gdi核心
+合并Duilib RenderEngine的Gdi+和Gdi代码
+使用USE_GDI_RENDER控制是否使用GDI渲染，默认使用GDI+
+优化Duilib PaintManager绘制分层窗体的代码
 
 2016-4-25
 修改图片属性解析机制，缓冲属性，提高绘制性能

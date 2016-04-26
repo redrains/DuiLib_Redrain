@@ -61,10 +61,11 @@ namespace DuiLib
 		void Join(const RECT& rc);
 		void ResetOffset();
 		void Normalize();
-		void Offset(int cx, int cy);
-		void Inflate(int cx, int cy);
-		void Deflate(int cx, int cy);
-		void Union(CDuiRect& rc);
+		bool Offset(int cx, int cy);
+		bool Inflate(int cx, int cy);
+		bool Deflate(int cx, int cy);
+		bool Union(const CDuiRect& rc);
+		bool Intersect(const CDuiRect& rc);
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////

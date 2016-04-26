@@ -185,15 +185,18 @@ public:
     void SetMaxInfo(int cx, int cy);
 	int GetTransparent() const;
     void SetTransparent(int nOpacity);
-    void SetBackgroundTransparent(bool bTrans);
 
-	//redrain
-	bool IsBackgroundTransparent();
-	bool ShowCaret(bool bShow);
-	bool SetCaretPos(CRichEditUI* obj, int x, int y);
-	CRichEditUI* GetCurrentCaretObject();
+    void SetUseLayeredWindow(bool bTrans);
+	bool IsLayeredWindow();
+	RECT GetRichEditCorner() const;
+	void SetRichEditCorner(const RECT& rcRichedit);
+
+	CRichEditUI* GetCurrentCaretRichEdit();
 	bool CreateCaret(HBITMAP hBmp, int nWidth, int nHeight);
+	bool SetCaretPos(CRichEditUI* obj, int x, int y);
+	bool ShowCaret(bool bShow);
 	void DrawCaret(HDC hDC, const RECT& rcPaint);
+
 	CShadowUI* GetShadow();
 	void SetUseGdiplusText(bool bUse);
 	bool IsUseGdiplusText() const;
@@ -345,24 +348,24 @@ private:
     HDC		m_hDcOffscreen;
     HBITMAP m_hbmpOffscreen;
 	LPBYTE	m_pBmpOffscreenBits;
-	RECT	m_rcInvalidate;			// 半透明异形窗体中，保存刷新区域
+
+	bool	m_bLayeredWindow;
+	RECT	m_rcInvalidate;		// 半透明异形窗体中，保存刷新区域
+	RECT	m_rcRichEditCorner;	// RichEdit控件的范围（距离左上右下窗体的边距），在分层窗体中，用于修复RichEdit的Alpha通道
 	bool	m_bIsRestore;
-
-    HWND	m_hwndTooltip;
-    TOOLINFO m_ToolTip;
-
-	//redrain
-	RECT m_rtCaret;
-	bool m_bCaretActive;
-	bool m_bCaretShowing;
-	CRichEditUI* m_currentCaretObject;
+	bool	m_bUseGdiplusText;
 
 	CShadowUI m_shadow;
-	bool m_bUseGdiplusText;
-    //
+
+	//光标
+	RECT m_rcCaret;
+	bool m_bCaretActive;
+	bool m_bCaretShowing;
+	CRichEditUI *m_pCurrentCaretRichedit;
+
 	//
-	ULONG_PTR						m_gdiplusToken;
-	Gdiplus::GdiplusStartupInput	*m_pGdiplusStartupInput;
+	HWND	m_hwndTooltip;
+	TOOLINFO m_ToolTip;
 	//
     CControlUI* m_pRoot;
     CControlUI* m_pFocus;
@@ -381,8 +384,6 @@ private:
     bool m_bFirstLayout;
     bool m_bUpdateNeeded;
     bool m_bFocusNeeded;
-    bool m_bOffscreenPaint;
-    bool m_bAlphaBackground;
     bool m_bMouseTracking;
     bool m_bMouseCapture;
 	bool m_bUsedVirtualWnd;
@@ -411,6 +412,8 @@ private:
     CStdStringPtrMap m_mImageHash;
     CStdStringPtrMap m_DefaultAttrHash;
     //
+	static ULONG_PTR m_gdiplusToken;
+	static Gdiplus::GdiplusStartupInput *m_pGdiplusStartupInput;
     static HINSTANCE m_hInstance;
     static HINSTANCE m_hResourceInstance;
     static CDuiString m_pStrResourcePath;

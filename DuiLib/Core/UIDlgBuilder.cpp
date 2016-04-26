@@ -182,8 +182,20 @@ CControlUI* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, CPaintMana
                         pManager->SetTransparent(_ttoi(pstrValue));
                     } 
                     else if( _tcscmp(pstrName, _T("bktrans")) == 0 ) {
-                        pManager->SetBackgroundTransparent(_tcscmp(pstrValue, _T("true")) == 0);
-                    } 
+                        pManager->SetUseLayeredWindow(_tcscmp(pstrValue, _T("true")) == 0);
+                    }
+					else if (_tcscmp(pstrName, _T("gdiplustext")) == 0) {
+						pManager->SetUseGdiplusText(_tcscmp(pstrValue, _T("true")) == 0);
+					}
+					else if (_tcscmp(pstrName, _T("richeditcorner")) == 0) {
+						RECT rcRichEdit = { 0 };
+						LPTSTR pstr = NULL;
+						rcRichEdit.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
+						rcRichEdit.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
+						rcRichEdit.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
+						rcRichEdit.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+						pManager->SetRichEditCorner(rcRichEdit);
+					}
                     else if( _tcscmp(pstrName, _T("disabledfontcolor")) == 0 ) {
                         if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
                         LPTSTR pstr = NULL;
@@ -249,9 +261,6 @@ CControlUI* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, CPaintMana
 					}
 					else if( _tcscmp(pstrName, _T("showshadow")) == 0 ) {
 						pManager->GetShadow()->ShowShadow(_tcscmp(pstrValue, _T("true")) == 0);
-					} 
-					else if( _tcscmp(pstrName, _T("gdiplustext")) == 0 ) {
-						pManager->SetUseGdiplusText(_tcscmp(pstrValue, _T("true")) == 0);
 					} 
                 }
             }

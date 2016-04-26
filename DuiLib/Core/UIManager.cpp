@@ -93,9 +93,11 @@ typedef struct tagTIMERINFO
 /////////////////////////////////////////////////////////////////////////////////////
 
 HPEN m_hUpdateRectPen = NULL;
+ULONG_PTR CPaintManagerUI::m_gdiplusToken;
+Gdiplus::GdiplusStartupInput* CPaintManagerUI::m_pGdiplusStartupInput = NULL;
 HINSTANCE CPaintManagerUI::m_hInstance = NULL;
 HINSTANCE CPaintManagerUI::m_hResourceInstance = NULL;
-CDuiString CPaintManagerUI::m_pStrDefaultFontName;//added by cddjr at 05/18/2012
+CDuiString CPaintManagerUI::m_pStrDefaultFontName;
 CDuiString CPaintManagerUI::m_pStrResourcePath;
 CDuiString CPaintManagerUI::m_pStrResourceZip;
 bool CPaintManagerUI::m_bCachedResourceZip = false;
@@ -105,7 +107,11 @@ short CPaintManagerUI::m_S = 100;
 short CPaintManagerUI::m_L = 100;
 CStdPtrArray CPaintManagerUI::m_aPreMessages;
 CStdPtrArray CPaintManagerUI::m_aPlugins;
-const UINT kCaretTimerID = 0xF1;
+
+namespace
+{
+	const UINT kCaretTimerID = 0xF1;
+}
 
 CPaintManagerUI::CPaintManagerUI() :
 m_hWndPaint(NULL),
@@ -113,9 +119,15 @@ m_hDcPaint(NULL),
 m_hDcOffscreen(NULL),
 m_hbmpOffscreen(NULL),
 m_pBmpOffscreenBits(NULL),
-m_bOffscreenPaint(true),
-m_bAlphaBackground(false),
+
+m_nOpacity(255),
+m_bLayeredWindow(false),
 m_bIsRestore(false),
+m_bUseGdiplusText(false),
+
+m_bCaretActive(false),
+m_bCaretShowing(false),
+m_pCurrentCaretRichedit(NULL),
 
 m_hwndTooltip(NULL),
 m_uTimerID(0x1000),
@@ -130,12 +142,7 @@ m_bUpdateNeeded(false),
 m_bMouseTracking(false),
 m_bMouseCapture(false),
 m_bUsedVirtualWnd(false),
-m_nOpacity(255),
-m_pParentResourcePM(NULL),
-m_bCaretActive(false),
-m_bCaretShowing(false),
-m_currentCaretObject(NULL),
-m_bUseGdiplusText(false)
+m_pParentResourcePM(NULL)
 {
     m_dwDefaultDisabledColor = 0xFFA7A6AA;
     m_dwDefaultFontColor = 0xFF000001;
@@ -166,9 +173,6 @@ m_bUseGdiplusText(false)
         ::LoadLibrary(_T("msimg32.dll"));
     }
 
-	m_pGdiplusStartupInput = new Gdiplus::GdiplusStartupInput;
-	Gdiplus::GdiplusStartup( &m_gdiplusToken, m_pGdiplusStartupInput, NULL); // 加载GDI接口
-
     m_szMinWindow.cx = 0;
     m_szMinWindow.cy = 0;
     m_szMaxWindow.cx = 0;
@@ -178,8 +182,9 @@ m_bUseGdiplusText(false)
     m_szRoundCorner.cx = m_szRoundCorner.cy = 0;
     ::ZeroMemory(&m_rcSizeBox, sizeof(m_rcSizeBox));
     ::ZeroMemory(&m_rcCaption, sizeof(m_rcCaption));
-	::ZeroMemory(&m_rtCaret, sizeof(m_rtCaret));
+	::ZeroMemory(&m_rcCaret, sizeof(m_rcCaret));
 	::ZeroMemory(&m_rcInvalidate, sizeof(m_rcInvalidate));
+	::ZeroMemory(&m_rcRichEditCorner, sizeof(m_rcRichEditCorner));
     m_ptLastMousePos.x = m_ptLastMousePos.y = -1;
 }
 
@@ -190,9 +195,6 @@ CPaintManagerUI::~CPaintManagerUI()
     for( int i = 0; i < m_aAsyncNotify.GetSize(); i++ ) delete static_cast<TNotifyUI*>(m_aAsyncNotify[i]);
     m_mNameHash.Resize(0);
     delete m_pRoot;
-
-	Gdiplus::GdiplusShutdown( m_gdiplusToken );	//  卸载GDI接口
-	delete m_pGdiplusStartupInput;
 
     ::DeleteObject(m_DefaultFontInfo.hFont);
     RemoveAllFonts();
@@ -272,6 +274,8 @@ HANDLE CPaintManagerUI::GetResourceZipHandle()
 void CPaintManagerUI::SetInstance(HINSTANCE hInst)
 {
     m_hInstance = hInst;
+	m_pGdiplusStartupInput = new Gdiplus::GdiplusStartupInput;
+	Gdiplus::GdiplusStartup(&m_gdiplusToken, m_pGdiplusStartupInput, NULL); // 加载GDI+接口
 	CShadowUI::Initialize(hInst);
 }
 
@@ -654,37 +658,81 @@ void CPaintManagerUI::SetTransparent(int nOpacity)
     }
 }
 
-void CPaintManagerUI::SetBackgroundTransparent(bool bTrans)
+void CPaintManagerUI::SetUseLayeredWindow(bool bTrans)
 {
-    m_bAlphaBackground = bTrans;
+    m_bLayeredWindow = bTrans;
 }
 
-bool CPaintManagerUI::IsBackgroundTransparent()
+bool CPaintManagerUI::IsLayeredWindow()
 {
-	return m_bAlphaBackground;
+	return m_bLayeredWindow;
+}
+
+RECT CPaintManagerUI::GetRichEditCorner() const
+{
+	return m_rcRichEditCorner;
+}
+
+void CPaintManagerUI::SetRichEditCorner(const RECT& rcRichedit)
+{
+	m_rcRichEditCorner = rcRichedit;
+}
+
+CRichEditUI* CPaintManagerUI::GetCurrentCaretRichEdit()
+{
+	return m_pCurrentCaretRichedit;
+}
+
+bool CPaintManagerUI::CreateCaret(HBITMAP hBmp, int nWidth, int nHeight)
+{
+	::CreateCaret(m_hWndPaint, hBmp, nWidth, nHeight);
+
+	m_rcCaret.right = m_rcCaret.left + nWidth;
+	m_rcCaret.bottom = m_rcCaret.top + nHeight;
+	return true;
+}
+
+bool CPaintManagerUI::SetCaretPos(CRichEditUI* obj, int x, int y)
+{
+	if (!::SetCaretPos(x, y))
+		return false;
+
+	m_pCurrentCaretRichedit = obj;
+	RECT rcTemp = m_rcCaret;
+	int w = m_rcCaret.right - m_rcCaret.left;
+	int h = m_rcCaret.bottom - m_rcCaret.top;
+	m_rcCaret.left = x;
+	m_rcCaret.top = y;
+	m_rcCaret.right = x + w;
+	m_rcCaret.bottom = y + h;
+
+	Invalidate(rcTemp);
+	Invalidate(m_rcCaret);
+
+	return true;
 }
 
 bool CPaintManagerUI::ShowCaret(bool bShow)
 {
-	if(m_bCaretShowing == bShow)
+	if (m_bCaretShowing == bShow)
 		return true;
 
 	m_bCaretShowing = bShow;
-	if(!bShow)
-	{	
+	if (!bShow)
+	{
 		::KillTimer(m_hWndPaint, kCaretTimerID);
-		if(m_bCaretActive)
+		if (m_bCaretActive)
 		{
-			Invalidate(m_rtCaret);
+			Invalidate(m_rcCaret);
 		}
 		m_bCaretActive = false;
 	}
 	else
 	{
 		::SetTimer(m_hWndPaint, kCaretTimerID, ::GetCaretBlinkTime(), NULL);
-		if(!m_bCaretActive)
+		if (!m_bCaretActive)
 		{
-			Invalidate(m_rtCaret);
+			Invalidate(m_rcCaret);
 			m_bCaretActive = true;
 		}
 	}
@@ -692,58 +740,25 @@ bool CPaintManagerUI::ShowCaret(bool bShow)
 	return true;
 }
 
-bool CPaintManagerUI::SetCaretPos(CRichEditUI* obj, int x, int y)
-{
-	if(!::SetCaretPos(x, y)) 
-		return false;
-
-	m_currentCaretObject = obj;
-	RECT tempRt = m_rtCaret;
-	int w = m_rtCaret.right - m_rtCaret.left;
-	int h = m_rtCaret.bottom - m_rtCaret.top;
-	m_rtCaret.left = x;
-	m_rtCaret.top = y;
-	m_rtCaret.right = x + w;
-	m_rtCaret.bottom = y + h;
-	Invalidate(tempRt);
-	Invalidate(m_rtCaret);
-
-	return true;
-}
-
-CRichEditUI* CPaintManagerUI::GetCurrentCaretObject()
-{
-	return m_currentCaretObject;
-}
-
-bool CPaintManagerUI::CreateCaret(HBITMAP hBmp, int nWidth, int nHeight)
-{
-	::CreateCaret(m_hWndPaint, hBmp, nWidth, nHeight);
-	//TODO hBmp处理位图光标
-	m_rtCaret.right = m_rtCaret.left + nWidth;
-	m_rtCaret.bottom = m_rtCaret.top + nHeight;
-	return true;
-}
-
 void CPaintManagerUI::DrawCaret(HDC hDC, const RECT& rcPaint)
 {
-	if(m_currentCaretObject && (!m_currentCaretObject->IsFocused() || m_hWndPaint != ::GetFocus()))
+	if(m_pCurrentCaretRichedit && (!m_pCurrentCaretRichedit->IsFocused() || m_hWndPaint != ::GetFocus()))
 	{
 		::KillTimer(m_hWndPaint, kCaretTimerID);
 		if(m_bCaretActive)
 		{
-			Invalidate(m_rtCaret);
+			Invalidate(m_rcCaret);
 		}
 		m_bCaretActive = false;
 		return;
 	}
 
-	if(m_bCaretActive && m_bCaretShowing && m_currentCaretObject)
+	if(m_bCaretActive && m_bCaretShowing && m_pCurrentCaretRichedit)
 	{
 		RECT temp = {};
-		if(::IntersectRect(&temp, &rcPaint, &m_rtCaret))
+		if(::IntersectRect(&temp, &rcPaint, &m_rcCaret))
 		{
-			DWORD dwColor = m_currentCaretObject->GetTextColor();
+			DWORD dwColor = m_pCurrentCaretRichedit->GetTextColor();
 			if(dwColor == 0)
 				dwColor = m_dwDefaultFontColor;
 			CRenderEngine::DrawColor(hDC, temp, dwColor);
@@ -928,7 +943,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 			   {
 				   if(m_pRoot->IsUpdateNeeded())
 				   {
-					   if( !::IsIconic(m_hWndPaint))  //redrain修复bug
+					   if( !::IsIconic(m_hWndPaint))
 						   m_pRoot->SetPos(rcClient);
 					   if(m_hDcOffscreen != NULL) ::DeleteDC(m_hDcOffscreen);
 					   if(m_hbmpOffscreen != NULL) ::DeleteObject(m_hbmpOffscreen);
@@ -961,7 +976,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 		   }
 
 		   // 是否开启了半透明窗体模式
-		   if(m_bAlphaBackground)
+		   if(m_bLayeredWindow)
 		   {
 			   // 设置层样式
 			   DWORD dwExStyle = GetWindowLong(m_hWndPaint, GWL_EXSTYLE);
@@ -971,20 +986,20 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 			   RECT rcClient = {0};
 			   GetClientRect(m_hWndPaint, &rcClient);
 			   // 如果窗体从最小化恢复，则刷新整个软件
-			   if (!m_bIsRestore)
+			   if (m_bIsRestore)
 			   {
-				   UnionRect(&rcPaint, &rcPaint, &m_rcInvalidate);
-				   ::ZeroMemory(&m_rcInvalidate, sizeof(m_rcInvalidate));				   
+				   rcPaint = rcClient;
+				   m_bIsRestore = false;		   
 			   }
 			   else
 			   {
-				   rcPaint = rcClient;
-				   m_bIsRestore = false;
+				   UnionRect(&rcPaint, &rcPaint, &m_rcInvalidate);
+				   ::ZeroMemory(&m_rcInvalidate, sizeof(m_rcInvalidate));
 			   }
 			   
 			   int nClientWidth = rcClient.right - rcClient.left;
 			   int nClientHeight = rcClient.bottom - rcClient.top;
-			   if(m_bOffscreenPaint && m_hbmpOffscreen == NULL)
+			   if(m_hbmpOffscreen == NULL)
 			   {
 				   m_hDcOffscreen = ::CreateCompatibleDC(m_hDcPaint);
 				   m_hbmpOffscreen = CRenderEngine::CreateBitmap(m_hDcPaint, nClientWidth, nClientHeight, &m_pBmpOffscreenBits);
@@ -994,7 +1009,31 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
 			   HBITMAP hOldBitmap = (HBITMAP)::SelectObject(m_hDcOffscreen, m_hbmpOffscreen);
 			   int iSaveDC = ::SaveDC(m_hDcOffscreen);
-			   CRenderEngine::ClearAlphaPixel(m_pBmpOffscreenBits, nClientWidth, &rcPaint);
+
+#ifdef USE_GDI_RENDER
+			   for(int y = rcPaint.top; y < rcPaint.bottom; ++y)
+			   {
+				   ZeroMemory((unsigned int*)m_pBmpOffscreenBits + y * nClientWidth + rcPaint.left, (rcPaint.right - rcPaint.left) * 4);
+			   }
+#else
+			   //默认使用Gdi+渲染，此时只需要为RichEdit控件修补alpha即可
+			   if (m_rcRichEditCorner.left > 0 || m_rcRichEditCorner.top > 0 || m_rcRichEditCorner.right > 0 || m_rcRichEditCorner.bottom > 0)
+			   {
+				   //获取需要更新的RichEdit范围
+				   RECT rcRichEdit = rcClient;
+				   rcRichEdit.left += m_rcRichEditCorner.left;
+				   rcRichEdit.top += m_rcRichEditCorner.top;
+				   rcRichEdit.right -= m_rcRichEditCorner.right;
+				   rcRichEdit.bottom -= m_rcRichEditCorner.bottom;
+				   if (IntersectRect(&rcRichEdit, &rcRichEdit, &rcPaint))
+				   {
+					   for (int y = rcRichEdit.top; y < rcRichEdit.bottom; ++y)
+					   {
+						   ZeroMemory((unsigned int*)m_pBmpOffscreenBits + y * nClientWidth + rcRichEdit.left, (rcRichEdit.right - rcRichEdit.left) * 4);
+					   }
+				   }
+			   }
+#endif
 			   m_pRoot->DoPaint(m_hDcOffscreen, rcPaint);
 			   DrawCaret(m_hDcOffscreen, rcPaint);
 			   for(int i = 0; i < m_aPostPaintControls.GetSize(); i++)
@@ -1002,7 +1041,46 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 				   CControlUI* pPostPaintControl = static_cast<CControlUI*>(m_aPostPaintControls[i]);
 				   pPostPaintControl->DoPostPaint(m_hDcOffscreen, ps.rcPaint);
 			   }
-			   CRenderEngine::RestoreAlphaColor(m_pBmpOffscreenBits, nClientWidth, &rcPaint);
+
+#ifdef USE_GDI_RENDER
+			   for (int y = rcPaint.top; y < rcPaint.bottom; ++y)
+			   {
+				   for (int x = rcPaint.left; x < rcPaint.right; ++x)
+				   {				   
+					   int i = (y*nClientWidth + x) * 4;
+					   if ((m_pBmpOffscreenBits[i + 3] == 0) &&
+						   (m_pBmpOffscreenBits[i + 0] != 0 ||
+						   m_pBmpOffscreenBits[i + 1] != 0 ||
+						   m_pBmpOffscreenBits[i + 2] != 0))
+					   {
+						   m_pBmpOffscreenBits[i + 3] = 255;
+					   }
+						   
+				   }
+			   }
+#else
+			   //默认使用Gdi+渲染，此时只需要为RichEdit控件修补alpha即可
+			   if (m_rcRichEditCorner.left > 0 || m_rcRichEditCorner.top > 0 || m_rcRichEditCorner.right > 0 || m_rcRichEditCorner.bottom > 0)
+			   {
+				   //获取需要更新的RichEdit范围
+				   RECT rcRichEdit = rcClient;
+				   rcRichEdit.left += m_rcRichEditCorner.left;
+				   rcRichEdit.top += m_rcRichEditCorner.top;
+				   rcRichEdit.right -= m_rcRichEditCorner.right;
+				   rcRichEdit.bottom -= m_rcRichEditCorner.bottom;
+				   if (IntersectRect(&rcRichEdit, &rcRichEdit, &rcPaint))
+				   {
+					   for (int y = rcRichEdit.top; y < rcRichEdit.bottom; ++y)
+					   {
+						   for (int x = rcRichEdit.left; x < rcRichEdit.right; ++x)
+						   {
+								int i = (y*nClientWidth + x) * 4;
+								m_pBmpOffscreenBits[i + 3] = 255;
+						   }
+					   }
+				   }
+			   }
+#endif
 			   ::RestoreDC(m_hDcOffscreen, iSaveDC);
 
 			   // 贴到主窗体
@@ -1019,7 +1097,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 		   }
 		   else
 		   {
-			   if(m_bOffscreenPaint && m_hbmpOffscreen == NULL)
+			   if(m_hbmpOffscreen == NULL)
 			   {
 				   RECT rcClient = {0};
 				   ::GetClientRect(m_hWndPaint, &rcClient);
@@ -1029,32 +1107,19 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 				   ASSERT(m_hbmpOffscreen);
 			   }
 
-			   if(m_bOffscreenPaint)
-			   {
-				   HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(m_hDcOffscreen, m_hbmpOffscreen);
-				   int iSaveDC = ::SaveDC(m_hDcOffscreen);
-				   m_pRoot->DoPaint(m_hDcOffscreen, ps.rcPaint);
-				   DrawCaret(m_hDcOffscreen, ps.rcPaint);
-				   for(int i = 0; i < m_aPostPaintControls.GetSize(); i++)
-				   {
-					   CControlUI* pPostPaintControl = static_cast<CControlUI*>(m_aPostPaintControls[i]);
-					   pPostPaintControl->DoPostPaint(m_hDcOffscreen, ps.rcPaint);
-				   }
-				   ::RestoreDC(m_hDcOffscreen, iSaveDC);
-				   ::BitBlt(ps.hdc, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
-					   ps.rcPaint.bottom - ps.rcPaint.top, m_hDcOffscreen, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
-				   ::SelectObject(m_hDcOffscreen, hOldBitmap);
-
-			   }
-			   else
-			   {
-				   // A standard paint job
-				   int iSaveDC = ::SaveDC(ps.hdc);
-				   m_pRoot->DoPaint(ps.hdc, ps.rcPaint);
-				   DrawCaret(ps.hdc, ps.rcPaint);
-				   ::RestoreDC(ps.hdc, iSaveDC);
-			   }
-
+				HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(m_hDcOffscreen, m_hbmpOffscreen);
+				int iSaveDC = ::SaveDC(m_hDcOffscreen);
+				m_pRoot->DoPaint(m_hDcOffscreen, ps.rcPaint);
+				DrawCaret(m_hDcOffscreen, ps.rcPaint);
+				for(int i = 0; i < m_aPostPaintControls.GetSize(); i++)
+				{
+					CControlUI* pPostPaintControl = static_cast<CControlUI*>(m_aPostPaintControls[i]);
+					pPostPaintControl->DoPostPaint(m_hDcOffscreen, ps.rcPaint);
+				}
+				::RestoreDC(m_hDcOffscreen, iSaveDC);
+				::BitBlt(ps.hdc, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
+					ps.rcPaint.bottom - ps.rcPaint.top, m_hDcOffscreen, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
+				::SelectObject(m_hDcOffscreen, hOldBitmap);
 		   }
 
 		   // All Done!
@@ -1100,12 +1165,13 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
         return true;
 	case WM_TIMER:
 		{
-			if(kCaretTimerID == LOWORD(wParam)){
-				//DUI__Trace(_T("WM_TIMER:%d (%d,%d)"), m_bCaretActive, m_rtCaret.left, m_rtCaret.top);
-				Invalidate(m_rtCaret);
+			if(kCaretTimerID == LOWORD(wParam))
+			{
+				Invalidate(m_rcCaret);
 				m_bCaretActive = !m_bCaretActive;
 			}
-			else{
+			else
+			{
 				for( int i = 0; i < m_aTimers.GetSize(); i++ ) {
 					const TIMERINFO* pTimer = static_cast<TIMERINFO*>(m_aTimers[i]);
 					if(pTimer->hWnd == m_hWndPaint && 
@@ -1567,24 +1633,23 @@ void CPaintManagerUI::RemoveAllOptionGroups()
 void CPaintManagerUI::MessageLoop()
 {
     MSG msg = { 0 };
-    while( ::GetMessage(&msg, NULL, 0, 0) ) {
-        if( !CPaintManagerUI::TranslateMessage(&msg) ) {
+    while( ::GetMessage(&msg, NULL, 0, 0) ) 
+	{
+        if( !CPaintManagerUI::TranslateMessage(&msg) ) 
+		{
             ::TranslateMessage(&msg);
-			try{
             ::DispatchMessage(&msg);
-			} catch(...) {
-				DUITRACE(_T("EXCEPTION: %s(%d)\n"), __FILET__, __LINE__);
-				#ifdef _DEBUG
-				throw "CPaintManagerUI::MessageLoop";
-				#endif
-			}
         }
     }
 }
 
 void CPaintManagerUI::Term()
 {
-    if( m_bCachedResourceZip && m_hResourceZip != NULL ) {
+	Gdiplus::GdiplusShutdown(m_gdiplusToken);	//  卸载GDI+接口
+	delete m_pGdiplusStartupInput;
+
+    if( m_bCachedResourceZip && m_hResourceZip != NULL )
+	{
         CloseZip((HZIP)m_hResourceZip);
         m_hResourceZip = NULL;
     }
@@ -2620,5 +2685,6 @@ void CPaintManagerUI::UsedVirtualWnd(bool bUsed)
 {
 	m_bUsedVirtualWnd = bUsed;
 }
+
 
 } // namespace DuiLib

@@ -35,7 +35,7 @@ namespace DuiLib
 		m_pOwner = pOwner;
 		RECT rcPos = CalPos();
 		UINT uStyle = 0;
-		if(m_pOwner->GetManager()->IsBackgroundTransparent())
+		if(m_pOwner->GetManager()->IsLayeredWindow())
 		{
 			uStyle = WS_POPUP | ES_AUTOHSCROLL | WS_VISIBLE;
 			RECT rcWnd={0};

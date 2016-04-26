@@ -169,9 +169,10 @@ protected:
 	CImageAttribute m_sHotImage;
 	CImageAttribute m_sFocusedImage;
 	CImageAttribute m_sDisabledImage;
-	RECT m_rcTextPadding;
-	CDuiString m_sTipValue;
-	DWORD m_dwTipValueColor;
+	RECT		m_rcTextPadding;
+	CDuiString	m_sTipValue;
+	DWORD		m_dwTipValueColor;
+
 };
 
 } // namespace DuiLib

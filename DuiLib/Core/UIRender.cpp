@@ -34,7 +34,7 @@ void CRenderClip::GenerateRoundClip(HDC hDC, RECT rc, RECT rcItem, int width, in
     ::GetClipBox(hDC, &rcClip);
     clip.hOldRgn = ::CreateRectRgnIndirect(&rcClip);
     clip.hRgn = ::CreateRectRgnIndirect(&rc);
-    HRGN hRgnItem = ::CreateRoundRectRgn(rcItem.left, rcItem.top, rcItem.right + 1, rcItem.bottom + 1, width*2, height*2);
+    HRGN hRgnItem = ::CreateRoundRectRgn(rcItem.left, rcItem.top, rcItem.right + 1, rcItem.bottom + 1, width * 2, height * 2);
     ::CombineRgn(clip.hRgn, clip.hRgn, hRgnItem, RGN_AND);
     ::ExtSelectClipRgn(hDC, clip.hRgn, RGN_AND);
     clip.hDC = hDC;
@@ -670,10 +670,90 @@ bool CRenderEngine::DrawImage(HDC hDC, CPaintManagerUI* pManager, const RECT& rc
 	if (!::IntersectRect(&rcTemp, &rcDest, &rcPaint)) return true;
 
 	CRenderEngine::DrawImage(hDC, data->hBitmap, rcDest, rcPaint, image.m_rcSource, image.m_rcCorner,
-		pManager->IsBackgroundTransparent() ? true : data->alphaChannel,
+		pManager->IsLayeredWindow() ? true : data->alphaChannel,
 		image.m_bFade, image.m_bHole, image.m_bTiledX, image.m_bTiledY);
 
 	return true;
+}
+
+void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle)
+{
+	ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
+	if (pstrText == NULL || pManager == NULL) return;
+
+	if (pManager->IsLayeredWindow() || pManager->IsUseGdiplusText())
+	{
+		Gdiplus::Graphics graphics(hDC);
+		graphics.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAlias);
+
+		Gdiplus::Font font(hDC, pManager->GetFont(iFont));
+		Gdiplus::RectF rectF((Gdiplus::REAL)rc.left, (Gdiplus::REAL)rc.top, (Gdiplus::REAL)(rc.right - rc.left), (Gdiplus::REAL)(rc.bottom - rc.top));
+		Gdiplus::SolidBrush brush(Gdiplus::Color(254, GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+
+		Gdiplus::StringFormat stringFormat = Gdiplus::StringFormat::GenericTypographic();
+
+		if ((uStyle & DT_END_ELLIPSIS) != 0) {
+			stringFormat.SetTrimming(Gdiplus::StringTrimmingEllipsisCharacter);
+		}
+
+		int formatFlags = 0;
+		if ((uStyle & DT_NOCLIP) != 0) {
+			formatFlags |= Gdiplus::StringFormatFlagsNoClip;
+		}
+		if ((uStyle & DT_SINGLELINE) != 0) {
+			formatFlags |= Gdiplus::StringFormatFlagsNoWrap;
+		}
+
+		stringFormat.SetFormatFlags(formatFlags);
+
+		if ((uStyle & DT_LEFT) != 0) {
+			stringFormat.SetAlignment(Gdiplus::StringAlignmentNear);
+		}
+		else if ((uStyle & DT_CENTER) != 0) {
+			stringFormat.SetAlignment(Gdiplus::StringAlignmentCenter);
+		}
+		else if ((uStyle & DT_RIGHT) != 0) {
+			stringFormat.SetAlignment(Gdiplus::StringAlignmentFar);
+		}
+		else {
+			stringFormat.SetAlignment(Gdiplus::StringAlignmentNear);
+		}
+		stringFormat.GenericTypographic();
+		if ((uStyle & DT_TOP) != 0) {
+			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentNear);
+		}
+		else if ((uStyle & DT_VCENTER) != 0) {
+			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentCenter);
+		}
+		else if ((uStyle & DT_BOTTOM) != 0) {
+			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentFar);
+		}
+		else {
+			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentNear);
+		}
+
+		if ((uStyle & DT_CALCRECT) != 0)
+		{
+			Gdiplus::RectF bounds;
+			graphics.MeasureString(pstrText, -1, &font, rectF, &stringFormat, &bounds);
+
+			// MeasureString存在计算误差，这里加一像素
+			rc.bottom = rc.top + (long)bounds.Height + 1;
+			rc.right = rc.left + (long)bounds.Width + 1;
+		}
+		else
+		{
+			graphics.DrawString(pstrText, -1, &font, rectF, &stringFormat, &brush);
+		}
+	}
+	else
+	{
+		::SetBkMode(hDC, TRANSPARENT);
+		::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+		HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
+		::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
+		::SelectObject(hDC, hOldFont);
+	}
 }
 
 void CRenderEngine::DrawColor(HDC hDC, const RECT& rc, DWORD color)
@@ -765,26 +845,63 @@ void CRenderEngine::DrawGradient(HDC hDC, const RECT& rc, DWORD dwFirst, DWORD d
 
 void CRenderEngine::DrawLine( HDC hDC, const RECT& rc, int nSize, DWORD dwPenColor,int nStyle /*= PS_SOLID*/ )
 {
-	ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
+#if USE_GDI_RENDER
+	ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
+
+	LOGPEN lg;
+	lg.lopnColor = RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor));
+	lg.lopnStyle = nStyle;
+	lg.lopnWidth.x = nSize;
+	HPEN hPen = CreatePenIndirect(&lg);
+	HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
+	POINT ptTemp = { 0 };
+	::MoveToEx(hDC, rc.left, rc.top, &ptTemp);
+	::LineTo(hDC, rc.right, rc.bottom);
+	::SelectObject(hDC, hOldPen);
+	::DeleteObject(hPen);
+#else
+	ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
 
 	Gdiplus::Graphics graphics(hDC);
 	Gdiplus::Pen pen(Gdiplus::Color(dwPenColor), (Gdiplus::REAL)nSize);
 	pen.SetDashStyle((Gdiplus::DashStyle)nStyle);
 	graphics.DrawLine(&pen, Gdiplus::Point(rc.left, rc.top), Gdiplus::Point(rc.right, rc.bottom));
+
+#endif
 }
 
 void CRenderEngine::DrawRect(HDC hDC, const RECT& rc, int nSize, DWORD dwPenColor)
 {
+#if USE_GDI_RENDER
+	ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
+	HPEN hPen = ::CreatePen(PS_SOLID | PS_INSIDEFRAME, nSize, RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
+	HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
+	::SelectObject(hDC, ::GetStockObject(HOLLOW_BRUSH));
+	::Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
+	::SelectObject(hDC, hOldPen);
+	::DeleteObject(hPen);
+#else
 	ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
 	Gdiplus::Graphics graphics(hDC);
 	Gdiplus::Pen pen(Gdiplus::Color(dwPenColor), (Gdiplus::REAL)nSize);
 	pen.SetAlignment(Gdiplus::PenAlignmentInset);
 
 	graphics.DrawRectangle(&pen, rc.left, rc.top, rc.right-rc.left-1, rc.bottom-rc.top-1);
+#endif
+
 }
 
 void CRenderEngine::DrawRoundRect(HDC hDC, const RECT& rc, int nSize, int width, int height, DWORD dwPenColor)
 {
+#ifdef USE_GDI_RENDER
+	ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
+	HPEN hPen = ::CreatePen(PS_SOLID | PS_INSIDEFRAME, nSize, RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
+	HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
+	::SelectObject(hDC, ::GetStockObject(HOLLOW_BRUSH));
+	::RoundRect(hDC, rc.left, rc.top, rc.right, rc.bottom, width * 2, height * 2);
+	::SelectObject(hDC, hOldPen);
+	::DeleteObject(hPen);
+#else
 	ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
 	Gdiplus::Graphics graphics(hDC);
 	Gdiplus::Pen pen(Gdiplus::Color(dwPenColor), (Gdiplus::REAL)nSize);
@@ -813,86 +930,8 @@ void CRenderEngine::DrawRoundRect(HDC hDC, const RECT& rc, int nSize, int width,
 	path.AddArc(rc.left, rc.bottom - height * 2-1, width * 2, height * 2, (Gdiplus::REAL)90, (Gdiplus::REAL)90);
 	
 	graphics.DrawPath(&pen, &path);
-}
+#endif
 
-void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle)
-{
-	ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
-	if( pstrText == NULL || pManager == NULL ) return;
-	
-	if ( pManager->IsBackgroundTransparent() || pManager->IsUseGdiplusText())
-	{
-		Gdiplus::Graphics graphics( hDC );
-		graphics.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAlias);
-
-		Gdiplus::Font font(hDC, pManager->GetFont(iFont));
-		Gdiplus::RectF rectF((Gdiplus::REAL)rc.left, (Gdiplus::REAL)rc.top, (Gdiplus::REAL)(rc.right - rc.left), (Gdiplus::REAL)(rc.bottom - rc.top));
-		Gdiplus::SolidBrush brush(Gdiplus::Color(254, GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
-
-		Gdiplus::StringFormat stringFormat = Gdiplus::StringFormat::GenericTypographic();
-
-		if ((uStyle & DT_END_ELLIPSIS) != 0) {
-			stringFormat.SetTrimming(Gdiplus::StringTrimmingEllipsisCharacter);
-		}
-
-		int formatFlags = 0;
-		if ((uStyle & DT_NOCLIP) != 0) {
-			formatFlags |= Gdiplus::StringFormatFlagsNoClip;
-		}
-		if ((uStyle & DT_SINGLELINE) != 0) {
-			formatFlags |= Gdiplus::StringFormatFlagsNoWrap;
-		}
-
-		stringFormat.SetFormatFlags(formatFlags);
-
-		if ((uStyle & DT_LEFT) != 0) {
-			stringFormat.SetAlignment(Gdiplus::StringAlignmentNear);
-		}
-		else if ((uStyle & DT_CENTER) != 0) {
-			stringFormat.SetAlignment(Gdiplus::StringAlignmentCenter);
-		}
-		else if ((uStyle & DT_RIGHT) != 0) {
-			stringFormat.SetAlignment(Gdiplus::StringAlignmentFar);
-		}
-		else {
-			stringFormat.SetAlignment(Gdiplus::StringAlignmentNear);
-		}
-		stringFormat.GenericTypographic();
-		if ((uStyle & DT_TOP) != 0) {
-			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentNear);
-		}
-		else if ((uStyle & DT_VCENTER) != 0) {
-			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentCenter);
-		}
-		else if ((uStyle & DT_BOTTOM) != 0) {
-			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentFar);
-		}
-		else {
-			stringFormat.SetLineAlignment(Gdiplus::StringAlignmentNear);
-		}
-
-		if ((uStyle & DT_CALCRECT) != 0)
-		{
-			Gdiplus::RectF bounds;
-			graphics.MeasureString(pstrText, -1, &font, rectF, &stringFormat, &bounds);
-
-			// MeasureString存在计算误差，这里加一像素
-			rc.bottom = rc.top + (long)bounds.Height + 1;
-			rc.right = rc.left + (long)bounds.Width + 1;
-		}
-		else
-		{
-			graphics.DrawString(pstrText, -1, &font, rectF, &stringFormat, &brush);
-		}		
-	}
-	else
-	{
-		::SetBkMode(hDC, TRANSPARENT);
-		::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
-		HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
-		::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
-		::SelectObject(hDC, hOldFont);
-	}
 }
 
 void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, RECT* prcLinks, CDuiString* sLinks, int& nLinkRects, UINT uStyle)
@@ -1623,42 +1662,4 @@ SIZE CRenderEngine::GetTextSize( HDC hDC, CPaintManagerUI* pManager , LPCTSTR ps
 	return size;
 }
 
-void CRenderEngine::CheckAlphaColor(DWORD& dwColor)
-{
-	//RestoreAlphaColor认为0x00000000是真正的透明，其它都是GDI绘制导致的
-	//所以在GDI绘制中不能用0xFF000000这个颜色值，现在处理是让它变成RGB(0,0,1)
-	//RGB(0,0,1)与RGB(0,0,0)很难分出来
-	if((0x00FFFFFF & dwColor) == 0)
-	{
-		dwColor += 1;
-	}
-}
-
-void CRenderEngine::ClearAlphaPixel(LPBYTE pBits, int bitsWidth, PRECT rc)
-{
-	if(!pBits)
-		return;
-
-	for(int i = rc->top; i < rc->bottom; ++i)
-	{
-		for(int j = rc->left; j < rc->right; ++j)
-		{
-			int x = (i*bitsWidth + j) * 4;
-			*((unsigned int*)&pBits[x]) = 0;
-		}
-	}
-}
-
-void CRenderEngine::RestoreAlphaColor(LPBYTE pBits, int bitsWidth, PRECT rc)
-{
-	for(int i = rc->top; i < rc->bottom; ++i)
-	{
-		for(int j = rc->left; j < rc->right; ++j)
-		{
-			int x = (i*bitsWidth + j) * 4;
-			if((pBits[x + 3] == 0)&& (pBits[x + 0] != 0 || pBits[x + 1] != 0|| pBits[x + 2] != 0))
-				pBits[x + 3] = 255;	
-		}
-	}
-}
 } // namespace DuiLib
