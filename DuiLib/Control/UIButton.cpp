@@ -172,78 +172,78 @@ namespace DuiLib
 
 	LPCTSTR CButtonUI::GetNormalImage()
 	{
-		return m_sNormalImage;
+		return m_normalImage.GetAttributeString();
 	}
 
 	void CButtonUI::SetNormalImage(LPCTSTR pStrImage)
 	{
-		m_sNormalImage = pStrImage;
+		m_normalImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CButtonUI::GetHotImage()
 	{
-		return m_sHotImage;
+		return m_hotImage.GetAttributeString();
 	}
 
 	void CButtonUI::SetHotImage(LPCTSTR pStrImage)
 	{
-		m_sHotImage = pStrImage;
+		m_hotImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CButtonUI::GetPushedImage()
 	{
-		return m_sPushedImage;
+		return m_pushedImage.GetAttributeString();
 	}
 
 	void CButtonUI::SetPushedImage(LPCTSTR pStrImage)
 	{
-		m_sPushedImage = pStrImage;
+		m_pushedImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CButtonUI::GetFocusedImage()
 	{
-		return m_sFocusedImage;
+		return m_focusedImage.GetAttributeString();
 	}
 
 	void CButtonUI::SetFocusedImage(LPCTSTR pStrImage)
 	{
-		m_sFocusedImage = pStrImage;
+		m_focusedImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CButtonUI::GetDisabledImage()
 	{
-		return m_sDisabledImage;
+		return m_disabledImage.GetAttributeString();
 	}
 
 	void CButtonUI::SetDisabledImage(LPCTSTR pStrImage)
 	{
-		m_sDisabledImage = pStrImage;
+		m_disabledImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CButtonUI::GetForeImage()
 	{
-		return m_sForeImage;
+		return m_foreImage.GetAttributeString();
 	}
 
 	void CButtonUI::SetForeImage( LPCTSTR pStrImage )
 	{
-		m_sForeImage = pStrImage;
+		m_foreImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CButtonUI::GetHotForeImage()
 	{
-		return m_sHotForeImage;
+		return m_hotForeImage.GetAttributeString();
 	}
 
 	void CButtonUI::SetHotForeImage( LPCTSTR pStrImage )
 	{
-		m_sHotForeImage = pStrImage;
+		m_hotForeImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
@@ -394,20 +394,20 @@ namespace DuiLib
 		{
 			if ((m_uButtonState & UISTATE_DISABLED) != 0)
 			{
-				if (m_sDisabledImage.IsLoadSuccess())
+				if (m_disabledImage.IsLoadSuccess())
 				{
-					DrawImage(hDC, m_sDisabledImage);
+					DrawImage(hDC, m_disabledImage);
 					break;
 				}
 			}
 			else if ((m_uButtonState & UISTATE_PUSHED) != 0)
 			{
-				if (m_sPushedImage.IsLoadSuccess())
+				if (m_pushedImage.IsLoadSuccess())
 				{
-					DrawImage(hDC, m_sPushedImage);
-					if (m_sPushedForeImage.IsLoadSuccess())
+					DrawImage(hDC, m_pushedImage);
+					if (m_pushedForeImage.IsLoadSuccess())
 					{
-						DrawImage(hDC, m_sPushedForeImage);
+						DrawImage(hDC, m_pushedForeImage);
 						return;
 					}
 					else
@@ -416,13 +416,13 @@ namespace DuiLib
 			}
 			else if ((m_uButtonState & UISTATE_HOT) != 0)
 			{
-				if (m_sHotImage.IsLoadSuccess())
+				if (m_hotImage.IsLoadSuccess())
 				{
-					DrawImage(hDC, m_sHotImage);
+					DrawImage(hDC, m_hotImage);
 					
-					if (m_sHotForeImage.IsLoadSuccess())
+					if (m_hotForeImage.IsLoadSuccess())
 					{
-						DrawImage(hDC, m_sHotForeImage);
+						DrawImage(hDC, m_hotForeImage);
 						return;
 					}
 					else
@@ -436,17 +436,17 @@ namespace DuiLib
 			}
 			else if ((m_uButtonState & UISTATE_FOCUSED) != 0)
 			{
-				if (m_sFocusedImage.IsLoadSuccess())
+				if (m_focusedImage.IsLoadSuccess())
 				{
-					DrawImage(hDC, m_sFocusedImage);
+					DrawImage(hDC, m_focusedImage);
 					return;
 				}
 			}
 
-			DrawImage(hDC, m_sNormalImage);
+			DrawImage(hDC, m_normalImage);
 		} while (0);
 
 
-		DrawImage(hDC, m_sForeImage);
+		DrawImage(hDC, m_foreImage);
 	}
 }

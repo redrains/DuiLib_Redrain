@@ -140,45 +140,45 @@ namespace DuiLib
 
 	LPCTSTR CScrollBarUI::GetButton1NormalImage()
 	{
-		return m_sButton1NormalImage;
+		return m_button1NormalImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetButton1NormalImage(LPCTSTR pStrImage)
 	{
-		m_sButton1NormalImage = pStrImage;
+		m_button1NormalImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetButton1HotImage()
 	{
-		return m_sButton1HotImage;
+		return m_button1HotImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetButton1HotImage(LPCTSTR pStrImage)
 	{
-		m_sButton1HotImage = pStrImage;
+		m_button1HotImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetButton1PushedImage()
 	{
-		return m_sButton1PushedImage;
+		return m_button1PushedImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetButton1PushedImage(LPCTSTR pStrImage)
 	{
-		m_sButton1PushedImage = pStrImage;
+		m_button1PushedImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetButton1DisabledImage()
 	{
-		return m_sButton1DisabledImage;
+		return m_button1DisabledImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetButton1DisabledImage(LPCTSTR pStrImage)
 	{
-		m_sButton1DisabledImage = pStrImage;
+		m_button1DisabledImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
@@ -195,177 +195,177 @@ namespace DuiLib
 
 	LPCTSTR CScrollBarUI::GetButton2NormalImage()
 	{
-		return m_sButton2NormalImage;
+		return m_button2NormalImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetButton2NormalImage(LPCTSTR pStrImage)
 	{
-		m_sButton2NormalImage = pStrImage;
+		m_button2NormalImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetButton2HotImage()
 	{
-		return m_sButton2HotImage;
+		return m_button2HotImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetButton2HotImage(LPCTSTR pStrImage)
 	{
-		m_sButton2HotImage = pStrImage;
+		m_button2HotImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetButton2PushedImage()
 	{
-		return m_sButton2PushedImage;
+		return m_button2PushedImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetButton2PushedImage(LPCTSTR pStrImage)
 	{
-		m_sButton2PushedImage = pStrImage;
+		m_button2PushedImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetButton2DisabledImage()
 	{
-		return m_sButton2DisabledImage;
+		return m_button2DisabledImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetButton2DisabledImage(LPCTSTR pStrImage)
 	{
-		m_sButton2DisabledImage = pStrImage;
+		m_button2DisabledImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetThumbNormalImage()
 	{
-		return m_sThumbNormalImage;
+		return m_thumbNormalImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetThumbNormalImage(LPCTSTR pStrImage)
 	{
-		m_sThumbNormalImage = pStrImage;
+		m_thumbNormalImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetThumbHotImage()
 	{
-		return m_sThumbHotImage;
+		return m_thumbHotImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetThumbHotImage(LPCTSTR pStrImage)
 	{
-		m_sThumbHotImage = pStrImage;
+		m_thumbHotImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetThumbPushedImage()
 	{
-		return m_sThumbPushedImage;
+		return m_thumbPushedImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetThumbPushedImage(LPCTSTR pStrImage)
 	{
-		m_sThumbPushedImage = pStrImage;
+		m_thumbPushedImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetThumbDisabledImage()
 	{
-		return m_sThumbDisabledImage;
+		return m_thumbDisabledImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetThumbDisabledImage(LPCTSTR pStrImage)
 	{
-		m_sThumbDisabledImage = pStrImage;
+		m_thumbDisabledImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetRailNormalImage()
 	{
-		return m_sRailNormalImage;
+		return m_railNormalImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetRailNormalImage(LPCTSTR pStrImage)
 	{
-		m_sRailNormalImage = pStrImage;
+		m_railNormalImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetRailHotImage()
 	{
-		return m_sRailHotImage;
+		return m_railHotImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetRailHotImage(LPCTSTR pStrImage)
 	{
-		m_sRailHotImage = pStrImage;
+		m_railHotImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetRailPushedImage()
 	{
-		return m_sRailPushedImage;
+		return m_railPushedImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetRailPushedImage(LPCTSTR pStrImage)
 	{
-		m_sRailPushedImage = pStrImage;
+		m_railPushedImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetRailDisabledImage()
 	{
-		return m_sRailDisabledImage;
+		return m_railDisabledImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetRailDisabledImage(LPCTSTR pStrImage)
 	{
-		m_sRailDisabledImage = pStrImage;
+		m_railDisabledImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetBkNormalImage()
 	{
-		return m_sBkNormalImage;
+		return m_bkNormalImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetBkNormalImage(LPCTSTR pStrImage)
 	{
-		m_sBkNormalImage = pStrImage;
+		m_bkNormalImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetBkHotImage()
 	{
-		return m_sBkHotImage;
+		return m_bkHotImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetBkHotImage(LPCTSTR pStrImage)
 	{
-		m_sBkHotImage = pStrImage;
+		m_bkHotImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetBkPushedImage()
 	{
-		return m_sBkPushedImage;
+		return m_bkPushedImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetBkPushedImage(LPCTSTR pStrImage)
 	{
-		m_sBkPushedImage = pStrImage;
+		m_bkPushedImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CScrollBarUI::GetBkDisabledImage()
 	{
-		return m_sBkDisabledImage;
+		return m_bkDisabledImage.GetAttributeString();
 	}
 
 	void CScrollBarUI::SetBkDisabledImage(LPCTSTR pStrImage)
 	{
-		m_sBkDisabledImage = pStrImage;
+		m_bkDisabledImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
@@ -797,30 +797,30 @@ namespace DuiLib
 
 		if( (m_uThumbState & UISTATE_DISABLED) != 0 ) 
 		{
-			if( m_sBkDisabledImage.IsLoadSuccess() ) 
+			if( m_bkDisabledImage.IsLoadSuccess() ) 
 			{
-				DrawImage(hDC, m_sBkDisabledImage);
+				DrawImage(hDC, m_bkDisabledImage);
 				return;
 			}
 		}
 		else if( (m_uThumbState & UISTATE_PUSHED) != 0 )
 		{
-			if (m_sBkPushedImage.IsLoadSuccess())
+			if (m_bkPushedImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sBkPushedImage);
+				DrawImage(hDC, m_bkPushedImage);
 				return;
 			}
 		}
 		else if( (m_uThumbState & UISTATE_HOT) != 0 ) 
 		{
-			if (m_sBkHotImage.IsLoadSuccess())
+			if (m_bkHotImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sBkHotImage);
+				DrawImage(hDC, m_bkHotImage);
 				return;
 			}
 		}
 
-		DrawImage(hDC, m_sBkNormalImage);
+		DrawImage(hDC, m_bkNormalImage);
 	}
 
 	void CScrollBarUI::PaintButton1(HDC hDC)
@@ -837,32 +837,32 @@ namespace DuiLib
 
 		if( (m_uButton1State & UISTATE_DISABLED) != 0 ) 
 		{
-			if( m_sButton1DisabledImage.IsLoadSuccess() ) 
+			if( m_button1DisabledImage.IsLoadSuccess() ) 
 			{
-				DrawImage(hDC, m_sButton1DisabledImage, rcDest);
+				DrawImage(hDC, m_button1DisabledImage, rcDest);
 				return;
 			}
 		}
 		else if( (m_uButton1State & UISTATE_PUSHED) != 0 ) 
 		{
-			if (m_sButton1PushedImage.IsLoadSuccess())
+			if (m_button1PushedImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sButton1PushedImage, rcDest);
+				DrawImage(hDC, m_button1PushedImage, rcDest);
 				return;
 			}
 		}
 		else if( (m_uButton1State & UISTATE_HOT) != 0 ) 
 		{
-			if (m_sButton1HotImage.IsLoadSuccess())
+			if (m_button1HotImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sButton1HotImage, rcDest);
+				DrawImage(hDC, m_button1HotImage, rcDest);
 				return;
 			}
 		}
 
-		if (m_sButton1NormalImage.IsLoadSuccess())
+		if (m_button1NormalImage.IsLoadSuccess())
 		{
-			DrawImage(hDC, m_sButton1NormalImage, rcDest);
+			DrawImage(hDC, m_button1NormalImage, rcDest);
 			return;
 		}
 
@@ -885,32 +885,32 @@ namespace DuiLib
 
 		if( (m_uButton2State & UISTATE_DISABLED) != 0 ) 
 		{
-			if (m_sButton2DisabledImage.IsLoadSuccess())
+			if (m_button2DisabledImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sButton2DisabledImage, rcDest);
+				DrawImage(hDC, m_button2DisabledImage, rcDest);
 				return;
 			}
 		}
 		else if( (m_uButton2State & UISTATE_PUSHED) != 0 ) 
 		{
-			if (m_sButton2PushedImage.IsLoadSuccess())
+			if (m_button2PushedImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sButton2PushedImage, rcDest);
+				DrawImage(hDC, m_button2PushedImage, rcDest);
 				return;
 			}
 		}
 		else if( (m_uButton2State & UISTATE_HOT) != 0 ) 
 		{
-			if (m_sButton2HotImage.IsLoadSuccess())
+			if (m_button2HotImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sButton2HotImage, rcDest);
+				DrawImage(hDC, m_button2HotImage, rcDest);
 				return;
 			}
 		}
 
-		if (m_sButton2NormalImage.IsLoadSuccess())
+		if (m_button2NormalImage.IsLoadSuccess())
 		{
-			DrawImage(hDC, m_sButton2NormalImage, rcDest);
+			DrawImage(hDC, m_button2NormalImage, rcDest);
 			return;
 		}
 
@@ -932,32 +932,32 @@ namespace DuiLib
 
 		if( (m_uThumbState & UISTATE_DISABLED) != 0 ) 
 		{
-			if( m_sThumbDisabledImage.IsLoadSuccess() )
+			if( m_thumbDisabledImage.IsLoadSuccess() )
 			{
-				DrawImage(hDC, m_sThumbDisabledImage, rcDest);
+				DrawImage(hDC, m_thumbDisabledImage, rcDest);
 				return;
 			}
 		}
 		else if( (m_uThumbState & UISTATE_PUSHED) != 0 ) 
 		{
-			if (m_sThumbPushedImage.IsLoadSuccess())
+			if (m_thumbPushedImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sThumbPushedImage, rcDest);
+				DrawImage(hDC, m_thumbPushedImage, rcDest);
 				return;
 			}
 		}
 		else if( (m_uThumbState & UISTATE_HOT) != 0 ) 
 		{
-			if (m_sThumbHotImage.IsLoadSuccess())
+			if (m_thumbHotImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sThumbHotImage, rcDest);
+				DrawImage(hDC, m_thumbHotImage, rcDest);
 				return;
 			}
 		}
 
-		if (m_sThumbNormalImage.IsLoadSuccess())
+		if (m_thumbNormalImage.IsLoadSuccess())
 		{
-			DrawImage(hDC, m_sThumbNormalImage, rcDest);
+			DrawImage(hDC, m_thumbNormalImage, rcDest);
 			return;
 		}
 
@@ -990,32 +990,32 @@ namespace DuiLib
 
 		if( (m_uThumbState & UISTATE_DISABLED) != 0 )
 		{
-			if( m_sRailDisabledImage.IsLoadSuccess() ) 
+			if( m_railDisabledImage.IsLoadSuccess() ) 
 			{
-				DrawImage(hDC, m_sRailDisabledImage, rcDest);
+				DrawImage(hDC, m_railDisabledImage, rcDest);
 				return;
 			}
 		}
 		else if( (m_uThumbState & UISTATE_PUSHED) != 0 )
 		{
-			if (m_sRailPushedImage.IsLoadSuccess())
+			if (m_railPushedImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sRailPushedImage, rcDest);
+				DrawImage(hDC, m_railPushedImage, rcDest);
 				return;
 			}
 		}
 		else if( (m_uThumbState & UISTATE_HOT) != 0 ) 
 		{
-			if (m_sRailHotImage.IsLoadSuccess())
+			if (m_railHotImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sRailHotImage, rcDest);
+				DrawImage(hDC, m_railHotImage, rcDest);
 				return;
 			}
 		}
 
-		if (m_sRailNormalImage.IsLoadSuccess())
+		if (m_railNormalImage.IsLoadSuccess())
 		{
-			DrawImage(hDC, m_sRailNormalImage, rcDest);
+			DrawImage(hDC, m_railNormalImage, rcDest);
 			return;
 		}
 	}

@@ -58,11 +58,11 @@ namespace DuiLib
 		DWORD			m_dwSelectedBkColor;
 		DWORD			m_dwSelectedTextColor;
 
-		CImageAttribute		m_sSelectedImage;
-		CImageAttribute		m_sSelectedHotImage;
-		CImageAttribute		m_sSelectedPushedImage;
-		CImageAttribute		m_sForeImage;
-		CImageAttribute		m_sSelectedForeImage;
+		CImageAttribute		m_selectedImage;
+		CImageAttribute		m_selectedHotImage;
+		CImageAttribute		m_selectedPushedImage;
+		CImageAttribute		m_foreImage;
+		CImageAttribute		m_selectedForeImage;
 	};
 
 } // namespace DuiLib

@@ -150,14 +150,14 @@ void CControlUI::SetBkColor3(DWORD dwBackColor)
 
 LPCTSTR CControlUI::GetBkImage()
 {
-    return m_sBkImage;
+    return m_bkImage.GetAttributeString();
 }
 
 void CControlUI::SetBkImage(LPCTSTR pStrImage)
 {
-    if( m_sBkImage == pStrImage ) return;
+    if( m_bkImage.GetAttributeString() == pStrImage ) return;
 
-    m_sBkImage = pStrImage;
+    m_bkImage.SetAttributeString(pStrImage);
     Invalidate();
 }
 
@@ -942,7 +942,7 @@ void CControlUI::PaintBkColor(HDC hDC)
 
 void CControlUI::PaintBkImage(HDC hDC)
 {
-    DrawImage(hDC, m_sBkImage);
+    DrawImage(hDC, m_bkImage);
 }
 
 void CControlUI::PaintStatusImage(HDC hDC)

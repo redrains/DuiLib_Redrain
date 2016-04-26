@@ -16,17 +16,12 @@ public:
 	const CImageAttribute& operator=(const CImageAttribute&);
 	virtual ~CImageAttribute();
 
-    CDuiString GetAttributeString() const;
+    const CDuiString& GetAttributeString() const;
 	void SetAttributeString(LPCTSTR pStrImageAttri);
 	void ModifyAttribute(LPCTSTR pStrModify);
 	bool LoadImage(CPaintManagerUI* pManager);
 	bool IsLoadSuccess();
 
-	operator LPCTSTR() const;
-	bool operator ==(LPCTSTR pStrImage) const;
-	const CDuiString& operator=(const CDuiString& src);
-	const CDuiString& operator=(const TCHAR ch);
-	const CDuiString& operator=(LPCTSTR pstr);
 private:
 	void Clone(const CImageAttribute&);
 	void Clear();

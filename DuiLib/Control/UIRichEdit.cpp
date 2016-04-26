@@ -1964,45 +1964,45 @@ void CRichEditUI::DoEvent(TEventUI& event)
 
 LPCTSTR CRichEditUI::GetNormalImage()
 {
-	return m_sNormalImage;
+	return m_normalImage.GetAttributeString();
 }
 
 void CRichEditUI::SetNormalImage(LPCTSTR pStrImage)
 {
-	m_sNormalImage = pStrImage;
+	m_normalImage.SetAttributeString(pStrImage);
 	Invalidate();
 }
 
 LPCTSTR CRichEditUI::GetHotImage()
 {
-	return m_sHotImage;
+	return m_hotImage.GetAttributeString();
 }
 
 void CRichEditUI::SetHotImage(LPCTSTR pStrImage)
 {
-	m_sHotImage = pStrImage;
+	m_hotImage.SetAttributeString(pStrImage);
 	Invalidate();
 }
 
 LPCTSTR CRichEditUI::GetFocusedImage()
 {
-	return m_sFocusedImage;
+	return m_focusedImage.GetAttributeString();
 }
 
 void CRichEditUI::SetFocusedImage(LPCTSTR pStrImage)
 {
-	m_sFocusedImage = pStrImage;
+	m_focusedImage.SetAttributeString(pStrImage);
 	Invalidate();
 }
 
 LPCTSTR CRichEditUI::GetDisabledImage()
 {
-	return m_sDisabledImage;
+	return m_disabledImage.GetAttributeString();
 }
 
 void CRichEditUI::SetDisabledImage(LPCTSTR pStrImage)
 {
-	m_sDisabledImage = pStrImage;
+	m_disabledImage.SetAttributeString(pStrImage);
 	Invalidate();
 }
 
@@ -2050,30 +2050,30 @@ void CRichEditUI::PaintStatusImage(HDC hDC)
 
 	if ((m_uButtonState & UISTATE_DISABLED) != 0)
 	{
-		if (m_sDisabledImage.IsLoadSuccess())
+		if (m_disabledImage.IsLoadSuccess())
 		{
-			DrawImage(hDC, m_sDisabledImage);
+			DrawImage(hDC, m_disabledImage);
 			return;
 		}
 	}
 	else if ((m_uButtonState & UISTATE_HOT) != 0)
 	{
-		if (m_sHotImage.IsLoadSuccess())
+		if (m_hotImage.IsLoadSuccess())
 		{
-			DrawImage(hDC, m_sHotImage);
+			DrawImage(hDC, m_hotImage);
 			return;
 		}
 	}
 	else if ((m_uButtonState & UISTATE_FOCUSED) != 0)
 	{
-		if (m_sFocusedImage.IsLoadSuccess())
+		if (m_focusedImage.IsLoadSuccess())
 		{
-			DrawImage(hDC, m_sFocusedImage);
+			DrawImage(hDC, m_focusedImage);
 			return;
 		}
 	}
 
-	DrawImage(hDC, m_sNormalImage);
+	DrawImage(hDC, m_normalImage);
 }
 
 SIZE CRichEditUI::EstimateSize(SIZE szAvailable)

@@ -395,45 +395,45 @@ namespace DuiLib
 
 	LPCTSTR CEditUI::GetNormalImage()
 	{
-		return m_sNormalImage;
+		return m_normalImage.GetAttributeString();
 	}
 
 	void CEditUI::SetNormalImage(LPCTSTR pStrImage)
 	{
-		m_sNormalImage = pStrImage;
+		m_normalImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CEditUI::GetHotImage()
 	{
-		return m_sHotImage;
+		return m_hotImage.GetAttributeString();
 	}
 
 	void CEditUI::SetHotImage(LPCTSTR pStrImage)
 	{
-		m_sHotImage = pStrImage;
+		m_hotImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CEditUI::GetFocusedImage()
 	{
-		return m_sFocusedImage;
+		return m_focusedImage.GetAttributeString();
 	}
 
 	void CEditUI::SetFocusedImage(LPCTSTR pStrImage)
 	{
-		m_sFocusedImage = pStrImage;
+		m_focusedImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CEditUI::GetDisabledImage()
 	{
-		return m_sDisabledImage;
+		return m_disabledImage.GetAttributeString();
 	}
 
 	void CEditUI::SetDisabledImage(LPCTSTR pStrImage)
 	{
-		m_sDisabledImage = pStrImage;
+		m_disabledImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
@@ -559,30 +559,30 @@ namespace DuiLib
 
 		if( (m_uButtonState & UISTATE_DISABLED) != 0 )
 		{
-			if (m_sHotImage.IsLoadSuccess())
+			if (m_hotImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sDisabledImage);
+				DrawImage(hDC, m_disabledImage);
 				return;
 			}
 		}
 		else if ((m_uButtonState & UISTATE_FOCUSED) != 0)
 		{
-			if (m_sFocusedImage.IsLoadSuccess())
+			if (m_focusedImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sFocusedImage);
+				DrawImage(hDC, m_focusedImage);
 				return;
 			}
 		}
 		else if( (m_uButtonState & UISTATE_HOT) != 0 ) 
 		{
-			if( m_sHotImage.IsLoadSuccess() )
+			if( m_hotImage.IsLoadSuccess() )
 			{
-				DrawImage(hDC, m_sHotImage);
+				DrawImage(hDC, m_hotImage);
 				return;
 			}
 		}
 
-		DrawImage(hDC, m_sNormalImage);
+		DrawImage(hDC, m_normalImage);
 	}
 
 	void CEditUI::PaintText(HDC hDC)

@@ -55,9 +55,9 @@ namespace DuiLib
 		UINT m_uButtonState;
 		int m_nStep;
 
-		CImageAttribute m_sThumbImage;
-		CImageAttribute m_sThumbHotImage;
-		CImageAttribute m_sThumbPushedImage;
+		CImageAttribute m_thumbImage;
+		CImageAttribute m_thumbHotImage;
+		CImageAttribute m_thumbPushedImage;
 
 		bool	   m_bSendMove;
 	};

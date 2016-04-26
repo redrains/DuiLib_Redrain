@@ -42,7 +42,7 @@ namespace DuiLib {
 
 	}
 
-	CDuiString CImageAttribute::GetAttributeString() const
+	const CDuiString& CImageAttribute::GetAttributeString() const
 	{
 		return m_sImageAttribute;
 	}
@@ -217,35 +217,6 @@ namespace DuiLib {
 			}
 			if (*pStrImage++ != _T(' ')) break;
 		}
-	}
-
-	CImageAttribute::operator LPCTSTR() const
-	{
-		return m_sImageAttribute;
-	}
-
-	bool CImageAttribute::operator==(LPCTSTR pStrImage) const
-	{
-		return m_sImageAttribute == pStrImage;
-	}
-
-	const CDuiString& CImageAttribute::operator=(const CDuiString& src)
-	{
-		SetAttributeString(src);
-		return m_sImageAttribute;
-	}
-
-	const CDuiString& CImageAttribute::operator=(LPCTSTR lpStr)
-	{
-		SetAttributeString(lpStr);
-		return m_sImageAttribute;
-	}
-
-	const CDuiString& CImageAttribute::operator=(const TCHAR ch)
-	{
-		m_sImageAttribute = ch;
-		SetAttributeString(m_sImageAttribute);
-		return m_sImageAttribute;
 	}
 
 } // namespace DuiLib

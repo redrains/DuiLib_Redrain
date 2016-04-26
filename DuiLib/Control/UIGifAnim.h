@@ -46,7 +46,7 @@ namespace DuiLib
 		UINT			m_nFramePosition;			// 当前放到第几帧
 		Gdiplus::PropertyItem*	m_pPropertyItem;	// 帧与帧之间间隔时间
 
-		CDuiString		m_sBkImage;
+		CDuiString		m_bkImage;
 		bool			m_bIsAutoPlay;				// 是否自动播放gif
 		bool			m_bIsAutoSize;				// 是否自动根据图片设置大小
 		bool			m_bIsPlaying;

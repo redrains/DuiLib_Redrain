@@ -111,34 +111,34 @@ namespace DuiLib
 
 	LPCTSTR COptionUI::GetSelectedImage()
 	{
-		return m_sSelectedImage;
+		return m_selectedImage.GetAttributeString();
 	}
 
 	void COptionUI::SetSelectedImage(LPCTSTR pStrImage)
 	{
-		m_sSelectedImage = pStrImage;
+		m_selectedImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR COptionUI::GetSelectedHotImage()
 	{
-		return m_sSelectedHotImage;
+		return m_selectedHotImage.GetAttributeString();
 	}
 
 	void COptionUI::SetSelectedHotImage( LPCTSTR pStrImage )
 	{
-		m_sSelectedHotImage = pStrImage;
+		m_selectedHotImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR COptionUI::GetSelectedPushedImage()
 	{
-		return m_sSelectedPushedImage;
+		return m_selectedPushedImage.GetAttributeString();
 	}
 
 	void COptionUI::SetSelectedPushedImage(LPCTSTR pStrImage)
 	{
-		m_sSelectedPushedImage = pStrImage;
+		m_selectedPushedImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
@@ -165,23 +165,23 @@ namespace DuiLib
 
 	LPCTSTR COptionUI::GetForeImage()
 	{
-		return m_sForeImage;
+		return m_foreImage.GetAttributeString();
 	}
 
 	void COptionUI::SetForeImage(LPCTSTR pStrImage)
 	{
-		m_sForeImage = pStrImage;
+		m_foreImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR COptionUI::GetSelectedForedImage()
 	{
-		return m_sSelectedForeImage;
+		return m_selectedForeImage.GetAttributeString();
 	}
 
 	void COptionUI::SetSelectedForedImage(LPCTSTR pStrImage)
 	{
-		m_sSelectedForeImage = pStrImage;
+		m_selectedForeImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
@@ -219,20 +219,20 @@ namespace DuiLib
 	{
 		do 
 		{
-			if ((m_uButtonState & UISTATE_PUSHED) != 0 && IsSelected() && m_sSelectedPushedImage.IsLoadSuccess())
+			if ((m_uButtonState & UISTATE_PUSHED) != 0 && IsSelected() && m_selectedPushedImage.IsLoadSuccess())
 			{
-			if (DrawImage(hDC, m_sSelectedPushedImage))
+			if (DrawImage(hDC, m_selectedPushedImage))
 				break;
 			}
-			else if ((m_uButtonState & UISTATE_HOT) != 0 && IsSelected() && m_sSelectedHotImage.IsLoadSuccess()) {
-				if (DrawImage(hDC, m_sSelectedHotImage))
+			else if ((m_uButtonState & UISTATE_HOT) != 0 && IsSelected() && m_selectedHotImage.IsLoadSuccess()) {
+				if (DrawImage(hDC, m_selectedHotImage))
 					break;
 			}
 			else if ((m_uButtonState & UISTATE_SELECTED) != 0)
 			{
-				if (m_sSelectedImage.IsLoadSuccess())
+				if (m_selectedImage.IsLoadSuccess())
 				{
-					if (DrawImage(hDC, m_sSelectedImage))
+					if (DrawImage(hDC, m_selectedImage))
 						break;
 				}
 				else if (m_dwSelectedBkColor != 0)
@@ -245,13 +245,13 @@ namespace DuiLib
 			CButtonUI::PaintStatusImage(hDC);
 		} while (0);
 
-		if ( IsSelected() && m_sSelectedForeImage.IsLoadSuccess())
+		if ( IsSelected() && m_selectedForeImage.IsLoadSuccess())
 		{
-			DrawImage(hDC, m_sSelectedForeImage);
+			DrawImage(hDC, m_selectedForeImage);
 		}
-		else if( m_sForeImage.IsLoadSuccess() ) 
+		else if( m_foreImage.IsLoadSuccess() ) 
 		{
-			DrawImage(hDC, m_sForeImage);
+			DrawImage(hDC, m_foreImage);
 		}
 
 	}

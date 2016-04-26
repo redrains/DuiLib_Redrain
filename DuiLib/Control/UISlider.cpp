@@ -65,34 +65,34 @@ namespace DuiLib
 
 	LPCTSTR CSliderUI::GetThumbImage() const
 	{
-		return m_sThumbImage;
+		return m_thumbImage.GetAttributeString();
 	}
 
 	void CSliderUI::SetThumbImage(LPCTSTR pStrImage)
 	{
-		m_sThumbImage = pStrImage;
+		m_thumbImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CSliderUI::GetThumbHotImage() const
 	{
-		return m_sThumbHotImage;
+		return m_thumbHotImage.GetAttributeString();
 	}
 
 	void CSliderUI::SetThumbHotImage(LPCTSTR pStrImage)
 	{
-		m_sThumbHotImage = pStrImage;
+		m_thumbHotImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
 	LPCTSTR CSliderUI::GetThumbPushedImage() const
 	{
-		return m_sThumbPushedImage;
+		return m_thumbPushedImage.GetAttributeString();
 	}
 
 	void CSliderUI::SetThumbPushedImage(LPCTSTR pStrImage)
 	{
-		m_sThumbPushedImage = pStrImage;
+		m_thumbPushedImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
@@ -276,24 +276,24 @@ namespace DuiLib
 
 		if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) 
 		{
-			if( m_sThumbPushedImage.IsLoadSuccess() ) 
+			if( m_thumbPushedImage.IsLoadSuccess() ) 
 			{
-				DrawImage(hDC, m_sThumbPushedImage, rcDest);
+				DrawImage(hDC, m_thumbPushedImage, rcDest);
 				return;
 			}
 		}
 		else if( (m_uButtonState & UISTATE_HOT) != 0 ) 
 		{
-			if (m_sThumbHotImage.IsLoadSuccess())
+			if (m_thumbHotImage.IsLoadSuccess())
 			{
-				DrawImage(hDC, m_sThumbHotImage, rcDest);
+				DrawImage(hDC, m_thumbHotImage, rcDest);
 				return;
 			}
 		}
 
-		if (m_sThumbImage.IsLoadSuccess())
+		if (m_thumbImage.IsLoadSuccess())
 		{
-			DrawImage(hDC, m_sThumbImage, rcDest);
+			DrawImage(hDC, m_thumbImage, rcDest);
 			return;
 		}
 	}

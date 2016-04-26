@@ -72,14 +72,14 @@ namespace DuiLib
 
 	LPCTSTR CProgressUI::GetForeImage() const
 	{
-		return m_sForeImage;
+		return m_foreImage.GetAttributeString();
 	}
 
 	void CProgressUI::SetForeImage(LPCTSTR pStrImage)
 	{
-		if( m_sForeImage == pStrImage ) return;
+		if( m_foreImage.GetAttributeString() == pStrImage ) return;
 
-		m_sForeImage = pStrImage;
+		m_foreImage.SetAttributeString(pStrImage);
 		Invalidate();
 	}
 
@@ -111,7 +111,7 @@ namespace DuiLib
 			rc.bottom = m_rcItem.bottom - m_rcItem.top;
 		}
 
-		if( m_sForeImage.IsLoadSuccess() ) 
+		if( m_foreImage.IsLoadSuccess() ) 
 		{
 			m_sForeImageModify.Empty();
 			if (m_bStretchForeImage)
@@ -121,7 +121,7 @@ namespace DuiLib
 				, rc.left, rc.top, rc.right, rc.bottom
 				, rc.left, rc.top, rc.right, rc.bottom);
 
-			DrawImage(hDC, m_sForeImage, m_sForeImageModify);
+			DrawImage(hDC, m_foreImage, m_sForeImageModify);
 		}
 	}
 

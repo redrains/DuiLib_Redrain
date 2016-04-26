@@ -202,8 +202,8 @@ protected:
     DWORD m_dwBackColor;
     DWORD m_dwBackColor2;
     DWORD m_dwBackColor3;
-	CImageAttribute m_sBkImage;
-	CImageAttribute m_sForeImage;
+	CImageAttribute m_bkImage;
+	CImageAttribute m_foreImage;
     DWORD m_dwBorderColor;
 	DWORD m_dwFocusBorderColor;
     bool m_bColorHSL;

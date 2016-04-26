@@ -71,10 +71,10 @@ namespace DuiLib
 		bool m_bPasswordMode;
 		TCHAR m_cPasswordChar;
 		UINT m_uButtonState;
-		CImageAttribute m_sNormalImage;
-		CImageAttribute m_sHotImage;
-		CImageAttribute m_sFocusedImage;
-		CImageAttribute m_sDisabledImage;
+		CImageAttribute m_normalImage;
+		CImageAttribute m_hotImage;
+		CImageAttribute m_focusedImage;
+		CImageAttribute m_disabledImage;
 		CDuiString m_sTipValue;
 		DWORD m_dwTipValueColor;
 		DWORD m_dwEditbkColor;

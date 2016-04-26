@@ -120,9 +120,9 @@ namespace DuiLib
 
 	void CGifAnimUI::SetBkImage(LPCTSTR pStrImage)
 	{
-		if( m_sBkImage == pStrImage || NULL == pStrImage) return;
+		if( m_bkImage == pStrImage || NULL == pStrImage) return;
 
-		m_sBkImage = pStrImage;
+		m_bkImage = pStrImage;
 
 		StopGif();
 		DeleteGif();
@@ -133,7 +133,7 @@ namespace DuiLib
 
 	LPCTSTR CGifAnimUI::GetBkImage()
 	{
-		return m_sBkImage.GetData();
+		return m_bkImage.GetData();
 	}
 
 	void CGifAnimUI::SetAutoPlay(bool bIsAuto)
