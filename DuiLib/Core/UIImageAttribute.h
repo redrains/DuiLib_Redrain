@@ -22,6 +22,8 @@ public:
 	bool LoadImage(CPaintManagerUI* pManager);
 	bool IsLoadSuccess();
 
+	RECT GetDest() const;
+	void SetDest(const RECT &rcDest);
 private:
 	void Clone(const CImageAttribute&);
 	void Clear();

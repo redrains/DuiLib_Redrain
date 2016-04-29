@@ -658,10 +658,24 @@ bool CRenderEngine::DrawImage(HDC hDC, CPaintManagerUI* pManager, const RECT& rc
 	RECT rcDest = image.m_rcDest;
 	rcDest.left += rcControl.left;
 	rcDest.top += rcControl.top;
-	rcDest.right = rcDest.left + rcControl.right;
+	if (::IsRectEmpty(&image.m_rcDest))
+	{
+		//如果为空则赋值为控件值
+		rcDest.right += rcControl.right;
+		rcDest.bottom += rcControl.bottom;
+	}
+	else
+	{
+		//不为空则计算右下角坐标值
+		//计算图片的宽高
+		int nWidth = image.m_rcDest.right - image.m_rcDest.left;
+		int nHeight = image.m_rcDest.bottom - image.m_rcDest.top;
+		rcDest.right = rcDest.left + nWidth;
+		rcDest.bottom = rcDest.top + nHeight;
+	}
+
 	if (rcDest.right > rcControl.right)
-		rcDest.right = rcControl.right;
-	rcDest.bottom = rcDest.top + rcControl.bottom;
+		rcDest.right = rcControl.right;	
 	if (rcDest.bottom > rcControl.bottom)
 		rcDest.bottom = rcControl.bottom;
 

@@ -61,8 +61,10 @@ public:
     void SetColorHSL(bool bColorHSL);
     SIZE GetBorderRound() const;
     void SetBorderRound(SIZE cxyRound);
-	bool DrawImage(HDC hDC, CImageAttribute& image, LPCTSTR pStrModify = NULL);
-	bool DrawImage(HDC hDC, CImageAttribute& image, const RECT& rcDest, LPCTSTR pStrModify = NULL);
+	bool DrawImage(HDC hDC, CImageAttribute& image);
+	//因为经常需要指定绘制的Dest，所以专门增加rcDest参数控制输出位置
+	bool DrawImage(HDC hDC, CImageAttribute& image, const RECT& rcDest);
+	bool DrawImage(HDC hDC, CImageAttribute& image, LPCTSTR pStrModify);
 
 	//边框相关
 	int GetBorderSize() const;

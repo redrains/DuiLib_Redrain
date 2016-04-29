@@ -603,14 +603,16 @@ void CMenuElementUI::DrawItemIcon(HDC hDC, const RECT& rcItem)
 	if ( m_icon.IsLoadSuccess() )
 	{	
 		if (!(m_bCheckItem && !GetChecked()))
-		{	
-			CDuiString strModify;
-			strModify.Format(_T("dest='%d,%d,%d,%d'"),
-				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx)/2,
-				(m_cxyFixed.cy - m_szIconSize.cy)/2,
-				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx)/2 + m_szIconSize.cx,
-				(m_cxyFixed.cy - m_szIconSize.cy)/2 + m_szIconSize.cy);
-			DrawImage(hDC, m_icon, strModify);
+		{
+			RECT rcDest =
+			{
+				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx) / 2,
+				(m_cxyFixed.cy - m_szIconSize.cy) / 2,
+				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx) / 2 + m_szIconSize.cx,
+				(m_cxyFixed.cy - m_szIconSize.cy) / 2 + m_szIconSize.cy 
+			};
+			
+			DrawImage(hDC, m_icon, rcDest);
 		}			
 	}
 }
@@ -626,14 +628,15 @@ void CMenuElementUI::DrawItemExpland(HDC hDC, const RECT& rcItem)
 			m_expandIcon.SetAttributeString(strExplandIcon);
 		}
 		
-		CDuiString strModify;
-		strModify.Format(_T("dest='%d,%d,%d,%d'"),
-			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2,
-			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2,
-			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE,
-			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE);
+		RECT rcDest =
+		{
+			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2,
+			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2,
+			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE,
+			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE
+		};
 
-		DrawImage(hDC, m_expandIcon, strModify);
+		DrawImage(hDC, m_expandIcon, rcDest);
 	}
 }
 

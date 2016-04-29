@@ -219,4 +219,14 @@ namespace DuiLib {
 		}
 	}
 
+	void CImageAttribute::SetDest(const RECT &rcDest)
+	{
+		m_rcDest = rcDest;
+	}
+
+	RECT CImageAttribute::GetDest() const
+	{
+		return m_rcDest;
+	}
+
 } // namespace DuiLib

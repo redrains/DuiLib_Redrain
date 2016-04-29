@@ -296,12 +296,15 @@ void CControlUI::SetBorderRound(SIZE cxyRound)
     Invalidate();
 }
 
-bool CControlUI::DrawImage(HDC hDC, CImageAttribute& image, LPCTSTR pStrModify)
+bool CControlUI::DrawImage(HDC hDC, CImageAttribute& image)
 {
-	return DrawImage(hDC, image, m_rcItem, pStrModify);
+	if (!image.LoadImage(m_pManager))
+		return false;
+
+	return CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, image);
 }
 
-bool CControlUI::DrawImage(HDC hDC, CImageAttribute& image, const RECT& rcDest, LPCTSTR pStrModify /*= NULL*/)
+bool CControlUI::DrawImage(HDC hDC, CImageAttribute& image, LPCTSTR pStrModify)
 {
 	if (!image.LoadImage(m_pManager))
 		return false;
@@ -310,9 +313,23 @@ bool CControlUI::DrawImage(HDC hDC, CImageAttribute& image, const RECT& rcDest, 
 	{
 		CImageAttribute modifyImage = image;
 		modifyImage.ModifyAttribute(pStrModify);
-		return CRenderEngine::DrawImage(hDC, m_pManager, rcDest, m_rcPaint, modifyImage);
+		return CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, modifyImage);
 	}
-	return CRenderEngine::DrawImage(hDC, m_pManager, rcDest, m_rcPaint, image);
+	return CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, image);
+}
+
+bool CControlUI::DrawImage(HDC hDC, CImageAttribute& image, const RECT& rcDest)
+{
+	if (!image.LoadImage(m_pManager))
+		return false;
+
+	if (!IsRectEmpty(&rcDest))
+	{
+		CImageAttribute modifyImage = image;
+		modifyImage.SetDest(rcDest);
+		return CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, modifyImage);
+	}
+	return CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, image);
 }
 
 const RECT& CControlUI::GetPos() const
