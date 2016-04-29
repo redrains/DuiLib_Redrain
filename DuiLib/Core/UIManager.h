@@ -213,7 +213,11 @@ public:
     static void SetCurrentPath(LPCTSTR pStrPath);
     static void SetResourceDll(HINSTANCE hInst);
     static void SetResourcePath(LPCTSTR pStrPath);
+	//从资源文件中加载zip
+	static void SetResourceZip(UINT nResID);
+	//从内存数据加载zip
 	static void SetResourceZip(LPVOID pVoid, unsigned int len);
+	//从本地zip加载zip
     static void SetResourceZip(LPCTSTR pstrZip, bool bCachedResourceZip = false);
     static void GetHSL(short* H, short* S, short* L);
     static void SetHSL(bool bUseHSL, short H, short S, short L); // H:0~360, S:0~200, L:0~200 

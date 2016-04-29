@@ -297,6 +297,27 @@ void CPaintManagerUI::SetResourcePath(LPCTSTR pStrPath)
     if( cEnd != _T('\\') && cEnd != _T('/') ) m_pStrResourcePath += _T('\\');
 }
 
+void CPaintManagerUI::SetResourceZip(UINT nResID)
+{
+	HRSRC hResource = ::FindResource(CPaintManagerUI::GetResourceDll(), MAKEINTRESOURCE(nResID), _T("ZIPRES"));
+	if (hResource == NULL)
+		return;
+	DWORD dwSize = 0;
+	HGLOBAL hGlobal = ::LoadResource(CPaintManagerUI::GetResourceDll(), hResource);
+	if (hGlobal == NULL)
+	{
+		::FreeResource(hResource);
+		return;
+	}
+	dwSize = ::SizeofResource(CPaintManagerUI::GetResourceDll(), hResource);
+	if (dwSize == 0)
+		return;
+
+	CPaintManagerUI::SetResourceZip((LPBYTE)::LockResource(hGlobal), dwSize);
+
+	::FreeResource(hResource);
+}
+
 void CPaintManagerUI::SetResourceZip(LPVOID pVoid, unsigned int len)
 {
     if( m_pStrResourceZip == _T("membuffer") ) return;
