@@ -3,7 +3,10 @@
 
 namespace DuiLib
 {
-	COptionUI::COptionUI() : m_bSelected(false), m_dwSelectedTextColor(0)
+	COptionUI::COptionUI() 
+		: m_bSelected(false)
+		, m_dwSelectedTextColor(0)
+		, m_dwSelectedBkColor(0)
 	{
 	}
 
