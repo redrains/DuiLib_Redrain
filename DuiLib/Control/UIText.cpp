@@ -5,10 +5,12 @@ namespace DuiLib
 {
 	CTextUI::CTextUI() : m_nLinks(0), m_nHoverLink(-1)
 	{
-		m_uTextStyle = DT_WORDBREAK;
+		m_uTextStyle = DT_WORDBREAK ;
 		m_rcTextPadding.left = 2;
 		m_rcTextPadding.right = 2;
 		::ZeroMemory(m_rcLinks, sizeof(m_rcLinks));
+
+		m_dwShadowColor = 0;
 	}
 
 	CTextUI::~CTextUI()
@@ -146,21 +148,54 @@ namespace DuiLib
 		rc.right -= m_rcTextPadding.right;
 		rc.top += m_rcTextPadding.top;
 		rc.bottom -= m_rcTextPadding.bottom;
-		if( IsEnabled() ) {
-			if( m_bShowHtml )
-				CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, m_dwTextColor, \
-				m_rcLinks, m_sLinks, m_nLinks, m_uTextStyle);
-			else
-				CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, m_dwTextColor, \
+
+		DWORD dwTextColor = m_dwTextColor;
+		if (!IsEnabled())
+			dwTextColor = m_dwDisabledTextColor;
+
+		if( m_bShowHtml )
+			CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, dwTextColor, \
+			m_rcLinks, m_sLinks, m_nLinks, m_uTextStyle);
+		else
+		{
+			if (m_dwShadowColor != 0)
+			{
+				RECT rcShadow = rc;
+				rcShadow.left += 1;
+				rcShadow.right += 1;
+				rcShadow.top += 1;
+				rcShadow.bottom += 1;
+				CRenderEngine::DrawText(hDC, m_pManager, rcShadow, m_sText, m_dwShadowColor, \
+					m_iFont, m_uTextStyle);
+			}
+
+			CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, dwTextColor, \
 				m_iFont, m_uTextStyle);
-		}
-		else {
-			if( m_bShowHtml )
-				CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, m_dwDisabledTextColor, \
-				m_rcLinks, m_sLinks, m_nLinks, m_uTextStyle);
-			else
-				CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, m_dwDisabledTextColor, \
-				m_iFont, m_uTextStyle);
-		}
+
+		}		
+
 	}
+
+	void CTextUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+	{
+		if (_tcscmp(pstrName, _T("shadowcolor")) == 0) {
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			SetShadowColor(clrColor);
+		}
+		else
+			__super::SetAttribute(pstrName, pstrValue);
+	}
+
+	void CTextUI::SetShadowColor(DWORD dwTextColor)
+	{
+		m_dwShadowColor = dwTextColor;
+	}
+
+	DWORD CTextUI::GetShadowColor() const
+	{
+		return m_dwShadowColor;
+	}
+
 }
