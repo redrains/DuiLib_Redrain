@@ -209,8 +209,8 @@ namespace DuiLib
 		{
 			if ((m_uButtonState & UISTATE_PUSHED) != 0 && IsSelected() && m_selectedPushedImage.IsLoadSuccess())
 			{
-			if (DrawImage(hDC, m_selectedPushedImage))
-				break;
+				if (DrawImage(hDC, m_selectedPushedImage))
+					break;
 			}
 			else if ((m_uButtonState & UISTATE_HOT) != 0 && IsSelected() && m_selectedHotImage.IsLoadSuccess()) {
 				if (DrawImage(hDC, m_selectedHotImage))

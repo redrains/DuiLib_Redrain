@@ -834,6 +834,7 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	else if (_tcscmp(pstrName, _T("pushedimage")) == 0) SetPushedImage(pstrValue);
 	else if (_tcscmp(pstrName, _T("focusedimage")) == 0) SetFocusedImage(pstrValue);
 	else if (_tcscmp(pstrName, _T("disabledimage")) == 0) SetDisabledImage(pstrValue);
+	else if (_tcscmp(pstrName, _T("foreimage")) == 0) SetForeImage(pstrValue);
     else if( _tcscmp(pstrName, _T("pos")) == 0 ) {
         RECT rcPos = { 0 };
         LPTSTR pstr = NULL;
