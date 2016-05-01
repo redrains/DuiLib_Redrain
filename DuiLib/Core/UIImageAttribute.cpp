@@ -229,4 +229,9 @@ namespace DuiLib {
 		return m_rcDest;
 	}
 
+	const TImageInfo* CImageAttribute::GetImageInfo() const
+	{
+		return m_imageInfo;
+	}
+
 } // namespace DuiLib

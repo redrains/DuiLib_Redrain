@@ -24,6 +24,7 @@ public:
 
 	RECT GetDest() const;
 	void SetDest(const RECT &rcDest);
+	const TImageInfo* GetImageInfo() const;
 private:
 	void Clone(const CImageAttribute&);
 	void Clear();

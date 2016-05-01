@@ -246,6 +246,8 @@ void CMenuWnd::OnFinalMessage(HWND hWnd)
 
 LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
+	bool bShowShadow = false;
+
 	if( m_pOwner != NULL) {
 		LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
 		styleValue &= ~WS_CAPTION;
@@ -275,11 +277,14 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 			}
 		}
 
-		CShadowUI *pShadow = m_pOwner->GetManager()->GetShadow();
-		pShadow->CopyShadow(m_pm.GetShadow());
-
+		CShadowUI *pShadow = m_pm.GetShadow();
+		m_pOwner->GetManager()->GetShadow()->CopyShadow(pShadow);
+		bShowShadow = pShadow->IsShowShadow();
 		pShadow->ShowShadow(false);
 
+		m_pm.SetUseLayeredWindow(m_pOwner->GetManager()->IsLayeredWindow());
+		m_pm.SetUseGdiplusText(m_pOwner->GetManager()->IsUseGdiplusText());
+		
 		m_pm.AttachDialog(m_pLayout);
 		m_pm.AddNotifier(this);
 		
@@ -291,14 +296,18 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 		CDialogBuilder builder;
 
 		CControlUI* pRoot = builder.Create(m_xml,UINT(0), this, &m_pm);
-		m_pm.GetShadow()->ShowShadow(false);
+
+		CShadowUI *pShadow = m_pm.GetShadow();
+		bShowShadow = pShadow->IsShowShadow();
+		pShadow->ShowShadow(false);
+
 		m_pm.AttachDialog(pRoot);
 		m_pm.AddNotifier(this);
 
 		ResizeMenu();
 	}
 
-	m_pm.GetShadow()->ShowShadow(true);
+	m_pm.GetShadow()->ShowShadow(bShowShadow);
 	m_pm.GetShadow()->Create(&m_pm);
 	return 0;
 }
@@ -631,17 +640,20 @@ void CMenuElementUI::DrawItemExpland(HDC hDC, const RECT& rcItem)
 	{
 		if (!m_expandIcon.IsLoadSuccess())
 		{
-			CDuiString strExplandIcon;
-			strExplandIcon = GetManager()->GetDefaultAttributeList(_T("ExplandIcon"));
-			m_expandIcon.SetAttributeString(strExplandIcon);
+			m_expandIcon.SetAttributeString(GetManager()->GetDefaultAttributeList(_T("ExplandIcon")));
 		}
+		
+		if (!m_expandIcon.LoadImage(m_pManager))
+			return;
+
+		const TImageInfo *pImageInfo = m_expandIcon.GetImageInfo();
 		
 		RECT rcDest =
 		{
-			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2,
-			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2,
-			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE,
-			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE
+			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - pImageInfo->nX) / 2,
+			(m_cxyFixed.cy - pImageInfo->nY) / 2,
+			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - pImageInfo->nX) / 2 + pImageInfo->nX,
+			(m_cxyFixed.cy - pImageInfo->nY) / 2 + pImageInfo->nY
 		};
 
 		DrawImage(hDC, m_expandIcon, rcDest);

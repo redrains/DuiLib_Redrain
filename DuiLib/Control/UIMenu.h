@@ -33,7 +33,6 @@ enum MenuItemDefaultInfo
 	ITEM_DEFAULT_ICON_SIZE = 16,	//默认图标的大小
 
 	ITEM_DEFAULT_EXPLAND_ICON_WIDTH = 20,	//默认下级菜单扩展图标所占宽度
-	ITEM_DEFAULT_EXPLAND_ICON_SIZE = 9,		//默认下级菜单扩展图标的大小
 
 	DEFAULT_LINE_LEFT_INSET = ITEM_DEFAULT_ICON_WIDTH + 3,	//默认分隔线的左边距
 	DEFAULT_LINE_RIGHT_INSET = 7,	//默认分隔线的右边距

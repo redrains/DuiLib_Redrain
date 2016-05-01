@@ -237,6 +237,9 @@ void CShadowUI::Update(HWND hParent)
 	}
 	else
 	{
+		if (m_nSize == 0)
+			return;
+
 		nShadWndWid = WndRect.right - WndRect.left + m_nSize * 2;
 		nShadWndHei = WndRect.bottom - WndRect.top + m_nSize * 2;
 	}
@@ -629,6 +632,8 @@ bool CShadowUI::CopyShadow(CShadowUI* pShadow)
 		pShadow->SetColor(m_Color);
 		pShadow->SetPosition((int)m_nxOffset, (int)m_nyOffset);
 	}
+
+	pShadow->ShowShadow(m_bIsShowShadow);
 	return true;
 }
 } //namespace DuiLib
