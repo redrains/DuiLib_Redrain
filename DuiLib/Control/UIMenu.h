@@ -27,7 +27,7 @@ enum MenuAlignment
 enum MenuItemDefaultInfo
 {
 	ITEM_DEFAULT_HEIGHT = 30,		//每一个item的默认高度（只在竖状排列时自定义）
-	ITEM_DEFAULT_WIDTH = 150,		//窗口的默认宽度
+	ITEM_DEFAULT_WIDTH = 130,		//窗口的默认宽度
 
 	ITEM_DEFAULT_ICON_WIDTH = 26,	//默认图标所占宽度
 	ITEM_DEFAULT_ICON_SIZE = 16,	//默认图标的大小

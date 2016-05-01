@@ -698,7 +698,6 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTS
 	if (pManager->IsLayeredWindow() || pManager->IsUseGdiplusText())
 	{
 		Gdiplus::Graphics graphics(hDC);
-		graphics.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAlias);
 
 		Gdiplus::Font font(hDC, pManager->GetFont(iFont));
 		Gdiplus::RectF rectF((Gdiplus::REAL)rc.left, (Gdiplus::REAL)rc.top, (Gdiplus::REAL)(rc.right - rc.left), (Gdiplus::REAL)(rc.bottom - rc.top));
