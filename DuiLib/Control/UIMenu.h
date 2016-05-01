@@ -273,16 +273,17 @@ public:
 	~CMenuWnd();
 
 	/*
-	 *	@pOwner 一级菜单不要指定这个参数，这是菜单内部使用的
-	 *	@xml	菜单的布局文件
-	 *	@point	菜单的左上角坐标
-	 *	@pMainPaintManager	菜单的父窗体管理器指针
-	 *	@pMenuCheckInfo	保存菜单的单选和复选信息结构指针
-	 *	@dwAlignment		菜单的出现位置，默认出现在鼠标的右下侧。
-	 */
-    void Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
-		CPaintManagerUI* pMainPaintManager, std::map<CDuiString,bool>* pMenuCheckInfo = NULL,
+	*	@pOwner 一级菜单不要指定这个参数，这是菜单内部使用的
+	*	@xml	菜单的布局文件
+	*	@point	菜单的左上角坐标
+	*	@pMainPaintManager	菜单的父窗体管理器指针
+	*	@pMenuCheckInfo	保存菜单的单选和复选信息结构指针
+	*	@dwAlignment		菜单的出现位置，默认出现在鼠标的右下侧。
+	*/
+	static CMenuWnd* CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
+		CPaintManagerUI* pMainPaintManager, std::map<CDuiString, bool>* pMenuCheckInfo = NULL,
 		DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top);
+
     LPCTSTR GetWindowClassName() const;
     void OnFinalMessage(HWND hWnd);
 	void Notify(TNotifyUI& msg);
@@ -304,14 +305,20 @@ public:
 	// 重新调整子菜单的大小
 	void ResizeSubMenu();
 
-public:
+private:
+	friend class CMenuElementUI;
+	void Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
+		CPaintManagerUI* pMainPaintManager, std::map<CDuiString, bool>* pMenuCheckInfo,
+		DWORD dwAlignment);
+
+private:
 
 	POINT			m_BasedPoint;
 	STRINGorID		m_xml;
     CPaintManagerUI m_pm;
     CMenuElementUI* m_pOwner;
-    CMenuUI*	m_pLayout;
-	DWORD		m_dwAlignment;	//菜单对齐方式
+    CMenuUI*		m_pLayout;
+	DWORD			m_dwAlignment;	//菜单对齐方式
 };
 
 class CListContainerElementUI;
@@ -351,6 +358,7 @@ public:
 
 	void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
+
 protected:
 	CMenuWnd*	m_pWindow;
 
@@ -364,6 +372,8 @@ protected:
 
 	bool		m_bShowExplandIcon;
 	CImageAttribute m_expandIcon;
+
+	static CDuiString	s_clickedMenuItem;	//被单击的菜单项名字
 };
 
 } // namespace DuiLib

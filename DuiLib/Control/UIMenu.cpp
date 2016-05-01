@@ -155,9 +155,16 @@ BOOL CMenuWnd::Receive(ContextMenuParam param)
 	return TRUE;
 }
 
+CMenuWnd* CMenuWnd::CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, POINT point, CPaintManagerUI* pMainPaintManager, std::map<CDuiString, bool>* pMenuCheckInfo /*= NULL*/, DWORD dwAlignment /*= eMenuAlignment_Left | eMenuAlignment_Top*/)
+{
+	CMenuWnd* pMenu = new CMenuWnd;
+	pMenu->Init(pOwner, xml, point, pMainPaintManager, pMenuCheckInfo, dwAlignment);
+	return pMenu;
+}
+
 void CMenuWnd::Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
-					CPaintManagerUI* pMainPaintManager, std::map<CDuiString,bool>* pMenuCheckInfo/* = NULL*/,
-					DWORD dwAlignment/* = eMenuAlignment_Left | eMenuAlignment_Top*/)
+					CPaintManagerUI* pMainPaintManager, std::map<CDuiString,bool>* pMenuCheckInfo,
+					DWORD dwAlignment)
 {
 
 	m_BasedPoint = point;
@@ -232,9 +239,9 @@ void CMenuWnd::OnFinalMessage(HWND hWnd)
 		}
 		m_pOwner->m_pWindow = NULL;
 		m_pOwner->m_uButtonState &= ~ UISTATE_PUSHED;
-		m_pOwner->Invalidate();
-		delete this;
+		m_pOwner->Invalidate();	
 	}
+	delete this;
 }
 
 LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -544,6 +551,7 @@ LRESULT CMenuWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
+CDuiString CMenuElementUI::s_clickedMenuItem;
 CMenuElementUI::CMenuElementUI():
 m_pWindow(NULL),
 m_bDrawLine(false),
@@ -780,9 +788,8 @@ void CMenuElementUI::DoEvent(TEventUI& event)
 				SetChecked(!GetChecked());
 				if (CMenuWnd::GetGlobalContextMenuObserver().GetManager() != NULL)
 				{
-					CDuiString* strPost = new CDuiString(GetName().GetData());
-					if (!PostMessage(CMenuWnd::GetGlobalContextMenuObserver().GetManager()->GetPaintWindow(), WM_MENUCLICK, (WPARAM)(strPost), (LPARAM)(GetChecked() == TRUE)))
-						delete strPost;
+					s_clickedMenuItem = GetName();
+					PostMessage(CMenuWnd::GetGlobalContextMenuObserver().GetManager()->GetPaintWindow(), WM_MENUCLICK, (WPARAM)(&s_clickedMenuItem), (LPARAM)(GetChecked() ? TRUE : FALSE));
 				}
 				ContextMenuParam param;
 				param.hWnd = m_pManager->GetPaintWindow();
@@ -845,7 +852,7 @@ void CMenuElementUI::CreateMenuWnd()
 	param.wParam = 2;
 	CMenuWnd::GetGlobalContextMenuObserver().RBroadcast(param);
 
-	m_pWindow->Init(static_cast<CMenuElementUI*>(this), _T(""), CPoint(), NULL);
+	m_pWindow->Init(static_cast<CMenuElementUI*>(this), _T(""), CPoint(), NULL, NULL, eMenuAlignment_Left | eMenuAlignment_Top);
 }
 
 void CMenuElementUI::SetLineType()

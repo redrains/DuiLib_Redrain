@@ -3,7 +3,7 @@
 CFrameWnd::CFrameWnd( LPCTSTR pszXMLPath )
 	:  m_strXMLPath(pszXMLPath)
 {
-	m_pMenu = NULL;
+
 }
 
 LPCTSTR CFrameWnd::GetWindowClassName() const
@@ -44,22 +44,18 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 	{	
 		if( msg.pSender->GetName() == _T("btnMenu") ) 
 		{
-			if (m_pMenu != NULL)
-			{
-				delete m_pMenu;
-				m_pMenu = NULL;
-			}
-			m_pMenu = new CMenuWnd();
-			CPoint point = msg.ptMouse;
-			ClientToScreen(m_hWnd, &point);
-			m_pMenu->Init(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo);
+			CPoint point(0, 0);
+			GetCursorPos(&point);
+			
+			CMenuWnd* pMenu = CMenuWnd::CreateMenu(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo);
+
 			//左侧打开菜单
-			//pMenu->Init(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo, eMenuAlignment_Right );
+			//CMenuWnd* pMenu = CMenuWnd::CreateMenu(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo, eMenuAlignment_Right );
 			//左上侧打开菜单
-			//pMenu->Init(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo, eMenuAlignment_Right | eMenuAlignment_Bottom);
+			//CMenuWnd* pMenu = CMenuWnd::CreateMenu(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo, eMenuAlignment_Right | eMenuAlignment_Bottom);
 
 			// 先获取到根项，然后就可以使用rootMenu插到到菜单内的任意子菜单项，然后做添加删除操作
-			CMenuUI* rootMenu = m_pMenu->GetMenuUI();
+			CMenuUI* rootMenu = pMenu->GetMenuUI();
 			if (rootMenu != NULL)
 			{
 				CMenuElementUI* pNew = new CMenuElementUI;
@@ -88,7 +84,7 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 			}
 
 			// 动态添加后重新设置菜单的大小
-			m_pMenu->ResizeMenu();
+			pMenu->ResizeMenu();
 		}
 		else if (msg.pSender->GetName() == _T("Menu_btn") )
 		{
@@ -138,7 +134,6 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 			 MessageBox(m_hWnd, L"你单击了动态添加菜单", L"", 0);		 
 		 }
 
-		 delete strMenuName;
 	 }
 	 bHandled = false;
 	 return 0;
