@@ -1534,8 +1534,16 @@ void CPaintManagerUI::NeedUpdate()
 
 void CPaintManagerUI::Invalidate(RECT& rcItem)
 {
-    ::InvalidateRect(m_hWndPaint, &rcItem, FALSE);
-	m_rcInvalidate = rcItem;
+	if (rcItem.left < 0) rcItem.left = 0;
+	if (rcItem.top < 0) rcItem.top = 0;
+	if (rcItem.right < rcItem.left) rcItem.right = rcItem.left;
+	if (rcItem.bottom < rcItem.top) rcItem.bottom = rcItem.top;
+	if (m_bLayeredWindow)
+	{
+		::UnionRect(&m_rcInvalidate, &m_rcInvalidate, &rcItem);
+	}
+		
+	::InvalidateRect(m_hWndPaint, &rcItem, FALSE);
 
 }
 
