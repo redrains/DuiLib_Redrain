@@ -1,54 +1,7 @@
 #include "StdAfx.h"
 #include <zmouse.h>
+#include "Utils/ThirdParty.h"
 
-
-///////////////////////////////////////////////////////////////////////////////////////
-DECLARE_HANDLE(HZIP);	// An HZIP identifies a zip file that has been opened
-typedef DWORD ZRESULT;
-typedef struct
-{
-	int index;                 // index of this file within the zip
-	char name[MAX_PATH];       // filename within the zip
-	DWORD attr;                // attributes, as in GetFileAttributes.
-	FILETIME atime, ctime, mtime;// access, create, modify filetimes
-	long comp_size;            // sizes of item, compressed and uncompressed. These
-	long unc_size;             // may be -1 if not yet known (e.g. being streamed in)
-} ZIPENTRY;
-typedef struct
-{
-	int index;                 // index of this file within the zip
-	TCHAR name[MAX_PATH];      // filename within the zip
-	DWORD attr;                // attributes, as in GetFileAttributes.
-	FILETIME atime, ctime, mtime;// access, create, modify filetimes
-	long comp_size;            // sizes of item, compressed and uncompressed. These
-	long unc_size;             // may be -1 if not yet known (e.g. being streamed in)
-} ZIPENTRYW;
-#define OpenZip OpenZipU
-#define CloseZip(hz) CloseZipU(hz)
-extern HZIP OpenZipU(void *z, unsigned int len, DWORD flags);
-extern ZRESULT CloseZipU(HZIP hz);
-#ifdef _UNICODE
-#define ZIPENTRY ZIPENTRYW
-#define GetZipItem GetZipItemW
-#define FindZipItem FindZipItemW
-#else
-#define GetZipItem GetZipItemA
-#define FindZipItem FindZipItemA
-#endif
-extern ZRESULT GetZipItemA(HZIP hz, int index, ZIPENTRY *ze);
-extern ZRESULT GetZipItemW(HZIP hz, int index, ZIPENTRYW *ze);
-extern ZRESULT FindZipItemA(HZIP hz, const TCHAR *name, bool ic, int *index, ZIPENTRY *ze);
-extern ZRESULT FindZipItemW(HZIP hz, const TCHAR *name, bool ic, int *index, ZIPENTRYW *ze);
-extern ZRESULT UnzipItem(HZIP hz, int index, void *dst, unsigned int len, DWORD flags);
-///////////////////////////////////////////////////////////////////////////////////////
-
-extern "C"
-{
-	extern unsigned char *stbi_load_from_memory(unsigned char const *buffer, int len, int *x, int *y, \
-		int *comp, int req_comp);
-	extern void     stbi_image_free(void *retval_from_stbi_load);
-
-};
 
 namespace DuiLib {
 
@@ -321,21 +274,23 @@ void CPaintManagerUI::SetResourceZip(UINT nResID)
 void CPaintManagerUI::SetResourceZip(LPVOID pVoid, unsigned int len)
 {
     if( m_pStrResourceZip == _T("membuffer") ) return;
-    if( m_bCachedResourceZip && m_hResourceZip != NULL ) {
-        CloseZip((HZIP)m_hResourceZip);
+    if( m_bCachedResourceZip && m_hResourceZip != NULL ) 
+	{
+		ThirdParty::CloseZip(m_hResourceZip);
         m_hResourceZip = NULL;
     }
     m_pStrResourceZip = _T("membuffer");
     m_bCachedResourceZip = true;
     if( m_bCachedResourceZip ) 
-        m_hResourceZip = (HANDLE)OpenZip(pVoid, len, 3);
+        m_hResourceZip = ThirdParty::OpenZip(pVoid, len, 3);
 }
 
 void CPaintManagerUI::SetResourceZip(LPCTSTR pStrPath, bool bCachedResourceZip)
 {
     if( m_pStrResourceZip == pStrPath && m_bCachedResourceZip == bCachedResourceZip ) return;
-    if( m_bCachedResourceZip && m_hResourceZip != NULL ) {
-        CloseZip((HZIP)m_hResourceZip);
+    if( m_bCachedResourceZip && m_hResourceZip != NULL ) 
+	{
+		ThirdParty::CloseZip(m_hResourceZip);
         m_hResourceZip = NULL;
     }
     m_pStrResourceZip = pStrPath;
@@ -343,7 +298,7 @@ void CPaintManagerUI::SetResourceZip(LPCTSTR pStrPath, bool bCachedResourceZip)
     if( m_bCachedResourceZip ) {
         CDuiString sFile = CPaintManagerUI::GetResourcePath();
         sFile += CPaintManagerUI::GetResourceZip();
-        m_hResourceZip = (HANDLE)OpenZip((void*)sFile.GetData(), 0, 2);
+		m_hResourceZip = ThirdParty::OpenZip((void*)sFile.GetData(), 0, 2);
     }
 }
 
@@ -396,97 +351,36 @@ TImageInfo* CPaintManagerUI::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD ma
 	LPBYTE pData = NULL;
 	DWORD dwSize = 0;
 
-	do
+	if (type == NULL)
+	{			
+		if (CPaintManagerUI::GetResourceZip().IsEmpty())
+		{
+			pData = ThirdParty::LoadFromFile(bitmap.m_lpstr, dwSize);
+		}
+		else 
+		{
+			pData = ThirdParty::LoadFromZip(bitmap.m_lpstr, dwSize);
+		}
+	}
+	else 
 	{
-		if (type == NULL) {
-			CDuiString sFile = CPaintManagerUI::GetResourcePath();
-			if (CPaintManagerUI::GetResourceZip().IsEmpty()) {
-				sFile += bitmap.m_lpstr;
-				HANDLE hFile = ::CreateFile(sFile.GetData(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, \
-					FILE_ATTRIBUTE_NORMAL, NULL);
-				if (hFile == INVALID_HANDLE_VALUE) break;
-				dwSize = ::GetFileSize(hFile, NULL);
-				if (dwSize == 0) break;
+		pData = ThirdParty::LoadFromResource(bitmap.m_lpstr, type, dwSize);
+	}
 
-				DWORD dwRead = 0;
-				pData = new BYTE[dwSize];
-				::ReadFile(hFile, pData, dwSize, &dwRead, NULL);
-				::CloseHandle(hFile);
-
-				if (dwRead != dwSize) {
-					delete[] pData;
-					pData = NULL;
-					break;
-				}
-			}
-			else {
-				sFile += CPaintManagerUI::GetResourceZip();
-				HZIP hz = NULL;
-				if (CPaintManagerUI::IsCachedResourceZip()) hz = (HZIP)CPaintManagerUI::GetResourceZipHandle();
-				else hz = OpenZip((void*)sFile.GetData(), 0, 2);
-				if (hz == NULL) break;
-				ZIPENTRY ze;
-				int i;
-				if (FindZipItem(hz, bitmap.m_lpstr, true, &i, &ze) != 0) break;
-				dwSize = ze.unc_size;
-				if (dwSize == 0) break;
-				pData = new BYTE[dwSize];
-				int res = UnzipItem(hz, i, pData, dwSize, 3);
-				if (res != 0x00000000 && res != 0x00000600) {
-					delete[] pData;
-					pData = NULL;
-					if (!CPaintManagerUI::IsCachedResourceZip()) CloseZip(hz);
-					break;
-				}
-				if (!CPaintManagerUI::IsCachedResourceZip()) CloseZip(hz);
-			}
-		}
-		else {
-			HRSRC hResource = ::FindResource(CPaintManagerUI::GetResourceDll(), bitmap.m_lpstr, type);
-			if (hResource == NULL) break;
-			HGLOBAL hGlobal = ::LoadResource(CPaintManagerUI::GetResourceDll(), hResource);
-			if (hGlobal == NULL) {
-				FreeResource(hResource);
-				break;
-			}
-
-			dwSize = ::SizeofResource(CPaintManagerUI::GetResourceDll(), hResource);
-			if (dwSize == 0) break;
-			pData = new BYTE[dwSize];
-			::CopyMemory(pData, (LPBYTE)::LockResource(hGlobal), dwSize);
-			::FreeResource(hResource);
-		}
-	} while (0);
-
-	while (!pData)
+	if (!pData)
 	{
 		//读不到图片, 则直接去读取bitmap.m_lpstr指向的路径
-		HANDLE hFile = ::CreateFile(bitmap.m_lpstr, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, \
-			FILE_ATTRIBUTE_NORMAL, NULL);
-		if (hFile == INVALID_HANDLE_VALUE) break;
-		dwSize = ::GetFileSize(hFile, NULL);
-		if (dwSize == 0) break;
-
-		DWORD dwRead = 0;
-		pData = new BYTE[dwSize];
-		::ReadFile(hFile, pData, dwSize, &dwRead, NULL);
-		::CloseHandle(hFile);
-
-		if (dwRead != dwSize) {
-			delete[] pData;
-			pData = NULL;
-		}
-		break;
+		pData = ThirdParty::LoadFromAbsoluteFile(bitmap.m_lpstr, dwSize);
 	}
+
 	if (!pData)
 	{
 		//::MessageBox(0, _T("读取图片数据失败！"), _T("抓BUG"), MB_OK);
 		return NULL;
 	}
 
-	LPBYTE pImage = NULL;
-	int x, y, n;
-	pImage = stbi_load_from_memory(pData, dwSize, &x, &y, &n, 4);
+	int x, y;
+	LPBYTE pImage = pImage = ThirdParty::ParseImage(pData, dwSize, x, y);
 	delete[] pData;
 	if (!pImage)
 	{
@@ -527,7 +421,7 @@ TImageInfo* CPaintManagerUI::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD ma
 		}
 	}
 
-	stbi_image_free(pImage);
+	ThirdParty::FreeImage(pImage);
 
 	TImageInfo* data = new TImageInfo;
 	data->hBitmap = hBitmap;
@@ -1679,7 +1573,7 @@ void CPaintManagerUI::Term()
 
     if( m_bCachedResourceZip && m_hResourceZip != NULL )
 	{
-        CloseZip((HZIP)m_hResourceZip);
+        ThirdParty::CloseZip(m_hResourceZip);
         m_hResourceZip = NULL;
     }
 }

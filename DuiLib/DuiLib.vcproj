@@ -49,7 +49,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories=".\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;UILIB_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -146,7 +146,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="1"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories=".\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;UILIB_EXPORTS"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -259,6 +259,10 @@
 							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Utils\ThirdParty.cpp"
+					>
 				</File>
 				<File
 					RelativePath=".\Utils\UIDelegate.cpp"
@@ -459,6 +463,14 @@
 				</File>
 				<File
 					RelativePath=".\Utils\FlashEventHandler.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Utils\stb_image.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Utils\ThirdParty.h"
 					>
 				</File>
 				<File

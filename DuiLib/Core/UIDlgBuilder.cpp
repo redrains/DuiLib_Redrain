@@ -1,4 +1,5 @@
 #include "StdAfx.h"
+#include "Utils/ThirdParty.h"
 
 namespace DuiLib {
 
@@ -10,31 +11,46 @@ CDialogBuilder::CDialogBuilder() : m_pCallback(NULL), m_pstrtype(NULL)
 CControlUI* CDialogBuilder::Create(STRINGorID xml, LPCTSTR type, IDialogBuilderCallback* pCallback, 
                                    CPaintManagerUI* pManager, CControlUI* pParent)
 {
+	BYTE* pByte = NULL;
+	DWORD dwSize = 0;
+
 	//资源ID为0-65535，两个字节；字符串指针为4个字节
 	//字符串以<开头认为是XML字符串，否则认为是XML文件
 
-    if( HIWORD(xml.m_lpstr) != NULL ) {
-        if( *(xml.m_lpstr) == _T('<') ) {
+    if( HIWORD(xml.m_lpstr) != NULL ) 
+	{
+        if( *(xml.m_lpstr) == _T('<') ) 
+		{
             if( !m_xml.Load(xml.m_lpstr) ) return NULL;
         }
-        else {
-            if( !m_xml.LoadFromFile(xml.m_lpstr) ) return NULL;
+        else 
+		{
+			if (CPaintManagerUI::GetResourceZip().IsEmpty())
+			{
+				pByte = ThirdParty::LoadFromFile(xml.m_lpstr, dwSize);
+			}
+			else
+			{
+				pByte = ThirdParty::LoadFromZip(xml.m_lpstr, dwSize);
+			}
         }
     }
-    else {
-        HRSRC hResource = ::FindResource(CPaintManagerUI::GetResourceDll(), xml.m_lpstr, type);
-        if( hResource == NULL ) return NULL;
-        HGLOBAL hGlobal = ::LoadResource(CPaintManagerUI::GetResourceDll(), hResource);
-        if( hGlobal == NULL ) {
-            FreeResource(hResource);
-            return NULL;
-        }
+    else 
+	{
+		pByte = ThirdParty::LoadFromResource(xml.m_lpstr, type, dwSize);
 
-        m_pCallback = pCallback;
-        if( !m_xml.LoadFromMem((BYTE*)::LockResource(hGlobal), ::SizeofResource(CPaintManagerUI::GetResourceDll(), hResource) )) return NULL;
-        ::FreeResource(hResource);
-        m_pstrtype = type;
+		m_pCallback = pCallback;
+		m_pstrtype = type;
     }
+
+	if (pByte == NULL)
+		return NULL;
+
+	bool ret = m_xml.LoadFromMem(pByte, dwSize);
+	delete[] pByte;
+
+	if (!ret)
+		return NULL;
 
     return Create(pCallback, pManager, pParent);
 }

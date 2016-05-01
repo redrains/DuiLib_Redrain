@@ -25,7 +25,6 @@ public:
 
     bool Load(LPCTSTR pstrXML);
     bool LoadFromMem(BYTE* pByte, DWORD dwSize, int encoding = XMLFILE_ENCODING_UTF8);
-    bool LoadFromFile(LPCTSTR pstrFilename, int encoding = XMLFILE_ENCODING_UTF8);
     void Release();
     bool IsValid() const;
 
