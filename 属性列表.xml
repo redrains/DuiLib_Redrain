@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="属性列表.xslt"?>
-<!-- 可能有错漏，欢迎补充。wangchyz(wangchyz@gmail.com) -->
+
+<Resources>
+	<Include >
+		<Attribute name="source" default="" type="STRING" comment="XML布局文件"/>
+		<Attribute name="count" default="" type="INT" comment="嵌入的次数"/>
+	</Include>
+	<Font>
+		<Attribute name="name" default="" type="STRING" comment="字体的名字"/>
+		<Attribute name="size" default="" type="INT" comment="字体的大小"/>
+		<Attribute name="bold" default="false" type="BOOL" comment="是否为粗体"/>
+		<Attribute name="underline" default="false" type="BOOL" comment="是否有下划线"/>
+		<Attribute name="italic" default="false" type="BOOL" comment="是否为斜体"/>
+		<Attribute name="default" default="false" type="BOOL" comment="是否为默认的字体"/>
+	</Font>
+</Resources>
+
 <Controls>
 	<Window parent="">
 		<Attribute name="size" default="0,0" type="SIZE" comment="窗口的初始化大小,如(800,600)"/>
@@ -27,10 +41,6 @@
 		<Attribute name="shadowposition" default="0,0" type="SIZE" comment="算法阴影的偏移量"/>
 		<Attribute name="shadowcolor" default="0x000000" type="DWORD" comment="算法阴影的颜色，RGB格式，不支持透明度，使用shadowdarkness设置透明度"/>
 	</Window>
-	<Include >
-		<Attribute name="source" default="" type="STRING" comment="XML布局文件"/>
-		<Attribute name="count" default="" type="INT" comment="嵌入的次数"/>
-	</Include>
 	<ChildLayout parent="Container" >
 		<Attribute name="xmlfile" default="" type="STRING" comment="子窗体XML布局文件"/>
 	</ChildLayout>
