@@ -1049,7 +1049,7 @@ void CListBodyUI::SetPos(RECT rc)
         CListHeaderUI* pHeader = m_pOwner->GetHeader();
         if( pHeader != NULL && pHeader->GetCount() > 0 ) {
             cxNeeded = MAX(0, pHeader->EstimateSize(CSize(rc.right - rc.left, rc.bottom - rc.top)).cx);
-			if ( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible())
+			if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible())
 			{
 				int nOffset = m_pHorizontalScrollBar->GetScrollPos();
 				RECT rcHeader = pHeader->GetPos();

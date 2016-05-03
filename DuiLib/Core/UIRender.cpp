@@ -658,7 +658,7 @@ bool CRenderEngine::DrawImage(HDC hDC, CPaintManagerUI* pManager, const RECT& rc
 	RECT rcDest = image.m_rcDest;
 	rcDest.left += rcControl.left;
 	rcDest.top += rcControl.top;
-	if (::IsRectEmpty(&image.m_rcDest))
+	if (image.m_rcDest.top == 0 && image.m_rcDest.left == 0 && image.m_rcDest.right == 0 && image.m_rcDest.bottom == 0)
 	{
 		//如果为空则赋值为控件值
 		rcDest.right += rcControl.right;
