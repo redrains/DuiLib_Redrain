@@ -34,6 +34,16 @@ namespace DuiLib
 		else return 0;
 	}
 
+	void CTextUI::SetText(LPCTSTR pstrText)
+	{
+		if (m_sText != pstrText)
+		{
+			__super::SetText(pstrText);
+			if (m_pParent != NULL)
+				m_pParent->NeedUpdate();
+		}	
+	}
+
 	CDuiString* CTextUI::GetLinkContent(int iIndex)
 	{
 		if( iIndex >= 0 && iIndex < m_nLinks ) return &m_sLinks[iIndex];

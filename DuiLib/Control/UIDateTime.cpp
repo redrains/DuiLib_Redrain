@@ -200,6 +200,7 @@ namespace DuiLib
 
 	void CDateTimeUI::SetTime(SYSTEMTIME* pst)
 	{
+		m_nDTUpdateFlag = DT_UPDATE;
 		m_sysTime = *pst;
 		Invalidate();
 	}
@@ -232,7 +233,7 @@ namespace DuiLib
 	{
 		if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
 			if( m_pParent != NULL ) m_pParent->DoEvent(event);
-			else CLabelUI::DoEvent(event);
+			else CButtonUI::DoEvent(event);
 			return;
 		}
 
@@ -278,27 +279,27 @@ namespace DuiLib
 			}
 			return;
 		}
-		if( event.Type == UIEVENT_MOUSEMOVE ) 
-		{
-			return;
-		}
-		if( event.Type == UIEVENT_BUTTONUP ) 
-		{
-			return;
-		}
-		if( event.Type == UIEVENT_CONTEXTMENU )
-		{
-			return;
-		}
-		if( event.Type == UIEVENT_MOUSEENTER )
-		{
-			return;
-		}
-		if( event.Type == UIEVENT_MOUSELEAVE )
-		{
-			return;
-		}
+// 		if( event.Type == UIEVENT_MOUSEMOVE ) 
+// 		{
+// 			return;
+// 		}
+// 		if( event.Type == UIEVENT_BUTTONUP ) 
+// 		{
+// 			return;
+// 		}
+// 		if( event.Type == UIEVENT_CONTEXTMENU )
+// 		{
+// 			return;
+// 		}
+// 		if( event.Type == UIEVENT_MOUSEENTER )
+// 		{
+// 			return;
+// 		}
+// 		if( event.Type == UIEVENT_MOUSELEAVE )
+// 		{
+// 			return;
+// 		}
 
-		CLabelUI::DoEvent(event);
+		CButtonUI::DoEvent(event);
 	}
 }

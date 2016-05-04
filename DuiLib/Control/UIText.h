@@ -14,6 +14,7 @@ namespace DuiLib
 		LPCTSTR GetClass() const;
 		UINT GetControlFlags() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
+		void SetText(LPCTSTR pstrText) override;
 
 		CDuiString* GetLinkContent(int iIndex);
 
