@@ -1025,7 +1025,6 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 				HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(m_hDcOffscreen, m_hbmpOffscreen);
 				int iSaveDC = ::SaveDC(m_hDcOffscreen);
 				m_pRoot->DoPaint(m_hDcOffscreen, ps.rcPaint);
-				DrawCaret(m_hDcOffscreen, ps.rcPaint);
 				for(int i = 0; i < m_aPostPaintControls.GetSize(); i++)
 				{
 					CControlUI* pPostPaintControl = static_cast<CControlUI*>(m_aPostPaintControls[i]);
