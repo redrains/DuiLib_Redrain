@@ -28,7 +28,11 @@ namespace DuiLib
 
 	void CVerticalLayoutUI::SetPos(RECT rc)
 	{
+		
+		
+
 		CControlUI::SetPos(rc);
+		//g_Dpi.ScaleRect(&rc);
 		rc = m_rcItem;
 
 		// Adjust for inset
@@ -121,6 +125,7 @@ namespace DuiLib
 			if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
 
 			RECT rcCtrl = { iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + rcPadding.left + sz.cx, iPosY + sz.cy + rcPadding.top };
+			//g_Dpi.ScaleRect(&rcCtrl);
 			pControl->SetPos(rcCtrl);
 
 			iPosY += sz.cy + m_iChildPadding + rcPadding.top + rcPadding.bottom;

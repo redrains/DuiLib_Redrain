@@ -85,7 +85,7 @@ public:
 	void SetBorderStyle(int nStyle);
 
     // Œª÷√œ‡πÿ
-    virtual const RECT& GetPos() const;
+    virtual const RECT& GetPos();
     virtual void SetPos(RECT rc);
     virtual int GetWidth() const;
     virtual int GetHeight() const;
@@ -194,6 +194,7 @@ protected:
     bool m_bUpdateNeeded;
     bool m_bMenuUsed;
     RECT m_rcItem;
+	RECT m_rcItem2;
     RECT m_rcPadding;
     SIZE m_cXY;
     SIZE m_cxyFixed;

@@ -332,13 +332,14 @@ bool CControlUI::DrawImage(HDC hDC, CImageAttribute& image, const RECT& rcDest)
 	return CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, image);
 }
 
-const RECT& CControlUI::GetPos() const
+const RECT& CControlUI::GetPos() 
 {
     return m_rcItem;
 }
 
 void CControlUI::SetPos(RECT rc)
 {
+	//g_Dpi.ScaleRect(&rc);
     if( rc.right < rc.left ) rc.right = rc.left;
     if( rc.bottom < rc.top ) rc.bottom = rc.top;
 

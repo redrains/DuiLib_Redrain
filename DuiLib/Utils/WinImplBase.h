@@ -30,7 +30,7 @@ namespace DuiLib
 
 		DUI_DECLARE_MESSAGE_MAP()
 		virtual void OnClick(TNotifyUI& msg);
-
+		BOOL IsInStaticControl(CControlUI *pControl);
 	protected:
 		virtual CDuiString GetSkinFile() = 0;
 		virtual LPCTSTR GetWindowClassName(void) const = 0 ;

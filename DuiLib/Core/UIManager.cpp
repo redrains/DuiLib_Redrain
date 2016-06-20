@@ -2,6 +2,7 @@
 #include <zmouse.h>
 #include "Utils/ThirdParty.h"
 
+__declspec(dllexport) CDPI   g_Dpi;
 
 namespace DuiLib {
 

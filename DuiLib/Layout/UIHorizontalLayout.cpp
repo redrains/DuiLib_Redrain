@@ -28,7 +28,9 @@ namespace DuiLib
 
 	void CHorizontalLayoutUI::SetPos(RECT rc)
 	{
+
 		CControlUI::SetPos(rc);
+		//g_Dpi.ScaleRect(&rc);
 		rc = m_rcItem;
 
 		// Adjust for inset
@@ -117,6 +119,7 @@ namespace DuiLib
 			if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
 
 			RECT rcCtrl = { iPosX + rcPadding.left, rc.top + rcPadding.top, iPosX + sz.cx + rcPadding.left , rc.top + rcPadding.top + sz.cy};
+			//g_Dpi.ScaleRect(&rcCtrl);
 			pControl->SetPos(rcCtrl);
 			iPosX += sz.cx + m_iChildPadding + rcPadding.left + rcPadding.right;
             cxNeeded += sz.cx + rcPadding.left + rcPadding.right;

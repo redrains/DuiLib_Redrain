@@ -1,8 +1,0 @@
-    前些日子用wke内核封装了duilib的webkit浏览器控件，好多群里朋友私聊我希望可以我公布源码，今天把这个控件的源码和使用demo公布。其实这个控件封装起来没什么难度，我只是按照原来作者的demo，把相应的消息封装成duilib对应的。
-
-    最新的wke控件已经修复了select标签无法使用的问题。
-
-    如果代码有问题或者有什么疑问，请联系我
-    原文地址：http://blog.csdn.net/zhuhongshu?viewmode=contents
-              http://blog.csdn.net/zhuhongshu/article/details/40740353
-    BY:Redrain   QQ：491646717
