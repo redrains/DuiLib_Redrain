@@ -1,4 +1,4 @@
-﻿.gitignore 
+﻿.vs
 DuiLib_vs2008.VC.db
 DuiLib_vs2008.sdf
 HiDPITest/HiDPITest/Debug
