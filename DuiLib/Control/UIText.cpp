@@ -134,7 +134,7 @@ namespace DuiLib
 		
 		if (m_bAutoCalcWidth)
 		{
-			m_cxyFixed.cx = cXY.cx;
+			m_cxyFixed.cx = ceil( cXY.cx*100.0/g_Dpi.GetScale());
 		}
 
 		return CControlUI::EstimateSize(szAvailable);

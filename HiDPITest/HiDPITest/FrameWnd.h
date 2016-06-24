@@ -25,6 +25,8 @@ public:
      void InitWindow();
      void Notify(TNotifyUI& msg);
 	 LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
+	 void setDPI(int DPI);
 	 // CControlUI* CreateControl(LPCTSTR pstrClassName);
 private:
 	CDuiString		m_strXMLPath;

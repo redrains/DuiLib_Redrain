@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "UIImageAttribute.h"
+#include <sstream>
 namespace DuiLib {
 
 	CImageAttribute::CImageAttribute()
@@ -61,8 +62,21 @@ namespace DuiLib {
 
 	bool CImageAttribute::LoadImage(CPaintManagerUI* pManager)
 	{
-		if (m_imageInfo != NULL)
-			return true;
+		//if (m_imageInfo != NULL)
+		//	return true;
+		//m_sImage.Empty();
+		//m_sResType.Empty();
+		m_imageInfo = NULL;
+		m_bLoadSuccess = true;
+		ZeroMemory(&m_rcDest, sizeof(RECT));
+		ZeroMemory(&m_rcSource, sizeof(RECT));
+		ZeroMemory(&m_rcCorner, sizeof(RECT));
+		m_bFade = 0xFF;
+		m_dwMask = 0;
+		m_bHole = false;
+		m_bTiledX = false;
+		m_bTiledY = false;
+		ParseAttribute(m_sImageAttribute);
 		if (!m_bLoadSuccess)
 			return false;
 
@@ -167,6 +181,17 @@ namespace DuiLib {
 				if (sItem == _T("file") || sItem == _T("res"))
 				{
 					m_sImage = sValue;
+					if (g_Dpi.GetScale() != 100) {
+						
+						std::wstringstream wss;
+						wss << L"@" << g_Dpi.GetScale() << L".";
+						std::wstring suffix = wss.str();
+						m_sImage.Replace(L".", suffix.c_str());
+					}
+					
+					
+					
+		
 				}
 				else if (sItem == _T("restype"))
 				{					
@@ -178,6 +203,8 @@ namespace DuiLib {
 					m_rcDest.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
 					m_rcDest.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
 					m_rcDest.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+
+					g_Dpi.ScaleRect(&m_rcDest);
 				}
 				else if (sItem == _T("source"))
 				{
@@ -185,6 +212,7 @@ namespace DuiLib {
 					m_rcSource.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
 					m_rcSource.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
 					m_rcSource.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+					g_Dpi.ScaleRect(&m_rcSource);
 				}
 				else if (sItem == _T("corner"))
 				{

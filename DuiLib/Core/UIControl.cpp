@@ -268,6 +268,7 @@ void CControlUI::SetColorHSL(bool bColorHSL)
 
 int CControlUI::GetBorderSize() const
 {
+	return g_Dpi.Scale(m_nBorderSize);
     return m_nBorderSize;
 }
 
@@ -355,7 +356,7 @@ void CControlUI::SetPos(RECT rc)
         m_bSetPos = false;
     }
     
-    if( m_bFloat ) {
+   /* if( m_bFloat ) {
         CControlUI* pParent = GetParent();
         if( pParent != NULL ) {
             RECT rcParentPos = pParent->GetPos();
@@ -366,7 +367,7 @@ void CControlUI::SetPos(RECT rc)
             m_cxyFixed.cx = m_rcItem.right - m_rcItem.left;
             m_cxyFixed.cy = m_rcItem.bottom - m_rcItem.top;
         }
-    }
+    }*/
 
     m_bUpdateNeeded = false;
     invalidateRc.Join(m_rcItem);
@@ -419,6 +420,10 @@ void CControlUI::SetPadding(RECT rcPadding)
 
 SIZE CControlUI::GetFixedXY() const
 {
+	SIZE xy;
+	xy.cx = g_Dpi.Scale(m_cXY.cx);
+	xy.cy = g_Dpi.Scale(m_cXY.cy);
+	return xy;
     return m_cXY;
 }
 
@@ -432,6 +437,7 @@ void CControlUI::SetFixedXY(SIZE szXY)
 
 int CControlUI::GetFixedWidth() const
 {
+	return g_Dpi.Scale(m_cxyFixed.cx);
     return m_cxyFixed.cx;
 }
 
@@ -445,6 +451,7 @@ void CControlUI::SetFixedWidth(int cx)
 
 int CControlUI::GetFixedHeight() const
 {
+	return  g_Dpi.Scale(m_cxyFixed.cy);
     return m_cxyFixed.cy;
 }
 
@@ -984,7 +991,12 @@ CControlUI* CControlUI::ApplyAttributeList(LPCTSTR pstrList)
 
 SIZE CControlUI::EstimateSize(SIZE szAvailable)
 {
-    return m_cxyFixed;
+
+	
+	SIZE size;
+	size.cx = g_Dpi.Scale(m_cxyFixed.cx);
+	size.cy = g_Dpi.Scale(m_cxyFixed.cy);
+    return size;
 }
 
 void CControlUI::DoPaint(HDC hDC, const RECT& rcPaint)
@@ -1047,6 +1059,8 @@ void CControlUI::PaintText(HDC hDC)
 
 void CControlUI::PaintBorder(HDC hDC)
 {
+
+	int m_nBorderSize = g_Dpi.Scale(CControlUI::m_nBorderSize);
 	if(m_dwBorderColor != 0 || m_dwFocusBorderColor != 0)
 	{
 		if(m_nBorderSize > 0 && ( m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0 ))//»­Ô²½Ç±ß¿ò

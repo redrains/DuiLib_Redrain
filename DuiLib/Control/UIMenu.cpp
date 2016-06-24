@@ -568,10 +568,10 @@ m_dwLineColor(DEFAULT_LINE_COLOR),
 m_bCheckItem(false),
 m_bShowExplandIcon(false)
 {
-	m_cxyFixed.cy = ITEM_DEFAULT_HEIGHT;
-	m_cxyFixed.cx = ITEM_DEFAULT_WIDTH;
-	m_szIconSize.cy = ITEM_DEFAULT_ICON_SIZE;
-	m_szIconSize.cx = ITEM_DEFAULT_ICON_SIZE;
+	m_cxyFixed.cy =( ITEM_DEFAULT_HEIGHT);
+	m_cxyFixed.cx = (ITEM_DEFAULT_WIDTH);
+	m_szIconSize.cy = (ITEM_DEFAULT_ICON_SIZE);
+	m_szIconSize.cx = (ITEM_DEFAULT_ICON_SIZE);
 
 	m_rcLinePadding.top = m_rcLinePadding.bottom = 0;
 	m_rcLinePadding.left = DEFAULT_LINE_LEFT_INSET;
@@ -594,6 +594,9 @@ LPVOID CMenuElementUI::GetInterface(LPCTSTR pstrName)
 
 void CMenuElementUI::DoPaint(HDC hDC, const RECT& rcPaint)
 {
+	SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
+	m_cxyFixed.cx = g_Dpi.Scale(m_cxyFixed.cx);
+	m_cxyFixed.cy = g_Dpi.Scale(m_cxyFixed.cy);
     if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return;
 
 	if(m_bDrawLine)
@@ -617,6 +620,9 @@ void CMenuElementUI::DoPaint(HDC hDC, const RECT& rcPaint)
 
 void CMenuElementUI::DrawItemIcon(HDC hDC, const RECT& rcItem)
 {
+	SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
+	m_cxyFixed.cx = g_Dpi.Scale(m_cxyFixed.cx);
+	m_cxyFixed.cy = g_Dpi.Scale(m_cxyFixed.cy);
 	if ( m_icon.IsLoadSuccess() )
 	{	
 		if (!(m_bCheckItem && !GetChecked()))
@@ -636,6 +642,9 @@ void CMenuElementUI::DrawItemIcon(HDC hDC, const RECT& rcItem)
 
 void CMenuElementUI::DrawItemExpland(HDC hDC, const RECT& rcItem)
 {
+	SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
+	m_cxyFixed.cx = g_Dpi.Scale(m_cxyFixed.cx);
+	m_cxyFixed.cy = g_Dpi.Scale(m_cxyFixed.cy);
 	if (m_bShowExplandIcon)
 	{
 		if (!m_expandIcon.IsLoadSuccess())
@@ -695,6 +704,9 @@ void CMenuElementUI::DrawItemText(HDC hDC, const RECT& rcItem)
 
 SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
 {
+	SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
+	m_cxyFixed.cx = g_Dpi.Scale(m_cxyFixed.cx);
+	m_cxyFixed.cy = g_Dpi.Scale(m_cxyFixed.cy);
 	SIZE cXY = {0};
 	for( int it = 0; it < GetCount(); it++ ) {
 		CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
@@ -718,6 +730,8 @@ SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
 			iTextColor = pInfo->dwDisabledTextColor;
 		}
 
+		
+		
 		RECT rcText = { 0, 0, MAX(szAvailable.cx, m_cxyFixed.cx), 9999 };
 		rcText.left += pInfo->rcTextPadding.left;
 		rcText.right -= pInfo->rcTextPadding.right;

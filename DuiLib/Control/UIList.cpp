@@ -444,6 +444,9 @@ void CListUI::SetItemTextPadding(RECT rc)
 
 RECT CListUI::GetItemTextPadding() const
 {
+	RECT rect = m_ListInfo.rcTextPadding;
+	g_Dpi.ScaleRect(&rect);
+	return rect;
 	return m_ListInfo.rcTextPadding;
 }
 
@@ -1481,7 +1484,8 @@ void CListHeaderItemUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		rcTextPadding.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
 		rcTextPadding.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
 		rcTextPadding.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
-		rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
+		rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);   
+		g_Dpi.ScaleRect(&rcTextPadding);
 		SetTextPadding(rcTextPadding);
 	}
     else if( _tcscmp(pstrName, _T("showhtml")) == 0 ) SetShowHtml(_tcscmp(pstrValue, _T("true")) == 0);

@@ -1,5 +1,13 @@
-﻿*.exp
+﻿.gitignore 
+DuiLib_vs2008.VC.db
+DuiLib_vs2008.sdf
+HiDPITest/HiDPITest/Debug
+HiDPITest/HiDPITest/Release
+ipch
+Temp
+*.exp
 *.pdb
 *.idb
 *.ilk
 *.ncb
+*.xlsx

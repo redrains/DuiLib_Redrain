@@ -88,8 +88,9 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 		{
 			CPoint point(0, 0);
 			GetCursorPos(&point);
-			
-			CMenuWnd* pMenu = CMenuWnd::CreateMenu(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo);
+			point.x += 5;
+			point.y -= 5;
+			CMenuWnd* pMenu = CMenuWnd::CreateMenu(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo, eMenuAlignment_Bottom);
 
 			//左侧打开菜单
 			//CMenuWnd* pMenu = CMenuWnd::CreateMenu(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo, eMenuAlignment_Right );
@@ -128,14 +129,58 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 			// 动态添加后重新设置菜单的大小
 			pMenu->ResizeMenu();
 		}
-		else if (msg.pSender->GetName() == _T("Menu_btn") )
+		else if (msg.pSender->GetName() == _T("DPI96") )
 		{
-			DUI__Trace(_T("你单击了按钮"));
+			
+			setDPI(96);
+			
 		}
+		else if (msg.pSender->GetName() == _T("DPI144"))
+		{
+			setDPI(144);
+			
+			
+		}
+		else if (msg.pSender->GetName() == _T("DPI192"))
+		{
+			setDPI(192);
+			
+		}
+
 		
 	}
 
 	__super::Notify(msg);
+}
+
+void CFrameWnd::setDPI(int DPI) {
+
+
+	int scale1=g_Dpi.GetScale();
+	g_Dpi.SetScale(DPI);
+	int scale2= g_Dpi.GetScale();
+
+
+
+	RECT rcWnd;
+	::GetWindowRect(m_hWnd, &rcWnd);
+	RECT rc = rcWnd;
+	
+	rc.right = rcWnd.left + (rcWnd.right - rcWnd.left) * scale2 / scale1;
+	rc.bottom = rcWnd.top + (rcWnd.bottom - rcWnd.top) * scale2 / scale1;
+	
+	
+	
+	RECT* const prcNewWindow = &rc;
+	SetWindowPos(m_hWnd,
+		NULL,
+		prcNewWindow->left,
+		prcNewWindow->top,
+		prcNewWindow->right - prcNewWindow->left,
+		prcNewWindow->bottom - prcNewWindow->top,
+		SWP_NOZORDER | SWP_NOACTIVATE);
+
+	if (m_PaintManager.GetRoot() != NULL) m_PaintManager.GetRoot()->NeedUpdate();
 }
 
  LRESULT CFrameWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

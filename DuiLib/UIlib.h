@@ -84,3 +84,4 @@
 #include "Control/UIFlash.h"
 
 #include "Control/UIMenu.h"
+#include "Utils/DPI.h"
