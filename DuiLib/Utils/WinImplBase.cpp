@@ -160,8 +160,13 @@ LRESULT WindowImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	return HTCLIENT;
 }
 
+void WindowImplBase::setDPI(int DPI) {
 
-//TODO FIXXXXXXXXX
+	m_PaintManager.SetDPI(DPI);
+	
+}
+
+
 BOOL WindowImplBase::IsInStaticControl(CControlUI *pControl)
 {
 	BOOL bRet = FALSE;
@@ -250,7 +255,7 @@ LRESULT WindowImplBase::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 {
 	SIZE szRoundCorner = m_PaintManager.GetRoundCorner();
 #if defined(WIN32) && !defined(UNDER_CE)
-	if( !::IsIconic(*this) ) {
+	if( !::IsIconic(*this)&&!::IsZoomed(*this)) {
 		CDuiRect rcWnd;
 		::GetWindowRect(*this, &rcWnd);
 		rcWnd.Offset(-rcWnd.left, -rcWnd.top);
@@ -258,6 +263,11 @@ LRESULT WindowImplBase::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 		HRGN hRgn = ::CreateRoundRectRgn(rcWnd.left, rcWnd.top, rcWnd.right, rcWnd.bottom, szRoundCorner.cx, szRoundCorner.cy);
 		::SetWindowRgn(*this, hRgn, TRUE);
 		::DeleteObject(hRgn);
+	}
+
+	if (::IsZoomed(*this)) {
+
+		::SetWindowRgn(*this, NULL, TRUE);
 	}
 #endif
 	bHandled = FALSE;

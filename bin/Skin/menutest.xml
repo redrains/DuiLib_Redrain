@@ -24,7 +24,7 @@
         </VerticalLayout>
     </MenuElement>
 
-    <MenuElement name="Menu_Test1" text="菜单测试3" icon="right.png" iconsize="40,22" checkitem="true" ischeck="true" />
+    <MenuElement name="Menu_Test1" text="菜单测试aaaaaaaaaaaaaaaaaaaaaaaaaaaa3" icon="right.png" iconsize="40,22" checkitem="true" ischeck="true" />
 	<MenuElement name="Menu_Test2" text="菜单测试31" />
 	<MenuElement name="Menu_Test3" text="菜单测试32" icon="right.png" iconsize="40,22" checkitem="true" ischeck="true" />
 

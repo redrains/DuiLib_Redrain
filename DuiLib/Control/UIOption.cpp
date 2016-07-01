@@ -240,7 +240,7 @@ namespace DuiLib
 		{
 			DrawImage(hDC, m_selectedForeImage);
 		}
-		else if( m_foreImage.IsLoadSuccess() ) 
+		if(IsSelected() && !m_selectedForeImage.IsLoadSuccess()&&m_foreImage.IsLoadSuccess() )
 		{
 			DrawImage(hDC, m_foreImage);
 		}

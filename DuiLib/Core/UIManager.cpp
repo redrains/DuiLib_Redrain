@@ -5,7 +5,7 @@
 
 
 namespace DuiLib {
-	__declspec(dllexport) CDPI   g_Dpi;
+
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -96,7 +96,8 @@ m_bUpdateNeeded(false),
 m_bMouseTracking(false),
 m_bMouseCapture(false),
 m_bUsedVirtualWnd(false),
-m_pParentResourcePM(NULL)
+m_pParentResourcePM(NULL),
+m_pDPI(NULL)
 {
     m_dwDefaultDisabledColor = 0xFFA7A6AA;
     m_dwDefaultFontColor = 0xFF000001;
@@ -163,6 +164,9 @@ CPaintManagerUI::~CPaintManagerUI()
     if( m_hbmpOffscreen != NULL ) ::DeleteObject(m_hbmpOffscreen);
     if( m_hDcPaint != NULL ) ::ReleaseDC(m_hWndPaint, m_hDcPaint);
     m_aPreMessages.Remove(m_aPreMessages.Find(this));
+
+	delete m_pDPI;
+	
 }
 
 void CPaintManagerUI::Init(HWND hWnd)
@@ -490,6 +494,10 @@ void CPaintManagerUI::SetInitSize(int cx, int cy)
 
 RECT& CPaintManagerUI::GetSizeBox()
 {
+
+	RECT rect = m_rcSizeBox;
+	GetDPIObj()->ScaleRect(&rect);
+	return rect;
     return m_rcSizeBox;
 }
 
@@ -1987,7 +1995,7 @@ TFontInfo* CPaintManagerUI::GetDefaultFontInfo()
 
 void CPaintManagerUI::SetDefaultFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic)
 {
-	nSize = g_Dpi.Scale(nSize);
+	
     LOGFONT lf = { 0 };
     ::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
     _tcsncpy(lf.lfFaceName, pStrFontName, LF_FACESIZE);
@@ -2026,7 +2034,7 @@ HFONT CPaintManagerUI::AddFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool
     ::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
     _tcsncpy(lf.lfFaceName, pStrFontName, LF_FACESIZE);
     lf.lfCharSet = DEFAULT_CHARSET;
-    lf.lfHeight = -g_Dpi.Scale(nSize);
+    lf.lfHeight = -GetDPIObj()->Scale(nSize);
 	lf.lfQuality = CLEARTYPE_QUALITY;
     if( bBold ) lf.lfWeight += FW_BOLD;
     if( bUnderline ) lf.lfUnderline = TRUE;
@@ -2059,7 +2067,7 @@ HFONT CPaintManagerUI::AddFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool
 
 HFONT CPaintManagerUI::AddFontAt(int index, LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic)
 {
-	nSize = g_Dpi.Scale(nSize);
+	
     LOGFONT lf = { 0 };
     ::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
     _tcsncpy(lf.lfFaceName, pStrFontName, LF_FACESIZE);
@@ -2097,6 +2105,10 @@ HFONT CPaintManagerUI::AddFontAt(int index, LPCTSTR pStrFontName, int nSize, boo
 
 HFONT CPaintManagerUI::GetFont(int index)
 {
+
+
+	if (m_pParentResourcePM) return m_pParentResourcePM->GetFont(index);
+
 	TFontInfo* pFontInfo;
 	if (index < 0 || index >= m_aCustomFonts.GetSize()) {
 
@@ -2107,21 +2119,6 @@ HFONT CPaintManagerUI::GetFont(int index)
 
 	}
 
-
-	LOGFONT lf = { 0 };
-	::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
-	_tcsncpy(lf.lfFaceName, pFontInfo->sFontName, LF_FACESIZE);
-	lf.lfCharSet = DEFAULT_CHARSET;
-	lf.lfHeight = -g_Dpi.Scale(pFontInfo->iSize);
-	lf.lfQuality = CLEARTYPE_QUALITY;
-	if (pFontInfo->bBold) lf.lfWeight += FW_BOLD;
-	if (pFontInfo->bUnderline) lf.lfUnderline = TRUE;
-	if (pFontInfo->bItalic) lf.lfItalic = TRUE;
-	HFONT hFont = ::CreateFontIndirect(&lf);
-	if (hFont == NULL) return NULL;
-
-
-    return hFont;
 
 
 	return pFontInfo->hFont;
@@ -2251,6 +2248,8 @@ TFontInfo* CPaintManagerUI::GetFontInfo(HFONT hFont)
     if( m_pParentResourcePM ) return m_pParentResourcePM->GetFontInfo(hFont);
     return GetDefaultFontInfo();
 }
+
+
 
 const TImageInfo* CPaintManagerUI::GetImage(LPCTSTR bitmap)
 {
@@ -2419,6 +2418,116 @@ void CPaintManagerUI::RemoveAllDefaultAttributeList()
 		}
 	}
 	m_DefaultAttrHash.RemoveAll();
+}
+
+CDPI * DuiLib::CPaintManagerUI::GetDPIObj()
+{
+	if (m_pDPI == NULL) {
+
+		m_pDPI = new CDPI;
+	}
+
+	return m_pDPI;
+}
+
+void DuiLib::CPaintManagerUI::SetDPI(int DPI)
+{
+
+
+
+
+	int scale1 = GetDPIObj()->GetScale();
+	GetDPIObj()->SetScale(DPI);
+	int scale2 = GetDPIObj()->GetScale();
+	ResetDPIAssets();
+
+	RECT rcWnd;
+	::GetWindowRect(GetPaintWindow(), &rcWnd);
+	RECT*  prcNewWindow = &rcWnd;
+	if (!::IsZoomed(GetPaintWindow())) {
+		RECT rc = rcWnd;
+		rc.right = rcWnd.left + (rcWnd.right - rcWnd.left) * scale2 / scale1;
+		rc.bottom = rcWnd.top + (rcWnd.bottom - rcWnd.top) * scale2 / scale1;
+		prcNewWindow = &rc;
+	}
+
+
+	SetWindowPos(GetPaintWindow(),
+		NULL,
+		prcNewWindow->left,
+		prcNewWindow->top,
+		prcNewWindow->right - prcNewWindow->left,
+		prcNewWindow->bottom - prcNewWindow->top,
+		SWP_NOZORDER | SWP_NOACTIVATE);
+
+	if (GetRoot() != NULL) GetRoot()->NeedUpdate();
+
+
+	::PostMessage(GetPaintWindow(), WM_USER_SET_DPI, 0, 0);
+
+
+	
+}
+
+void DuiLib::CPaintManagerUI::SetAllDPI(int DPI)
+{
+	for (int i = 0; i < m_aPreMessages.GetSize(); i++) {
+		CPaintManagerUI* pManager = static_cast<CPaintManagerUI*>(m_aPreMessages[i]);
+		pManager->SetDPI(DPI);
+	}
+}
+
+void DuiLib::CPaintManagerUI::ResetDPIAssets()
+{
+
+	///1 reset fonts
+	TFontInfo* pFontInfo = NULL;
+	for (int it = 0; it < m_aCustomFonts.GetSize(); it++) {
+		pFontInfo = static_cast<TFontInfo*>(m_aCustomFonts[it]);
+		
+		RebuildFont(pFontInfo);
+	}
+
+	RebuildFont(&m_DefaultFontInfo);
+	
+
+
+
+	///2 reset images;
+
+
+
+
+}
+
+void DuiLib::CPaintManagerUI::RebuildFont(TFontInfo * pFontInfo)
+{
+
+	
+
+	::DeleteObject(pFontInfo->hFont);
+	
+
+	LOGFONT lf = { 0 };
+	::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
+	_tcsncpy(lf.lfFaceName, pFontInfo->sFontName, LF_FACESIZE);
+	lf.lfCharSet = DEFAULT_CHARSET;
+	lf.lfHeight = -GetDPIObj()->Scale(pFontInfo->iSize);
+	lf.lfQuality = CLEARTYPE_QUALITY;
+	if (pFontInfo->bBold) lf.lfWeight += FW_BOLD;
+	if (pFontInfo->bUnderline) lf.lfUnderline = TRUE;
+	if (pFontInfo->bItalic) lf.lfItalic = TRUE;
+	HFONT hFont = ::CreateFontIndirect(&lf);
+
+
+
+	pFontInfo->hFont = hFont;
+	::ZeroMemory(&(pFontInfo->tm), sizeof(pFontInfo->tm));
+	if (m_hDcPaint) {
+		HFONT hOldFont = (HFONT) ::SelectObject(m_hDcPaint, hFont);
+		::GetTextMetrics(m_hDcPaint, &pFontInfo->tm);
+		::SelectObject(m_hDcPaint, hOldFont);
+	}
 }
 
 CControlUI* CPaintManagerUI::GetRoot() const

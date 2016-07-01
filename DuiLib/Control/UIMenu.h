@@ -303,6 +303,7 @@ public:
 
 	// 重新调整子菜单的大小
 	void ResizeSubMenu();
+	void setDPI(int DPI);
 
 private:
 	friend class CMenuElementUI;

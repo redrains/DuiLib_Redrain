@@ -56,6 +56,9 @@ public:
 	void ShowShadow(bool bShow);	
 	bool IsShowShadow() const;
 
+	void DisableShadow(bool bDisable);
+	bool IsDisableShadow() const;
+
 	// 算法阴影的函数
 	bool SetSize(int NewSize = 0);
 	bool SetSharpness(unsigned int NewSharpness = 5);
@@ -114,7 +117,7 @@ protected:
 	BYTE			 m_Status;
 	bool			 m_bIsImageMode;	// 是否为图片阴影模式
 	bool			 m_bIsShowShadow;	// 是否要显示阴影
-
+	bool			m_bIsDisableShadow;
 	// 算法阴影成员变量
 	unsigned char m_nDarkness;	// Darkness, transparency of blurred area
 	unsigned char m_nSharpness;	// Sharpness, width of blurred border of shadow window

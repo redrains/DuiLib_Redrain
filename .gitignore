@@ -1,6 +1,7 @@
-﻿.vs
-DuiLib_vs2008.VC.db
-DuiLib_vs2008.sdf
+﻿".vs"
+DuiLib_vs2015.VC.db
+DuiLib_vs2015.sdf
+DuiLib_vs2015.VC.VC.opendb
 HiDPITest/HiDPITest/Debug
 HiDPITest/HiDPITest/Release
 ipch

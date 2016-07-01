@@ -34,7 +34,8 @@ namespace DuiLib
 		CControlUI::SetPos(rc);
 		//g_Dpi.ScaleRect(&rc);
 		rc = m_rcItem;
-
+		RECT m_rcInset = CVerticalLayoutUI::m_rcInset;
+		GetManager()->GetDPIObj()->ScaleRect(&m_rcInset);
 		// Adjust for inset
 		rc.left += m_rcInset.left;
 		rc.top += m_rcInset.top;

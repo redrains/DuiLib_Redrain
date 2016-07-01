@@ -4,51 +4,80 @@
 #pragma comment(lib, "delayimp")
 namespace DuiLib
 {
-	/*STDAPI SetProcessDpiAwareness(
-		_In_ PROCESS_DPI_AWARENESS value);
-
-	STDAPI GetProcessDpiAwareness(
-		_In_opt_ HANDLE hprocess,
-		_Out_ PROCESS_DPI_AWARENESS *value);
-*/
+	//96 DPI = 100% scaling
+	//120 DPI = 125% scaling
+	//144 DPI = 150% scaling
+	//168 DPI = 175% scaling
+	//192 DPI = 200% scaling
 
 
-
+	 BOOL CDPI::bIsWindowsXPOrLater;
+	 BOOL CDPI::bIsWindowsVistaOrLater;
+	 BOOL CDPI::bIsWindows7OrLater;
+	 BOOL CDPI::bIsWindows8OrLater;
+	 BOOL CDPI::bIsWindowsBlueOrLater;
+	 BOOL CDPI::bIsWindows10OrLater;
+	 CDPI::Initializer OSVersionInitializationGuard;
 	CDPI::CDPI()
 	{
-
-
-		OSVERSIONINFO osvi;
-		
-
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-
-		GetVersionEx(&osvi);
-
-		//_WIN32_WINNT_WINXP
-		bIsWindowsXPOrLater =
-			((osvi.dwMajorVersion > 5) ||
-			((osvi.dwMajorVersion == 5) && (osvi.dwMinorVersion >= 1)));
-
-		bIsWindows7OrLater =
-			((osvi.dwMajorVersion > 6) ||
-			((osvi.dwMajorVersion == 6) && (osvi.dwMinorVersion >= 1)));
-		bIsWindows8OrLater =
-			((osvi.dwMajorVersion > 6) ||
-			((osvi.dwMajorVersion == 6) && (osvi.dwMinorVersion >= 2)));
 
 		m_nScaleFactor = 0;
 		m_nScaleFactorSDA = 0;
 		m_Awareness = PROCESS_PER_MONITOR_DPI_AWARE;
 
-		//SetScale(120);
+		SetScale(96);
+	}
+
+	int DuiLib::CDPI::GetDPIOfMonitor(HMONITOR hMonitor)
+	{
+		UINT     dpix = 96, dpiy = 96;
+		if (CDPI::bIsWindowsBlueOrLater) {
+			
+			HRESULT  hr = E_FAIL;
+			hr = GetDpiForMonitor(hMonitor, MDT_EFFECTIVE_DPI, &dpix, &dpiy);
+
+			if (hr != S_OK)
+			{
+				MessageBox(NULL, (LPCWSTR)L"GetDpiForMonitor failed", (LPCWSTR)L"Notification", MB_OK);
+				return 96;
+			}
+
+		}
+		else {
+
+			HDC screen = GetDC(0);
+			dpix = GetDeviceCaps(screen, LOGPIXELSX);
+			//dpiy = GetDeviceCaps(screen, LOGPIXELSY);
+			ReleaseDC(0, screen);
+		}
+
+
+		return dpix;
+	}
+
+	int DuiLib::CDPI::GetDPIOfMonitorNearestToPoint(POINT pt)
+	{
+		HMONITOR hMonitor;
+		hMonitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
+		return GetDPIOfMonitor(hMonitor);
+	}
+
+	int DuiLib::CDPI::GetMainMonitorDPI()
+	{
+
+		
+		POINT    pt;
+		// Get the DPI for the main monitor
+		pt.x = 1;
+		pt.y = 1;
+		return GetDPIOfMonitorNearestToPoint(pt);
+		
 	}
 
 	PROCESS_DPI_AWARENESS CDPI::GetAwareness()
 	{
 		
-		if (bIsWindows8OrLater) {
+		if (bIsWindowsBlueOrLater) {
 			HANDLE hProcess;
 			hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, GetCurrentProcessId());
 			GetProcessDpiAwareness(hProcess, &m_Awareness);
@@ -60,7 +89,7 @@ namespace DuiLib
 	void CDPI::SetAwareness(PROCESS_DPI_AWARENESS awareness)
 	{
 		HRESULT hr = E_FAIL;
-		if (bIsWindows8OrLater) {
+		if (bIsWindowsBlueOrLater) {
 
 			hr = SetProcessDpiAwareness(awareness);
 			if (hr == S_OK)
@@ -82,6 +111,21 @@ namespace DuiLib
 		return;
 	}
 
+	UINT DuiLib::CDPI::GetDPI()
+	{
+		if (m_Awareness == PROCESS_DPI_UNAWARE)
+		{
+			return 96;
+		}
+
+		if (m_Awareness == PROCESS_SYSTEM_DPI_AWARE)
+		{
+			return MulDiv(m_nScaleFactorSDA,96,100);
+		}
+
+		return MulDiv(m_nScaleFactor,96,100);
+	}
+
 	UINT CDPI::GetScale()
 	{
 		if (m_Awareness == PROCESS_DPI_UNAWARE)
@@ -96,6 +140,7 @@ namespace DuiLib
 
 		return m_nScaleFactor;
 	}
+
 
 	void CDPI::SetScale(__in UINT iDPI)
 	{
@@ -138,10 +183,17 @@ namespace DuiLib
 
 	void CDPI::ScaleRect(__inout RECT *pRect)
 	{
+		int width = pRect->right - pRect->left;
+		int height = pRect->bottom - pRect->top;
+		int sw = Scale(width);
+		int sh = Scale(height);
 		pRect->left = Scale(pRect->left);
-		pRect->right = Scale(pRect->right);
+		//pRect->right = Scale(pRect->right);
 		pRect->top = Scale(pRect->top);
-		pRect->bottom = Scale(pRect->bottom);
+		//pRect->bottom = Scale(pRect->bottom);
+		
+		pRect->right = pRect->left + sw;
+		pRect->bottom = pRect->top + sh;
 	}
 
 	void CDPI::ScalePoint(__inout POINT *pPoint)

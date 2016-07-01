@@ -57,7 +57,7 @@ namespace DuiLib {
 
 		m_sImageAttribute = pStrImageAttri;
 		m_sImage = m_sImageAttribute;
-		ParseAttribute(pStrImageAttri);
+		//ParseAttribute(pStrImageAttri);
 	}
 
 	bool CImageAttribute::LoadImage(CPaintManagerUI* pManager)
@@ -76,7 +76,7 @@ namespace DuiLib {
 		m_bHole = false;
 		m_bTiledX = false;
 		m_bTiledY = false;
-		ParseAttribute(m_sImageAttribute);
+		ParseAttribute(m_sImageAttribute,*pManager->GetDPIObj());
 		if (!m_bLoadSuccess)
 			return false;
 
@@ -118,7 +118,7 @@ namespace DuiLib {
 
 	void CImageAttribute::ModifyAttribute(LPCTSTR pStrModify)
 	{
-		ParseAttribute(pStrModify);
+		//ParseAttribute(pStrModify);
 	}
 
 	void CImageAttribute::Clear()
@@ -138,7 +138,7 @@ namespace DuiLib {
 		m_bTiledY = false;
 	}
 
-	void CImageAttribute::ParseAttribute(LPCTSTR pStrImage)
+	void CImageAttribute::ParseAttribute(LPCTSTR pStrImage,CDPI g_Dpi)
 	{
 		if (pStrImage == NULL)
 			return;
@@ -220,6 +220,7 @@ namespace DuiLib {
 					m_rcCorner.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
 					m_rcCorner.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
 					m_rcCorner.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+					g_Dpi.ScaleRect(&m_rcCorner);
 				}
 				else if (sItem == _T("mask"))
 				{

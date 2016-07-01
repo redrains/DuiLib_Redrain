@@ -2,6 +2,7 @@
 #define __DPI_H__
 #pragma once
 #include "ShellScalingAPI.h"
+#include <VersionHelpers.h>
 namespace DuiLib
 {
 
@@ -14,10 +15,13 @@ namespace DuiLib
 public:
 	CDPI(void);
 
+	static int GetMainMonitorDPI();
+	static int GetDPIOfMonitor(HMONITOR hMonitor);
+	static int GetDPIOfMonitorNearestToPoint(POINT pt);
 	int  Scale(int x);
 
 	UINT GetScale();
-
+	UINT GetDPI();
 	void SetScale(__in UINT iDPI);
 	
 	PROCESS_DPI_AWARENESS GetAwareness();
@@ -32,10 +36,38 @@ public:
 
 	// Scale Point from raw pixels to relative pixels.
 	void ScalePoint(__inout POINT *pPoint);
-	BOOL bIsWindowsXPOrLater;
-	BOOL bIsWindows7OrLater;
-	BOOL bIsWindows8OrLater;
+
+	struct Initializer {
+		Initializer() {
+			OSVERSIONINFO osvi;
+			ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
+			osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+
+			GetVersionEx(&osvi);
+
+			//_WIN32_WINNT_WINXP
+			bIsWindowsXPOrLater = IsWindowsXPOrGreater();
+				
+
+			bIsWindowsVistaOrLater = IsWindowsVistaOrGreater();
+
+			bIsWindows7OrLater = IsWindows7OrGreater();
+			bIsWindows8OrLater = IsWindows8OrGreater();
+
+			bIsWindowsBlueOrLater = IsWindows8Point1OrGreater();
+
+			bIsWindows10OrLater = IsWindows10OrGreater();
+		}
+	};
+
 	
+	static BOOL bIsWindowsXPOrLater;
+	static BOOL bIsWindowsVistaOrLater;
+	static BOOL bIsWindows7OrLater;
+	static BOOL bIsWindows8OrLater;
+	static BOOL bIsWindowsBlueOrLater;
+	static BOOL bIsWindows10OrLater;
+	static Initializer OSVersionInitializationGuard;
 
 private:
 	UINT m_nScaleFactor;
@@ -43,6 +75,5 @@ private:
 	PROCESS_DPI_AWARENESS m_Awareness;
 };
 
- __declspec(dllimport) CDPI   g_Dpi;
 }
 #endif //__DPI_H__

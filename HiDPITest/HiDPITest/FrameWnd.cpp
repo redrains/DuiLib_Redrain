@@ -1,5 +1,5 @@
 #include "duilib.h"
-
+#include <sstream>
 CFrameWnd::CFrameWnd( LPCTSTR pszXMLPath )
 	:  m_strXMLPath(pszXMLPath)
 {
@@ -43,9 +43,9 @@ LRESULT CFrameWnd::OnDPIChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 	//The LOWORD of the wParam contains the X-axis value of the new DPI of the window. 
 	//For example, 96, 120, 144, or 192. 
 	//The values of the X-axis and the Y-axis are identical for Windows apps.
-
-	g_Dpi.SetScale(LOWORD(wParam));  // Set the new DPI, retrieved from the wParam
-
+	
+	m_PaintManager.GetDPIObj()->SetScale(LOWORD(wParam));  // Set the new DPI, retrieved from the wParam
+	m_PaintManager.ResetDPIAssets();
 	int g_dpi = HIWORD(wParam);
 
 
@@ -57,23 +57,26 @@ LRESULT CFrameWnd::OnDPIChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 		prcNewWindow->right - prcNewWindow->left,
 		prcNewWindow->bottom - prcNewWindow->top,
 		SWP_NOZORDER | SWP_NOACTIVATE);
+
+	if (m_PaintManager.GetRoot() != NULL) m_PaintManager.GetRoot()->NeedUpdate();
+
+
 	bHandled = false;
 
-	/*INT iBorderWidth100 = 5;
-	FLOAT fscale = (float)g_dpi / USER_DEFAULT_SCREEN_DPI;
-	INT iBorderWidth = iBorderWidth100 * fscale;
-	double zoomLevel = log(fscale) / log(1.2);
-	m_pClientHandler->GetBrowser()->GetHost()->SetZoomLevel(zoomLevel);
 
+	
+	wstring optionName;
+	wstringstream wss;
+	wss << L"DPI";
+	wss << m_PaintManager.GetDPIObj()->GetDPI();
+	wss >> optionName;
+	COptionUI	*option = static_cast<COptionUI*>(m_PaintManager.FindControl(optionName.c_str()));
+	option->Selected(true);
+	
 
-	if (fscale > 1) {
-		m_pClientHandler->GetBrowser()->GetMainFrame()->ExecuteJavaScript("enableHiDPIStyle(true)", "", 0);
-	}
-	else {
-		m_pClientHandler->GetBrowser()->GetMainFrame()->ExecuteJavaScript("enableHiDPIStyle(false)", "", 0);
-	}
+	
 
-*/
+	
 
 
 	return 0;
@@ -91,7 +94,7 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 			point.x += 5;
 			point.y -= 5;
 			CMenuWnd* pMenu = CMenuWnd::CreateMenu(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo, eMenuAlignment_Bottom);
-
+			pMenu->setDPI(m_PaintManager.GetDPIObj()->GetDPI());
 			//左侧打开菜单
 			//CMenuWnd* pMenu = CMenuWnd::CreateMenu(NULL, _T("menutest.xml"), point, &m_PaintManager, &m_MenuCheckInfo, eMenuAlignment_Right );
 			//左上侧打开菜单
@@ -135,11 +138,22 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 			setDPI(96);
 			
 		}
+		else if (msg.pSender->GetName() == _T("DPI120"))
+		{
+			setDPI(120);
+
+
+		}
 		else if (msg.pSender->GetName() == _T("DPI144"))
 		{
 			setDPI(144);
 			
 			
+		}
+		else if (msg.pSender->GetName() == _T("DPI168"))
+		{
+			setDPI(168);
+
 		}
 		else if (msg.pSender->GetName() == _T("DPI192"))
 		{
@@ -153,35 +167,7 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 	__super::Notify(msg);
 }
 
-void CFrameWnd::setDPI(int DPI) {
 
-
-	int scale1=g_Dpi.GetScale();
-	g_Dpi.SetScale(DPI);
-	int scale2= g_Dpi.GetScale();
-
-
-
-	RECT rcWnd;
-	::GetWindowRect(m_hWnd, &rcWnd);
-	RECT rc = rcWnd;
-	
-	rc.right = rcWnd.left + (rcWnd.right - rcWnd.left) * scale2 / scale1;
-	rc.bottom = rcWnd.top + (rcWnd.bottom - rcWnd.top) * scale2 / scale1;
-	
-	
-	
-	RECT* const prcNewWindow = &rc;
-	SetWindowPos(m_hWnd,
-		NULL,
-		prcNewWindow->left,
-		prcNewWindow->top,
-		prcNewWindow->right - prcNewWindow->left,
-		prcNewWindow->bottom - prcNewWindow->top,
-		SWP_NOZORDER | SWP_NOACTIVATE);
-
-	if (m_PaintManager.GetRoot() != NULL) m_PaintManager.GetRoot()->NeedUpdate();
-}
 
  LRESULT CFrameWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
  {
@@ -226,6 +212,21 @@ void CFrameWnd::setDPI(int DPI) {
 	 if (uMsg == WM_DPICHANGED) {
 
 		 OnDPIChanged(uMsg, wParam, lParam, bHandled);
+	 }
+
+	 if (uMsg == WM_CLOSE) {
+
+		 PostQuitMessage(0);
+	 }if (uMsg == WM_USER_SET_DPI) {
+
+
+		 wstring optionName;
+		 wstringstream wss;
+		 wss << L"DPI";
+		 wss << m_PaintManager.GetDPIObj()->GetDPI();
+		 wss >> optionName;
+		 COptionUI	*option = static_cast<COptionUI*>(m_PaintManager.FindControl(optionName.c_str()));
+		 option->Selected(true);
 	 }
 
 

@@ -154,6 +154,11 @@ namespace DuiLib
 
 	RECT CContainerUI::GetInset() const
 	{
+		
+
+		RECT inset = m_rcInset;
+		GetManager()->GetDPIObj()->ScaleRect(&inset);
+		return inset;
 		return m_rcInset;
 	}
 

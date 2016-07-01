@@ -103,6 +103,15 @@ SIZE CMenuUI::EstimateSize(SIZE szAvailable)
 		if( cxFixed < sz.cx )
 			cxFixed = sz.cx;
     }
+
+	for (int it = 0; it < GetCount(); it++) {
+		CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
+		if (!pControl->IsVisible()) continue;
+		
+		pControl->SetFixedWidth(cxFixed*100/GetManager()->GetDPIObj()->GetScale());
+	}
+
+
     return CSize(cxFixed, cyFixed);
 }
 
@@ -258,6 +267,7 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 			rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
 
 		m_pm.Init(m_hWnd);
+		m_pm.GetDPIObj()->SetScale(m_pOwner->GetManager()->GetDPIObj()->GetDPI());
 		// The trick is to add the items to the new container. Their owner gets
 		// reassigned by this operation - which is why it is important to reassign
 		// the items back to the righfull owner/manager when the window closes.
@@ -310,6 +320,13 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 	m_pm.GetShadow()->ShowShadow(bShowShadow);
 	m_pm.GetShadow()->Create(&m_pm);
 	return 0;
+}
+
+
+void CMenuWnd::setDPI(int DPI) {
+
+
+	m_pm.SetDPI(DPI);
 }
 
 CMenuUI* CMenuWnd::GetMenuUI()
@@ -595,8 +612,8 @@ LPVOID CMenuElementUI::GetInterface(LPCTSTR pstrName)
 void CMenuElementUI::DoPaint(HDC hDC, const RECT& rcPaint)
 {
 	SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
-	m_cxyFixed.cx = g_Dpi.Scale(m_cxyFixed.cx);
-	m_cxyFixed.cy = g_Dpi.Scale(m_cxyFixed.cy);
+	m_cxyFixed.cx = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cx);
+	m_cxyFixed.cy = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cy);
     if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return;
 
 	if(m_bDrawLine)
@@ -621,17 +638,25 @@ void CMenuElementUI::DoPaint(HDC hDC, const RECT& rcPaint)
 void CMenuElementUI::DrawItemIcon(HDC hDC, const RECT& rcItem)
 {
 	SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
-	m_cxyFixed.cx = g_Dpi.Scale(m_cxyFixed.cx);
-	m_cxyFixed.cy = g_Dpi.Scale(m_cxyFixed.cy);
+	m_cxyFixed.cx = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cx);
+	m_cxyFixed.cy = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cy);
+
+	SIZE m_szIconSize = CMenuElementUI::m_szIconSize;
+	m_szIconSize.cx = GetManager()->GetDPIObj()->Scale(m_szIconSize.cx);
+	m_szIconSize.cy = GetManager()->GetDPIObj()->Scale(m_szIconSize.cy);
+	TListInfoUI* pInfo = m_pOwner->GetListInfo();
+	RECT rcTextPadding = pInfo->rcTextPadding;
+	GetManager()->GetDPIObj()->ScaleRect(&rcTextPadding);
+	int padding =(rcTextPadding.left-m_szIconSize.cx)/2 ;
 	if ( m_icon.IsLoadSuccess() )
 	{	
 		if (!(m_bCheckItem && !GetChecked()))
 		{
 			RECT rcDest =
 			{
-				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx) / 2,
+				padding,
 				(m_cxyFixed.cy - m_szIconSize.cy) / 2,
-				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx) / 2 + m_szIconSize.cx,
+				padding + m_szIconSize.cx,
 				(m_cxyFixed.cy - m_szIconSize.cy) / 2 + m_szIconSize.cy 
 			};
 			
@@ -643,8 +668,8 @@ void CMenuElementUI::DrawItemIcon(HDC hDC, const RECT& rcItem)
 void CMenuElementUI::DrawItemExpland(HDC hDC, const RECT& rcItem)
 {
 	SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
-	m_cxyFixed.cx = g_Dpi.Scale(m_cxyFixed.cx);
-	m_cxyFixed.cy = g_Dpi.Scale(m_cxyFixed.cy);
+	m_cxyFixed.cx = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cx);
+	m_cxyFixed.cy = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cy);
 	if (m_bShowExplandIcon)
 	{
 		if (!m_expandIcon.IsLoadSuccess())
@@ -656,15 +681,16 @@ void CMenuElementUI::DrawItemExpland(HDC hDC, const RECT& rcItem)
 			return;
 
 		const TImageInfo *pImageInfo = m_expandIcon.GetImageInfo();
-		
+		int padding = GetManager()->GetDPIObj()->Scale(ITEM_DEFAULT_EXPLAND_ICON_WIDTH)/3;
 		RECT rcDest =
 		{
-			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - pImageInfo->nX) / 2,
+			m_cxyFixed.cx- pImageInfo->nX- padding,
 			(m_cxyFixed.cy - pImageInfo->nY) / 2,
-			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - pImageInfo->nX) / 2 + pImageInfo->nX,
+			m_cxyFixed.cx -  pImageInfo->nX -padding + pImageInfo->nX,
 			(m_cxyFixed.cy - pImageInfo->nY) / 2 + pImageInfo->nY
 		};
 
+		
 		DrawImage(hDC, m_expandIcon, rcDest);
 	}
 }
@@ -688,10 +714,12 @@ void CMenuElementUI::DrawItemText(HDC hDC, const RECT& rcItem)
     }
     int nLinks = 0;
     RECT rcText = rcItem;
-    rcText.left += pInfo->rcTextPadding.left;
-    rcText.right -= pInfo->rcTextPadding.right;
-    rcText.top += pInfo->rcTextPadding.top;
-    rcText.bottom -= pInfo->rcTextPadding.bottom;
+	RECT rcTextPadding = pInfo->rcTextPadding;
+	GetManager()->GetDPIObj()->ScaleRect(&rcTextPadding);
+    rcText.left += rcTextPadding.left;
+    rcText.right -= rcTextPadding.right;
+    rcText.top += rcTextPadding.top;
+    rcText.bottom -= rcTextPadding.bottom;
 
     if( pInfo->bShowHtml )
         CRenderEngine::DrawHtmlText(hDC, m_pManager, rcText, m_sText, iTextColor, \
@@ -705,8 +733,8 @@ void CMenuElementUI::DrawItemText(HDC hDC, const RECT& rcItem)
 SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
 {
 	SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
-	m_cxyFixed.cx = g_Dpi.Scale(m_cxyFixed.cx);
-	m_cxyFixed.cy = g_Dpi.Scale(m_cxyFixed.cy);
+	m_cxyFixed.cx = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cx);
+	m_cxyFixed.cy = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cy);
 	SIZE cXY = {0};
 	for( int it = 0; it < GetCount(); it++ ) {
 		CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
@@ -733,8 +761,10 @@ SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
 		
 		
 		RECT rcText = { 0, 0, MAX(szAvailable.cx, m_cxyFixed.cx), 9999 };
-		rcText.left += pInfo->rcTextPadding.left;
-		rcText.right -= pInfo->rcTextPadding.right;
+		RECT rcTextPadding = pInfo->rcTextPadding;
+		GetManager()->GetDPIObj()->ScaleRect(&rcTextPadding);
+		rcText.left += rcTextPadding.left;
+		rcText.right -= rcTextPadding.right;
 		if( pInfo->bShowHtml ) {   
 			int nLinks = 0;
 			CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, iTextColor, NULL, NULL, nLinks, DT_CALCRECT | pInfo->uTextStyle);
@@ -742,16 +772,16 @@ SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
 		else {
 			CRenderEngine::DrawText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, iTextColor, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle);
 		}
-		cXY.cx = rcText.right - rcText.left + pInfo->rcTextPadding.left + pInfo->rcTextPadding.right + 20;
-		cXY.cy = rcText.bottom - rcText.top + pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
+		cXY.cx = rcText.right - rcText.left + rcTextPadding.left + rcTextPadding.right + 20;
+		cXY.cy = rcText.bottom - rcText.top + rcTextPadding.top + rcTextPadding.bottom;
 	}
 
 	if( m_cxyFixed.cy != 0 ) cXY.cy = m_cxyFixed.cy;
 	if ( cXY.cx < m_cxyFixed.cx )
 		cXY.cx =  m_cxyFixed.cx;
 
-	m_cxyFixed.cy = cXY.cy;
-	m_cxyFixed.cx = cXY.cx;
+	CMenuElementUI::m_cxyFixed.cy = cXY.cy*100/GetManager()->GetDPIObj()->GetScale();
+	CMenuElementUI::m_cxyFixed.cx = cXY.cx*100/ GetManager()->GetDPIObj()->GetScale();
 	return cXY;
 }
 
@@ -789,6 +819,29 @@ void CMenuElementUI::DoEvent(TEventUI& event)
 		return;
 	}
 
+
+	if (event.Type == UIEVENT_MOUSELEAVE) {
+
+		//::OutputDebugString(L"QQQQQQQQQQQQQQQQQQQQQQQQ\n");
+
+		//if (m_pWindow) return;
+		bool hasSubMenu = false;
+		for (int i = 0; i < GetCount(); ++i)
+		{
+			if (GetItemAt(i)->GetInterface(_T("MenuElement")) != NULL)
+			{
+				//(static_cast<CMenuElementUI*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetVisible(true);
+				//(static_cast<CMenuElementUI*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(true);
+
+				hasSubMenu = true;
+			}
+		}
+
+		if (!hasSubMenu) {
+			m_pOwner->SelectItem(-1, true);
+		}
+	}
+
 	if( event.Type == UIEVENT_BUTTONUP )
 	{
 		if( IsEnabled() ){
@@ -817,6 +870,7 @@ void CMenuElementUI::DoEvent(TEventUI& event)
 					s_clickedMenuItem = GetName();
 					PostMessage(CMenuWnd::GetGlobalContextMenuObserver().GetManager()->GetPaintWindow(), WM_MENUCLICK, (WPARAM)(&s_clickedMenuItem), (LPARAM)(GetChecked() ? TRUE : FALSE));
 				}
+				m_pManager->SendNotify(this, DUI_MSGTYPE_CLICK);
 				ContextMenuParam param;
 				param.hWnd = m_pManager->GetPaintWindow();
 				param.wParam = 1;
@@ -884,7 +938,7 @@ void CMenuElementUI::CreateMenuWnd()
 void CMenuElementUI::SetLineType()
 {
 	m_bDrawLine = true;
-	if (GetFixedHeight() == 0 || GetFixedHeight() == ITEM_DEFAULT_HEIGHT )
+	if (m_cxyFixed.cy == 0 || m_cxyFixed.cy == ITEM_DEFAULT_HEIGHT )
 		SetFixedHeight(DEFAULT_LINE_HEIGHT);
 
 	SetMouseChildEnabled(false);

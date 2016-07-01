@@ -268,7 +268,7 @@ void CControlUI::SetColorHSL(bool bColorHSL)
 
 int CControlUI::GetBorderSize() const
 {
-	return g_Dpi.Scale(m_nBorderSize);
+	return GetManager()->GetDPIObj()->Scale(m_nBorderSize);
     return m_nBorderSize;
 }
 
@@ -340,7 +340,7 @@ const RECT& CControlUI::GetPos()
 
 void CControlUI::SetPos(RECT rc)
 {
-	//g_Dpi.ScaleRect(&rc);
+	//GetManager()->GetDPI()->ScaleRect(&rc);
     if( rc.right < rc.left ) rc.right = rc.left;
     if( rc.bottom < rc.top ) rc.bottom = rc.top;
 
@@ -409,6 +409,9 @@ int CControlUI::GetY() const
 
 RECT CControlUI::GetPadding() const
 {
+	RECT rect = m_rcPadding;
+	GetManager()->GetDPIObj()->ScaleRect(&rect);
+	return rect;
     return m_rcPadding;
 }
 
@@ -421,8 +424,8 @@ void CControlUI::SetPadding(RECT rcPadding)
 SIZE CControlUI::GetFixedXY() const
 {
 	SIZE xy;
-	xy.cx = g_Dpi.Scale(m_cXY.cx);
-	xy.cy = g_Dpi.Scale(m_cXY.cy);
+	xy.cx = GetManager()->GetDPIObj()->Scale(m_cXY.cx);
+	xy.cy = GetManager()->GetDPIObj()->Scale(m_cXY.cy);
 	return xy;
     return m_cXY;
 }
@@ -437,7 +440,7 @@ void CControlUI::SetFixedXY(SIZE szXY)
 
 int CControlUI::GetFixedWidth() const
 {
-	return g_Dpi.Scale(m_cxyFixed.cx);
+	return GetManager()->GetDPIObj()->Scale(m_cxyFixed.cx);
     return m_cxyFixed.cx;
 }
 
@@ -451,7 +454,7 @@ void CControlUI::SetFixedWidth(int cx)
 
 int CControlUI::GetFixedHeight() const
 {
-	return  g_Dpi.Scale(m_cxyFixed.cy);
+	return GetManager()->GetDPIObj()->Scale(m_cxyFixed.cy);
     return m_cxyFixed.cy;
 }
 
@@ -994,8 +997,8 @@ SIZE CControlUI::EstimateSize(SIZE szAvailable)
 
 	
 	SIZE size;
-	size.cx = g_Dpi.Scale(m_cxyFixed.cx);
-	size.cy = g_Dpi.Scale(m_cxyFixed.cy);
+	size.cx = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cx);
+	size.cy = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cy);
     return size;
 }
 
@@ -1060,7 +1063,7 @@ void CControlUI::PaintText(HDC hDC)
 void CControlUI::PaintBorder(HDC hDC)
 {
 
-	int m_nBorderSize = g_Dpi.Scale(CControlUI::m_nBorderSize);
+	int m_nBorderSize = GetManager()->GetDPIObj()->Scale(CControlUI::m_nBorderSize);
 	if(m_dwBorderColor != 0 || m_dwFocusBorderColor != 0)
 	{
 		if(m_nBorderSize > 0 && ( m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0 ))//»­Ô²½Ç±ß¿ò

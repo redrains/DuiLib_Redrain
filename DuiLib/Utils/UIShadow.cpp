@@ -23,6 +23,7 @@ CShadowUI::CShadowUI(void)
 , m_bUpdate(false)
 , m_bIsImageMode(false)
 , m_bIsShowShadow(false)
+, m_bIsDisableShadow(false)
 {
 	::ZeroMemory(&m_rcShadowCorner, sizeof(RECT));
 }
@@ -114,7 +115,16 @@ LRESULT CALLBACK CShadowUI::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
 	_ASSERT(GetShadowMap().find(hwnd) != GetShadowMap().end());	// Shadow must have been attached
 
 	CShadowUI *pThis = GetShadowMap()[hwnd];
+	if (pThis->m_bIsDisableShadow) {
 
+#pragma warning(disable: 4312)	// temporrarily disable the type_cast warning in Win32
+		// Call the default(original) window procedure for other messages or messages processed but not returned
+		return ((WNDPROC)pThis->m_OriParentProc)(hwnd, uMsg, wParam, lParam);
+#pragma warning(default: 4312)
+
+
+
+	}
 	switch(uMsg)
 	{
 	case WM_MOVE:
@@ -219,7 +229,23 @@ LRESULT CALLBACK CShadowUI::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
 #pragma warning(default: 4312)
 
 }
+void GetLastErrorMessage() {          //Formats GetLastError() value.
+	LPVOID lpMsgBuf;
 
+	FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+		NULL, GetLastError(),
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+		(LPTSTR)&lpMsgBuf, 0, NULL
+	);
+
+	// Display the string.
+	//MessageBox(NULL, (const wchar_t*)lpMsgBuf, L"GetLastError", MB_OK | MB_ICONINFORMATION);
+
+	// Free the buffer.
+	LocalFree(lpMsgBuf);
+
+}
 void CShadowUI::Update(HWND hParent)
 {
 
@@ -258,9 +284,20 @@ void CShadowUI::Update(HWND hParent)
 
 	BYTE *pvBits;          // pointer to DIB section
 	HBITMAP hbitmap = CreateDIBSection(NULL, &bmi, DIB_RGB_COLORS, (void **)&pvBits, NULL, 0);
-	HDC hMemDC = CreateCompatibleDC(NULL);
-	HBITMAP hOriBmp = (HBITMAP)SelectObject(hMemDC, hbitmap);
+	if (hbitmap == NULL) {
 
+		GetLastErrorMessage();
+	}
+
+	HDC hMemDC = CreateCompatibleDC(NULL);
+	if (hMemDC == NULL) {
+
+		GetLastErrorMessage();
+	}
+	HBITMAP hOriBmp = (HBITMAP)SelectObject(hMemDC, hbitmap);
+	if (GetLastError()!=0) {
+		GetLastErrorMessage();
+	}
 	if (m_bIsImageMode)
 	{
 		RECT rcPaint = {0, 0, nShadWndWid, nShadWndHei};
@@ -274,8 +311,13 @@ void CShadowUI::Update(HWND hParent)
 		rcBmpPart.right = data->nX;
 		rcBmpPart.bottom = data->nY;
 
-		CRenderEngine::DrawImage(hMemDC, data->hBitmap, rcPaint, rcPaint, rcBmpPart, m_rcShadowCorner, data->alphaChannel, 0xFF, true, false, false);
-
+		int shadowRound = 5;
+		RECT corner = m_rcShadowCorner;
+		corner.left += shadowRound;
+		corner.top += shadowRound;
+		corner.right += shadowRound;
+		corner.bottom += shadowRound;
+		CRenderEngine::DrawImage(hMemDC, data->hBitmap, rcPaint, rcPaint, rcBmpPart, corner, data->alphaChannel, 0xFF, true, false, false);
 	}
 	else
 	{
@@ -535,6 +577,52 @@ void CShadowUI::ShowShadow(bool bShow)
 bool CShadowUI::IsShowShadow() const
 {
 	return m_bIsShowShadow;
+}
+
+
+void CShadowUI::DisableShadow(bool bDisable) {
+
+
+	m_bIsDisableShadow = bDisable;
+	if (m_hWnd != NULL) {
+
+		if (m_bIsDisableShadow) {
+			::ShowWindow(m_hWnd, SW_HIDE);
+		}
+		else {
+			// Determine the initial show state of shadow according to parent window's state
+			LONG lParentStyle = GetWindowLongPtr(GetParent(m_hWnd), GWL_STYLE);
+
+
+			if (!(WS_VISIBLE & lParentStyle))	// Parent invisible
+				m_Status = SS_ENABLED;
+			else if ((WS_MAXIMIZE | WS_MINIMIZE) & lParentStyle)	// Parent visible but does not need shadow
+				m_Status = SS_ENABLED | SS_PARENTVISIBLE;
+			else	// Show the shadow
+			{
+				m_Status = SS_ENABLED | SS_VISABLE | SS_PARENTVISIBLE;
+
+			}
+
+
+			if ((WS_VISIBLE & lParentStyle) && !((WS_MAXIMIZE | WS_MINIMIZE) & lParentStyle))// Parent visible && no maxsize or min size
+			{
+				::ShowWindow(m_hWnd, SW_SHOWNA);
+				Update(GetParent(m_hWnd));
+			}
+
+
+
+		}
+
+
+	}
+
+}
+////TODO shadow disnable fix////
+bool CShadowUI::IsDisableShadow() const {
+
+	return m_bIsDisableShadow;
 }
 
 bool CShadowUI::SetSize(int NewSize)

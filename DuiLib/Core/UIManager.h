@@ -2,14 +2,14 @@
 #define __UIMANAGER_H__
 
 #pragma once
-
+#define WM_USER_SET_DPI WM_USER + 200
 namespace DuiLib {
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
 class CControlUI;
 class CRichEditUI;
-
+class CDPI;
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
@@ -226,6 +226,7 @@ public:
 	static TImageInfo* LoadImage(STRINGorID bitmap, LPCTSTR type = NULL, DWORD mask = 0);
 	static void FreeImage(const TImageInfo* bitmap);
     static CStdPtrArray* GetPlugins();
+	
 
     bool UseParentResource(CPaintManagerUI* pm);
     CPaintManagerUI* GetParentResource() const;
@@ -256,7 +257,7 @@ public:
     void RemoveAllFonts();
     TFontInfo* GetFontInfo(int index);
     TFontInfo* GetFontInfo(HFONT hFont);
-
+	
     const TImageInfo* GetImage(LPCTSTR bitmap);
     const TImageInfo* GetImageEx(LPCTSTR bitmap, LPCTSTR type = NULL, DWORD mask = 0);
     const TImageInfo* AddImage(LPCTSTR bitmap, LPCTSTR type = NULL, DWORD mask = 0);
@@ -326,6 +327,12 @@ public:
     CStdPtrArray* FindSubControlsByClass(CControlUI* pParent, LPCTSTR pstrClass);
     CStdPtrArray* GetSubControlsByClass();
 
+	CDPI* GetDPIObj();
+	void ResetDPIAssets();
+	void SetDPI(int DPI);
+	static void SetAllDPI(int DPI);
+	private:void RebuildFont(TFontInfo* pFontInfo);
+public:
     static void MessageLoop();
     static bool TranslateMessage(const MSG* pMsg);
 	static void Term();
@@ -361,6 +368,8 @@ private:
 
 	CShadowUI m_shadow;
 
+	
+
 	//¹â±ê
 	RECT m_rcCaret;
 	bool m_bCaretActive;
@@ -376,6 +385,9 @@ private:
     CControlUI* m_pEventHover;
     CControlUI* m_pEventClick;
     CControlUI* m_pEventKey;
+
+	CDPI* m_pDPI;
+
     //
     POINT m_ptLastMousePos;
     SIZE m_szMinWindow;

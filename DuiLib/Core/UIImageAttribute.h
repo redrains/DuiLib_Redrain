@@ -28,7 +28,7 @@ public:
 private:
 	void Clone(const CImageAttribute&);
 	void Clear();
-	void ParseAttribute(LPCTSTR pStrImageAttri);
+	void ParseAttribute(LPCTSTR pStrImageAttri,CDPI g_Dpi);
 
 protected:
 	friend class CRenderEngine;
