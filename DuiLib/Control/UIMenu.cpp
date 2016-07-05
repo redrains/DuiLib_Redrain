@@ -316,7 +316,7 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
 		ResizeMenu();
 	}
-
+	ImmAssociateContext(m_hWnd, NULL);
 	m_pm.GetShadow()->ShowShadow(bShowShadow);
 	m_pm.GetShadow()->Create(&m_pm);
 	return 0;
