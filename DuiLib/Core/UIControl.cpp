@@ -468,6 +468,7 @@ void CControlUI::SetFixedHeight(int cy)
 
 int CControlUI::GetMinWidth() const
 {
+	return GetManager()->GetDPIObj()->Scale(m_cxyMin.cx);
     return m_cxyMin.cx;
 }
 
@@ -483,6 +484,7 @@ void CControlUI::SetMinWidth(int cx)
 
 int CControlUI::GetMaxWidth() const
 {
+	return GetManager()->GetDPIObj()->Scale(m_cxyMax.cx);
     return m_cxyMax.cx;
 }
 
@@ -498,6 +500,7 @@ void CControlUI::SetMaxWidth(int cx)
 
 int CControlUI::GetMinHeight() const
 {
+	return GetManager()->GetDPIObj()->Scale(m_cxyMin.cy);
     return m_cxyMin.cy;
 }
 
@@ -513,6 +516,7 @@ void CControlUI::SetMinHeight(int cy)
 
 int CControlUI::GetMaxHeight() const
 {
+	return GetManager()->GetDPIObj()->Scale(m_cxyMax.cy);
     return m_cxyMax.cy;
 }
 
