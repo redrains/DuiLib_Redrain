@@ -2490,14 +2490,19 @@ void DuiLib::CPaintManagerUI::ResetDPIAssets()
 
 	RebuildFont(&m_DefaultFontInfo);
 	
+	CStdPtrArray *richEditList= FindSubControlsByClass(GetRoot(), L"RichEditUI");
+
+	for (int i = 0; i < richEditList->GetSize(); i++)
+	{
+		CRichEditUI* pT = static_cast<CRichEditUI*>((*richEditList)[i]);
+		pT->SetFont(pT->GetFont());
+		
 
 
-
-	///2 reset images;
-
+	}
 
 
-
+	/// reset images;
 }
 
 void DuiLib::CPaintManagerUI::RebuildFont(TFontInfo * pFontInfo)
@@ -2528,6 +2533,8 @@ void DuiLib::CPaintManagerUI::RebuildFont(TFontInfo * pFontInfo)
 		::GetTextMetrics(m_hDcPaint, &pFontInfo->tm);
 		::SelectObject(m_hDcPaint, hOldFont);
 	}
+
+
 }
 
 CControlUI* CPaintManagerUI::GetRoot() const
