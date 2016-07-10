@@ -56,7 +56,7 @@ public:
 
 			bIsWindowsBlueOrLater = IsWindows8Point1OrGreater();
 
-			bIsWindows10OrLater = IsWindows10OrGreater();
+			//bIsWindows10OrLater = IsWindows10OrGreater();
 		}
 	};
 

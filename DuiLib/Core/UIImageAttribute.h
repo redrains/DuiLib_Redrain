@@ -18,7 +18,7 @@ public:
 
     const CDuiString& GetAttributeString() const;
 	void SetAttributeString(LPCTSTR pStrImageAttri);
-	void ModifyAttribute(LPCTSTR pStrModify);
+	void ModifyAttribute(LPCTSTR pStrModify, CDPI *dpi);
 	bool LoadImage(CPaintManagerUI* pManager);
 	bool IsLoadSuccess();
 
@@ -28,7 +28,7 @@ public:
 private:
 	void Clone(const CImageAttribute&);
 	void Clear();
-	void ParseAttribute(LPCTSTR pStrImageAttri,CDPI g_Dpi);
+	void ParseAttribute(LPCTSTR pStrImageAttri,CDPI *dpi);
 
 protected:
 	friend class CRenderEngine;

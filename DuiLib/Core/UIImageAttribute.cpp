@@ -76,7 +76,7 @@ namespace DuiLib {
 		m_bHole = false;
 		m_bTiledX = false;
 		m_bTiledY = false;
-		ParseAttribute(m_sImageAttribute,*pManager->GetDPIObj());
+		ParseAttribute(m_sImageAttribute,pManager->GetDPIObj());
 		if (!m_bLoadSuccess)
 			return false;
 
@@ -116,9 +116,9 @@ namespace DuiLib {
 		return !m_sImageAttribute.IsEmpty() && m_bLoadSuccess;
 	}
 
-	void CImageAttribute::ModifyAttribute(LPCTSTR pStrModify)
+	void CImageAttribute::ModifyAttribute(LPCTSTR pStrModify,CDPI *dpi)
 	{
-		//ParseAttribute(pStrModify);
+		ParseAttribute(pStrModify,dpi);
 	}
 
 	void CImageAttribute::Clear()
@@ -138,7 +138,7 @@ namespace DuiLib {
 		m_bTiledY = false;
 	}
 
-	void CImageAttribute::ParseAttribute(LPCTSTR pStrImage,CDPI g_Dpi)
+	void CImageAttribute::ParseAttribute(LPCTSTR pStrImage,CDPI *dpi)
 	{
 		if (pStrImage == NULL)
 			return;
@@ -181,10 +181,10 @@ namespace DuiLib {
 				if (sItem == _T("file") || sItem == _T("res"))
 				{
 					m_sImage = sValue;
-					if (g_Dpi.GetScale() != 100) {
+					if (dpi->GetScale() != 100) {
 						
 						std::wstringstream wss;
-						wss << L"@" << g_Dpi.GetScale() << L".";
+						wss << L"@" << dpi->GetScale() << L".";
 						std::wstring suffix = wss.str();
 						m_sImage.Replace(L".", suffix.c_str());
 					}
@@ -204,7 +204,7 @@ namespace DuiLib {
 					m_rcDest.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
 					m_rcDest.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
 
-					g_Dpi.ScaleRect(&m_rcDest);
+					dpi->ScaleRect(&m_rcDest);
 				}
 				else if (sItem == _T("source"))
 				{
@@ -212,7 +212,7 @@ namespace DuiLib {
 					m_rcSource.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
 					m_rcSource.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
 					m_rcSource.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-					g_Dpi.ScaleRect(&m_rcSource);
+					dpi->ScaleRect(&m_rcSource);
 				}
 				else if (sItem == _T("corner"))
 				{
@@ -220,7 +220,7 @@ namespace DuiLib {
 					m_rcCorner.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
 					m_rcCorner.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
 					m_rcCorner.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-					g_Dpi.ScaleRect(&m_rcCorner);
+					dpi->ScaleRect(&m_rcCorner);
 				}
 				else if (sItem == _T("mask"))
 				{

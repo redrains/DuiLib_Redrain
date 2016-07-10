@@ -328,6 +328,10 @@ namespace DuiLib
 	void CScrollBarUI::SetPos(RECT rc)
 	{
 		CControlUI::SetPos(rc);
+		SIZE m_cxyFixed = CScrollBarUI::m_cxyFixed;
+		m_cxyFixed.cx = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cx);
+		m_cxyFixed.cy = GetManager()->GetDPIObj()->Scale(m_cxyFixed.cy);
+
 		rc = m_rcItem;
 
 		if( m_bHorizontal ) {
@@ -404,6 +408,8 @@ namespace DuiLib
 			}
 		}
 		else {
+			
+			
 			int cy = rc.bottom - rc.top;
 			if( m_bShowButton1 ) cy -= m_cxyFixed.cx;
 			if( m_bShowButton2 ) cy -= m_cxyFixed.cx;
@@ -434,7 +440,7 @@ namespace DuiLib
 				m_rcThumb.right = rc.left + m_cxyFixed.cx;
 				if( m_nRange > 0 ) {
 					int cyThumb = cy * (rc.bottom - rc.top) / (m_nRange + rc.bottom - rc.top);
-					if( cyThumb < m_cxyFixed.cx ) cyThumb = m_cxyFixed.cx;
+					if( cyThumb < m_cxyFixed.cx*2 ) cyThumb = m_cxyFixed.cx*2;
 
 					m_rcThumb.top = m_nScrollPos * (cy - cyThumb) / m_nRange + m_rcButton1.bottom;
 					m_rcThumb.bottom = m_rcThumb.top + cyThumb;
@@ -877,6 +883,9 @@ namespace DuiLib
 
 	void CScrollBarUI::PaintThumb(HDC hDC)
 	{
+
+		
+
 		if( m_rcThumb.left == 0 && m_rcThumb.top == 0 && m_rcThumb.right == 0 && m_rcThumb.bottom == 0 ) return;
 		if( !IsEnabled() ) m_uThumbState |= UISTATE_DISABLED;
 		else m_uThumbState &= ~ UISTATE_DISABLED;

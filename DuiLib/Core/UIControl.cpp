@@ -313,7 +313,7 @@ bool CControlUI::DrawImage(HDC hDC, CImageAttribute& image, LPCTSTR pStrModify)
 	if (pStrModify != NULL)
 	{
 		CImageAttribute modifyImage = image;
-		modifyImage.ModifyAttribute(pStrModify);
+		modifyImage.ModifyAttribute(pStrModify,m_pManager->GetDPIObj());
 		return CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, modifyImage);
 	}
 	return CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, image);

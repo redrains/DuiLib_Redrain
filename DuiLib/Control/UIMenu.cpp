@@ -108,7 +108,7 @@ SIZE CMenuUI::EstimateSize(SIZE szAvailable)
 		CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
 		if (!pControl->IsVisible()) continue;
 		
-		pControl->SetFixedWidth(cxFixed*100/GetManager()->GetDPIObj()->GetScale());
+		pControl->SetFixedWidth(MulDiv(cxFixed,100,GetManager()->GetDPIObj()->GetScale()));
 	}
 
 
@@ -780,8 +780,8 @@ SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
 	if ( cXY.cx < m_cxyFixed.cx )
 		cXY.cx =  m_cxyFixed.cx;
 
-	CMenuElementUI::m_cxyFixed.cy = cXY.cy*100/GetManager()->GetDPIObj()->GetScale();
-	CMenuElementUI::m_cxyFixed.cx = cXY.cx*100/ GetManager()->GetDPIObj()->GetScale();
+	CMenuElementUI::m_cxyFixed.cy = MulDiv(cXY.cy,100,GetManager()->GetDPIObj()->GetScale());
+	CMenuElementUI::m_cxyFixed.cx = MulDiv(cXY.cx,100, GetManager()->GetDPIObj()->GetScale());
 	return cXY;
 }
 

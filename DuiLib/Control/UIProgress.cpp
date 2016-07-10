@@ -100,6 +100,13 @@ namespace DuiLib
 		if( m_foreImage.IsLoadSuccess() ) 
 		{
 			m_sForeImageModify.Empty();
+			
+			int sw = MulDiv( rc.right - rc.left,100, GetManager()->GetDPIObj()->GetScale());
+			int sh = MulDiv(rc.bottom - rc.top,100, GetManager()->GetDPIObj()->GetScale());
+			rc.left = MulDiv(rc.left ,100 , GetManager()->GetDPIObj()->GetScale());
+			rc.top = MulDiv(rc.top , 100 , GetManager()->GetDPIObj()->GetScale());
+			rc.right = rc.left + sw;
+			rc.bottom = rc.top + sh;
 			if (m_bStretchForeImage)
 				m_sForeImageModify.SmallFormat(_T("dest='%d,%d,%d,%d'"), rc.left, rc.top, rc.right, rc.bottom);
 			else
