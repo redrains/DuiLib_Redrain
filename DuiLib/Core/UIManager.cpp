@@ -922,7 +922,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 				   UnionRect(&rcPaint, &rcPaint, &m_rcInvalidate);
 				   ::ZeroMemory(&m_rcInvalidate, sizeof(m_rcInvalidate));
 			   }
-			   
+			  
 			   int nClientWidth = rcClient.right - rcClient.left;
 			   int nClientHeight = rcClient.bottom - rcClient.top;
 			   if(m_hbmpOffscreen == NULL)
@@ -936,30 +936,12 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 			   HBITMAP hOldBitmap = (HBITMAP)::SelectObject(m_hDcOffscreen, m_hbmpOffscreen);
 			   int iSaveDC = ::SaveDC(m_hDcOffscreen);
 
-#ifdef USE_GDI_RENDER
+
 			   for(int y = rcPaint.top; y < rcPaint.bottom; ++y)
 			   {
 				   ZeroMemory((unsigned int*)m_pBmpOffscreenBits + y * nClientWidth + rcPaint.left, (rcPaint.right - rcPaint.left) * 4);
 			   }
-#else
-			   //默认使用Gdi+渲染，此时只需要为RichEdit控件修补alpha即可
-			   if (m_rcRichEditCorner.left > 0 || m_rcRichEditCorner.top > 0 || m_rcRichEditCorner.right > 0 || m_rcRichEditCorner.bottom > 0)
-			   {
-				   //获取需要更新的RichEdit范围
-				   RECT rcRichEdit = rcClient;
-				   rcRichEdit.left += m_rcRichEditCorner.left;
-				   rcRichEdit.top += m_rcRichEditCorner.top;
-				   rcRichEdit.right -= m_rcRichEditCorner.right;
-				   rcRichEdit.bottom -= m_rcRichEditCorner.bottom;
-				   if (IntersectRect(&rcRichEdit, &rcRichEdit, &rcPaint))
-				   {
-					   for (int y = rcRichEdit.top; y < rcRichEdit.bottom; ++y)
-					   {
-						   ZeroMemory((unsigned int*)m_pBmpOffscreenBits + y * nClientWidth + rcRichEdit.left, (rcRichEdit.right - rcRichEdit.left) * 4);
-					   }
-				   }
-			   }
-#endif
+
 			   m_pRoot->DoPaint(m_hDcOffscreen, rcPaint);
 			   DrawCaret(m_hDcOffscreen, rcPaint);
 			   for(int i = 0; i < m_aPostPaintControls.GetSize(); i++)

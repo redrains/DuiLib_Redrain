@@ -4,7 +4,7 @@
  <Font name="Microsoft Yahei" size="22" />
 
 <!-- Menu标签的属性要通过Default来定义，为了让下级菜单也能拥有同样的外观 -->
-<Default name="Menu" value="bktrans=&quot;true&quot; bordersize=&quot;0&quot; borderround=&quot;0,0&quot; bordercolor=&quot;0x303132&quot; inset=&quot;0,3,0,3&quot; itemtextpadding=&quot;40,0,0,0&quot; bkimage=&quot;file='menu_bk.png' corner='16,13,16,13' &quot; itemtextcolor=&quot;0xff555555&quot; itemselectedbkcolor=&quot;0xFFE5E5E5&quot; itemselectedtextcolor=&quot;0xff444444&quot; itemfont=&quot;0&quot;" />
+<Default name="Menu" value="bktrans=&quot;true&quot; bordersize=&quot;0&quot; borderround=&quot;0,0&quot; bordercolor=&quot;0xffff0000&quot; inset=&quot;0,3,0,3&quot; itemtextpadding=&quot;40,0,0,0&quot; bkimage=&quot;file='menu_bk.png' corner='16,13,16,13' &quot; itemtextcolor=&quot;0xff555555&quot; itemselectedbkcolor=&quot;0xFFE5E5E5&quot; itemselectedtextcolor=&quot;0xff444444&quot; itemfont=&quot;0&quot;" />
 
 
 <Default name="MenuElement" value="linepadding=&quot;40,0,10,0&quot; " />
