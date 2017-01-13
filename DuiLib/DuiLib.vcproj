@@ -83,7 +83,7 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
 				BaseAddress="0x11000000"
-				ImportLibrary="$(SolutionDir)Lib\$(TargetName)_d.lib"
+				ImportLibrary="$(SolutionDir)Lib\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
