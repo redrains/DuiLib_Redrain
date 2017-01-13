@@ -1,5 +1,5 @@
 #include "stdafx.h"
-
+#include "FrameWnd.h"
 
 CFrameWnd::CFrameWnd( LPCTSTR pszXMLPath )
 	: m_strXMLPath(pszXMLPath)
@@ -18,11 +18,6 @@ LPCTSTR CFrameWnd::GetWindowClassName() const
 CDuiString CFrameWnd::GetSkinFile()
 {
 	return m_strXMLPath;
-}
-
-CDuiString CFrameWnd::GetSkinFolder()
-{
-	return _T("Skin");
 }
 
 void CFrameWnd::InitWindow()

@@ -1,18 +1,5 @@
 #pragma once
-
-#ifdef _DEBUG
-#   ifdef _UNICODE
-#       pragma comment(lib, "DuiLib_ud.lib")
-#   else
-#       pragma comment(lib, "DuiLib_d.lib")
-#   endif
-#else
-#   ifdef _UNICODE
-#       pragma comment(lib, "DuiLib_u.lib")
-#   else
-#       pragma comment(lib, "DuiLib.lib")
-#   endif
-#endif
+#include "WkeWebkit.h"
 
 #define WM_USER_TITLE_CHANGE         WM_USER + 289     // 浏览器标题改变
 #define WM_USER_URL_CHANGE		     WM_USER + 290     // 浏览器URL改变
@@ -21,26 +8,25 @@
 class CFrameWnd: public WindowImplBase
 {
 public:
-	explicit CFrameWnd(LPCTSTR pszXMLPath);
-
-	static CFrameWnd * CFrameWnd::MainWnd();
-	LPCTSTR GetWindowClassName() const;
-	CDuiString GetSkinFile();
-	CDuiString GetSkinFolder();
-	//UILIB_RESOURCETYPE GetResourceType() const;
-	//LPCTSTR GetResourceID() const;
+	static CFrameWnd* CFrameWnd::MainWnd();
+	LPCTSTR GetWindowClassName() const override;
+	CDuiString GetSkinFile() override;
 
      void InitWindow();
      void Notify(TNotifyUI& msg);
-	 CControlUI* CreateControl(LPCTSTR pstrClassName);
-	 LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	 CControlUI* CreateControl(LPCTSTR pstrClassName) override;
+	 LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
 
 	 LRESULT OnTitleChanged(HWND hwnd, WPARAM wParam, LPARAM lParam);
 	 LRESULT OnURLChanged(HWND hwnd, WPARAM wParam, LPARAM lParam);
 	 LRESULT OnJsNotify(HWND hwnd, WPARAM wParam, LPARAM lParam);
 private:
+
+	explicit CFrameWnd(LPCTSTR pszXMLPath);
+	~CFrameWnd() {};
+
+private:
 	CDuiString		m_strXMLPath;
-	CWndShadow		m_WndShadow;
 
 	CWkeWebkitUI	*m_pWke;
 	CEditUI			*m_pURLEdit;

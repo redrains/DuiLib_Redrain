@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="头文件\Controls">
-      <UniqueIdentifier>{f456fc9d-51ee-4413-a0d9-e782efe1e347}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Controls">
-      <UniqueIdentifier>{a143b33b-85eb-4664-85d9-3c4c34299e64}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

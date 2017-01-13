@@ -1,4 +1,5 @@
-#include "duilib.h"
+#include "stdafx.h"
+#include "FrameWnd.h"
 
 CFrameWnd::CFrameWnd( LPCTSTR pszXMLPath )
 	:  m_strXMLPath(pszXMLPath)
@@ -15,22 +16,6 @@ CDuiString CFrameWnd::GetSkinFile()
 {
 	return m_strXMLPath;
 }
-
-CDuiString CFrameWnd::GetSkinFolder()
-{
-	return _T("Skin");
-}
-
-// 	UILIB_RESOURCETYPE CFrameWnd::GetResourceType() const
-// 	{
-// 		return UILIB_ZIPRESOURCE;
-// 	}
-// 
-// 
-// 	LPCTSTR CFrameWnd::GetResourceID() const
-// 	{
-// 		return MAKEINTRESOURCE(IDR_ZIPRES1);
-// 	}
 
 void CFrameWnd::InitWindow()
 {
@@ -100,10 +85,10 @@ void CFrameWnd::Notify( TNotifyUI& msg )
  {
 	 if (uMsg == WM_MENUCLICK)
 	 {
-		 CDuiString *strMenuName = (CDuiString*)wParam;
+		 CDuiString strMenuName = CMenuWnd::GetClickedMenuName();
 		 BOOL bChecked = (BOOL)lParam;		 
 
-		 if ( *strMenuName == _T("Menu_Test1")) 
+		 if (strMenuName == _T("Menu_Test1")) 
 		 {
 			 if (bChecked)
 			 {
@@ -114,11 +99,11 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 				 MessageBox(m_hWnd, L"你取消Menu_Test1", L"", 0);
 			 }			 
 		 }
-		 else if ( *strMenuName == _T("Menu_Test2")) 
+		 else if (strMenuName == _T("Menu_Test2")) 
 		 {
-				MessageBox(m_hWnd, L"你单击了Menu_Test2", L"", 0);		 
+			MessageBox(m_hWnd, L"你单击了Menu_Test2", L"", 0);		 
 		 }
-		 else if ( *strMenuName == _T("Menu_Test3")) 
+		 else if (strMenuName == _T("Menu_Test3")) 
 		 {
 			 if (bChecked)
 			 {
@@ -129,7 +114,7 @@ void CFrameWnd::Notify( TNotifyUI& msg )
 				 MessageBox(m_hWnd, L"你取消Menu_Test3", L"", 0);
 			 }			 
 		 }
-		 else if ( *strMenuName == _T("Menu_Dynamic")) 
+		 else if (strMenuName == _T("Menu_Dynamic")) 
 		 {
 			 MessageBox(m_hWnd, L"你单击了动态添加菜单", L"", 0);		 
 		 }

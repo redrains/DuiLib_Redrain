@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<Window size="357,320" caption="0,0,0,220" bktrans="true">
+<Window size="357,320" caption="0,0,0,220" bktrans="true" richeditcorner="200,80,10,177">
 <Font name="微软雅黑" size="14" default="true" />
 <Font name="微软雅黑" size="16"/>
 <Font name="微软雅黑" size="22"/>

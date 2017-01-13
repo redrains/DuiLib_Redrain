@@ -12,15 +12,12 @@
 #include <memory.h>
 #include <tchar.h>
 
-
+#include <string>
 // TODO: 在此处引用程序需要的其他头文件
 #include "Uilib.h"
+#include "resource.h"
 using namespace DuiLib;
-
-#include "Controls/AnimLayout.h"
-#include "FrameWnd.h"
-
-
+using namespace std;
 
 #pragma warning(disable:4192)
 
@@ -28,18 +25,4 @@ using namespace DuiLib;
 	typedef std::wstring	tstring;
 #else
 	typedef std::string		tstring;
-#endif
-
-#ifdef _UNICODE
-#	ifdef _DEBUG
-#		pragma comment(lib, "DuiLib_ud.lib")
-#	else
-#		pragma comment(lib, "DuiLib_u.lib")
-#	endif
-#else
-#	ifdef _DEBUG
-#		pragma comment(lib, "DuiLib_d.lib")
-#	else
-#		pragma comment(lib, "DuiLib.lib")
-#	endif
 #endif

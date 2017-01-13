@@ -1,6 +1,6 @@
 
 #pragma once
-#include "..\UiFeatureEffect\Interface\IUIEffect.h"
+#include "..\..\UiFeatureEffect\Interface\IUIEffect.h"
 
 class IUiEffectManagerImpl
 {

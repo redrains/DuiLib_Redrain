@@ -1,4 +1,5 @@
-#include "duilib.h"
+#include "stdafx.h"
+#include "WkeWebkit.h"
 
 #pragma comment(lib,"wke.lib")
 
@@ -34,7 +35,7 @@ void CWkeWebkitWnd::Init(CWkeWebkitUI* pOwner)
 	{
 		RECT rcPos = m_pOwner->GetPos();
 		UINT uStyle = UI_WNDSTYLE_CHILD;
-//	HWND   hWnd = CreateWindow(_T("#32770"), _T("WndMediaDisplay"), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_PaintManager.GetPaintWindow(), (HMENU)0, NULL, NULL);
+
 		Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos);
 	}
 }
