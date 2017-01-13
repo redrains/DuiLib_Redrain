@@ -167,6 +167,7 @@ CPaintManagerUI::~CPaintManagerUI()
 void CPaintManagerUI::Init(HWND hWnd)
 {
     ASSERT(::IsWindow(hWnd));
+
     // Remember the window context we came from
     m_hWndPaint = hWnd;
     m_hDcPaint = ::GetDC(hWnd);
@@ -874,6 +875,8 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 						   pControl->SetPos(pControl->GetPos());
 					   }
 				   }
+				   m_rcInvalidate = rcClient;
+
 				   // We'll want to notify the window when it is first initialized
 				   // with the correct layout. The window form would take the time
 				   // to submit swipes/animations.
