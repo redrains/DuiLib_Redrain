@@ -114,6 +114,7 @@ void CMenuUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
+CDuiString CMenuWnd::s_clickedMenuItem;
 CMenuWnd::CMenuWnd():
 m_pOwner(NULL),
 m_pLayout(),
@@ -192,6 +193,16 @@ void CMenuWnd::Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
 
     ::ShowWindow(m_hWnd, SW_SHOW);
     ::SendMessage(hWndParent, WM_NCACTIVATE, TRUE, 0L);
+}
+
+CDuiString CMenuWnd::GetClickedMenuName()
+{
+	return s_clickedMenuItem;
+}
+
+void CMenuWnd::SetClickedMenuName( const CDuiString& sMenuName )
+{
+	s_clickedMenuItem = sMenuName;
 }
 
 LPCTSTR CMenuWnd::GetWindowClassName() const
@@ -467,7 +478,7 @@ void CMenuWnd::ResizeSubMenu()
 		rc.right = rc.left + cxFixed;
 	}
 
-	MoveWindow(m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top + m_pLayout->GetInset().top + m_pLayout->GetInset().bottom, FALSE);
+		MoveWindow(m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top + m_pLayout->GetInset().top + m_pLayout->GetInset().bottom, FALSE);
 
 }
 
@@ -560,7 +571,6 @@ LRESULT CMenuWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-CDuiString CMenuElementUI::s_clickedMenuItem;
 CMenuElementUI::CMenuElementUI():
 m_pWindow(NULL),
 m_bDrawLine(false),
@@ -800,8 +810,8 @@ void CMenuElementUI::DoEvent(TEventUI& event)
 				SetChecked(!GetChecked());
 				if (CMenuWnd::GetGlobalContextMenuObserver().GetManager() != NULL)
 				{
-					s_clickedMenuItem = GetName();
-					PostMessage(CMenuWnd::GetGlobalContextMenuObserver().GetManager()->GetPaintWindow(), WM_MENUCLICK, (WPARAM)(&s_clickedMenuItem), (LPARAM)(GetChecked() ? TRUE : FALSE));
+					CMenuWnd::SetClickedMenuName(GetName());
+					PostMessage(CMenuWnd::GetGlobalContextMenuObserver().GetManager()->GetPaintWindow(), WM_MENUCLICK, NULL, (LPARAM)(GetChecked() ? TRUE : FALSE));
 				}
 				ContextMenuParam param;
 				param.hWnd = m_pManager->GetPaintWindow();
