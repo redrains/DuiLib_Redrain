@@ -54,15 +54,15 @@ public:
 	static void WkeWebkit_Init();
 	static void WkeWebkit_Shutdown();
 	
-	LPCTSTR	GetClass() const;
-	LPVOID	GetInterface(LPCTSTR pstrName);
+	LPCTSTR	GetClass() const override;
+	LPVOID	GetInterface(LPCTSTR pstrName) override;
 
-	void	SetVisible(bool bVisible);
-	void	SetInternVisible(bool bVisible = true);
-	void	DoInit();
-	void	SetPos(RECT rc);
-	void	DoEvent(TEventUI& event);	
-	void	SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+	void	SetVisible(bool bVisible) override;
+	void	SetInternVisible(bool bVisible = true) override;
+	void	DoInit() override;
+	void	SetPos(RECT rc) override;	// 有些库的SetPos函数和我的不一样，需要根据使用的库修改这个函数
+	void	DoEvent(TEventUI& event) override;	
+	void	SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 	void	SetURL( wstring strValue);
 	void	SetFile(wstring strValue);

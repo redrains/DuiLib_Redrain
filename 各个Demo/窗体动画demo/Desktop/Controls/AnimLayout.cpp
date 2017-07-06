@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "AnimLayout.h"
-#include "../UiFeatureEffect/Interface/IUIEffect.h"
+#include "../../UiFeatureEffect/Interface/IUIEffect.h"
+#include "memory"
+
+namespace DuiLib
+{
 
 const LPCTSTR AnimLayout::kAnimLayoutClass		= L"AnimLayoutUI";
 const LPCTSTR AnimLayout::kAnimLayoutInterface  = L"AnimLayout";
@@ -51,7 +55,6 @@ void AnimLayout::DoPaint(HDC hDC, const RECT& rcPaint)
 		0, 0, m_rcItem.right - m_rcItem.left, m_rcItem.bottom - m_rcItem.top, bf);
 
 }
-
 
 bool AnimLayout::StartEffect()
 {
@@ -135,4 +138,6 @@ void AnimLayout::OnUiEffectDraw()
 {
 	// 这里必须强制重绘窗体，否则无法显示出动画，很关键
 	RedrawWindow(m_pManager->GetPaintWindow(), NULL, NULL,  RDW_INVALIDATE | RDW_UPDATENOW);
+}
+
 }

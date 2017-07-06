@@ -3,7 +3,9 @@
 #pragma once
 
 #include "../UIEffect/IUiEffectManagerImpl.h"
-#include "memory"
+
+namespace DuiLib
+{
 
 class AnimLayout : public CVerticalLayoutUI, public IUIEffectCallBack
 {
@@ -28,7 +30,6 @@ public:
 	virtual void OnUiEffectDraw() override;
 
 private:
-
 	CDuiRect			m_rcCustomShadow;		//保存窗体反转前的阴影九宫格
 
 	bool				m_bPlaying;
@@ -45,4 +46,5 @@ public:
 	static const LPCTSTR kAnimLayoutInterface;
 };
 
+}
 #endif // UI_ANIM_BOX_H_

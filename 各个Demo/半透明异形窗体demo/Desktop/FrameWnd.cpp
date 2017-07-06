@@ -1,5 +1,5 @@
 #include "stdafx.h"
-
+#include "FrameWnd.h"
 
 CFrameWnd::CFrameWnd( LPCTSTR pszXMLPath )
 	:  m_strXMLPath(pszXMLPath)
@@ -18,22 +18,6 @@ CDuiString CFrameWnd::GetSkinFile()
 {
 	return m_strXMLPath;
 }
-
-CDuiString CFrameWnd::GetSkinFolder()
-{
-	return _T("Skin");
-}
-
-// 	UILIB_RESOURCETYPE CFrameWnd::GetResourceType() const
-// 	{
-// 		return UILIB_ZIPRESOURCE;
-// 	}
-// 
-// 
-// 	LPCTSTR CFrameWnd::GetResourceID() const
-// 	{
-// 		return MAKEINTRESOURCE(IDR_ZIPRES1);
-// 	}
 
 void CFrameWnd::InitWindow()
 {

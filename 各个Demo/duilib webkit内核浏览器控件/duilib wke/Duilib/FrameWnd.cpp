@@ -1,5 +1,5 @@
-#include "duilib.h"
-
+#include "stdafx.h"
+#include "FrameWnd.h"
 
 jsValue JS_CALL js_msgBox(jsExecState es)
 {
@@ -65,25 +65,11 @@ CDuiString CFrameWnd::GetSkinFile()
 	return m_strXMLPath;
 }
 
-CDuiString CFrameWnd::GetSkinFolder()
-{
-	return _T("");
-}
-
-// 	UILIB_RESOURCETYPE CFrameWnd::GetResourceType() const
-// 	{
-// 		return UILIB_ZIPRESOURCE;
-// 	}
-// 
-// 
-// 	LPCTSTR CFrameWnd::GetResourceID() const
-// 	{
-// 		return MAKEINTRESOURCE(IDR_ZIPRES1);
-// 	}
-
 CControlUI* CFrameWnd::CreateControl( LPCTSTR pstrClassName )
 {
-	if (_tcsicmp(pstrClassName, _T("wkeWebkit")) == 0) return  new CWkeWebkitUI;
+	if (_tcsicmp(pstrClassName, _T("wkeWebkit")) == 0)
+		return  new CWkeWebkitUI;
+
 	return NULL;
 }
 
@@ -105,12 +91,6 @@ void CFrameWnd::InitWindow()
 		//m_pWke->SetURL(L"http://mudcu.be/sketchpad/"); //一个漂亮的网站，大家可以自己试试
 
 	}
-
-	CWndShadow::Initialize(m_PaintManager.GetInstance());
-	m_WndShadow.Create(m_hWnd);
-	m_WndShadow.SetSize(4);
-	m_WndShadow.SetPosition(0, 0);
-	
 }
 
 

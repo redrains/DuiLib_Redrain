@@ -260,7 +260,6 @@ class CMenuElementUI;
 class UILIB_API CMenuWnd : public CWindowWnd, public ReceiverImpl, public INotifyUI, public IDialogBuilderCallback
 {
 public:
-
 	static ObserverImpl& GetGlobalContextMenuObserver()
 	{
 		static ObserverImpl s_context_menu_observer;
@@ -282,6 +281,9 @@ public:
 	static CMenuWnd* CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
 		CPaintManagerUI* pMainPaintManager, std::map<CDuiString, bool>* pMenuCheckInfo = NULL,
 		DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top);
+
+	static CDuiString GetClickedMenuName();
+	static void SetClickedMenuName(const CDuiString& sMenuName);
 
     LPCTSTR GetWindowClassName() const;
     void OnFinalMessage(HWND hWnd);
@@ -311,13 +313,14 @@ private:
 		DWORD dwAlignment);
 
 private:
-
 	POINT			m_BasedPoint;
 	STRINGorID		m_xml;
     CPaintManagerUI m_pm;
     CMenuElementUI* m_pOwner;
     CMenuUI*		m_pLayout;
 	DWORD			m_dwAlignment;	//菜单对齐方式
+
+	static CDuiString	s_clickedMenuItem;	//被单击的菜单项名字
 };
 
 class CListContainerElementUI;
@@ -357,7 +360,6 @@ public:
 
 	void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
-
 protected:
 	CMenuWnd*	m_pWindow;
 
@@ -371,8 +373,6 @@ protected:
 
 	bool		m_bShowExplandIcon;
 	CImageAttribute m_expandIcon;
-
-	static CDuiString	s_clickedMenuItem;	//被单击的菜单项名字
 };
 
 } // namespace DuiLib

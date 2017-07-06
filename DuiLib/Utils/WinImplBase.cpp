@@ -78,32 +78,34 @@ LRESULT WindowImplBase::OnNcActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lPar
 
 LRESULT WindowImplBase::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	LPRECT pRect=NULL;
+	return 0;
+}
 
-	if ( wParam == TRUE)
+LRESULT WindowImplBase::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	bHandled = FALSE;
+	if (IsZoomed(m_hWnd))
 	{
-		LPNCCALCSIZE_PARAMS pParam = (LPNCCALCSIZE_PARAMS)lParam;
-		pRect=&pParam->rgrc[0];
-	}
-	else
-	{
-		pRect=(LPRECT)lParam;
-	}
+		LPWINDOWPOS lpPos = (LPWINDOWPOS)lParam;
+		if (lpPos->flags & SWP_FRAMECHANGED) // 第一次最大化，而不是最大化之后所触发的WINDOWPOSCHANGE
+		{
+			POINT pt = { 0, 0 };
+			HMONITOR hMontorPrimary = MonitorFromPoint(pt, MONITOR_DEFAULTTOPRIMARY);
+			HMONITOR hMonitorTo = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTOPRIMARY);
 
-	if ( ::IsZoomed(m_hWnd))
-	{	// 最大化时，计算当前显示器最适合宽高度
-		MONITORINFO oMonitor = {};
-		oMonitor.cbSize = sizeof(oMonitor);
-		::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTONEAREST), &oMonitor);
-		CDuiRect rcWork = oMonitor.rcWork;
-		CDuiRect rcMonitor = oMonitor.rcMonitor;
-		rcWork.Offset(-oMonitor.rcMonitor.left, -oMonitor.rcMonitor.top);
+			if (hMonitorTo != hMontorPrimary)
+			{
+				// 解决无边框窗口在双屏下面（副屏分辨率大于主屏）时，最大化不正确的问题
+				MONITORINFO  miTo = { sizeof(miTo), 0 };
+				GetMonitorInfo(hMonitorTo, &miTo);
 
-		pRect->right = pRect->left + rcWork.GetWidth();
-		pRect->bottom = pRect->top + rcWork.GetHeight();
-		return WVR_REDRAW;
+				lpPos->x = miTo.rcWork.left;
+				lpPos->y = miTo.rcWork.top;
+				lpPos->cx = miTo.rcWork.right - miTo.rcWork.left;
+				lpPos->cy = miTo.rcWork.bottom - miTo.rcWork.top;
+			}
+		}
 	}
-
 	return 0;
 }
 
@@ -327,14 +329,13 @@ LRESULT WindowImplBase::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:			lRes = OnCreate(uMsg, wParam, lParam, bHandled); break;
 	case WM_CLOSE:			lRes = OnClose(uMsg, wParam, lParam, bHandled); break;
 	case WM_DESTROY:		lRes = OnDestroy(uMsg, wParam, lParam, bHandled); break;
-#if defined(WIN32) && !defined(UNDER_CE)
 	case WM_NCACTIVATE:		lRes = OnNcActivate(uMsg, wParam, lParam, bHandled); break;
 	case WM_NCCALCSIZE:		lRes = OnNcCalcSize(uMsg, wParam, lParam, bHandled); break;
+	case WM_WINDOWPOSCHANGING: lRes = OnWindowPosChanging(uMsg, wParam, lParam, bHandled); break;
 	case WM_NCPAINT:		lRes = OnNcPaint(uMsg, wParam, lParam, bHandled); break;
 	case WM_NCHITTEST:		lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
 	case WM_GETMINMAXINFO:	lRes = OnGetMinMaxInfo(uMsg, wParam, lParam, bHandled); break;
 	case WM_MOUSEWHEEL:		lRes = OnMouseWheel(uMsg, wParam, lParam, bHandled); break;
-#endif
 	case WM_SIZE:			lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
 	case WM_CHAR:		lRes = OnChar(uMsg, wParam, lParam, bHandled); break;
 	case WM_SYSCOMMAND:		lRes = OnSysCommand(uMsg, wParam, lParam, bHandled); break;

@@ -9,16 +9,13 @@ public:
 	void InitWindow();
 	void OnPrepare(TNotifyUI& msg);
 	void Notify(TNotifyUI& msg);
-	CControlUI* CreateControl(LPCTSTR pstrClassName);
+	CControlUI* CreateControl(LPCTSTR pstrClassName) override;
 
 	LRESULT OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
 
 protected:
-	LPCTSTR GetWindowClassName() const;
-	CDuiString GetSkinFile();
-	CDuiString GetSkinFolder();
-	//UILIB_RESOURCETYPE GetResourceType() const;
-	//LPCTSTR GetResourceID() const;
+	LPCTSTR GetWindowClassName() const override;
+	CDuiString GetSkinFile() override;
 
 private:
 	CDuiString		m_strXMLPath;
