@@ -103,6 +103,17 @@ void CShadowUI::Create(CPaintManagerUI* pPaintManager)
 
 }
 
+bool CShadowUI::UpdateNow()
+{
+	bool bRet = false;
+	if (m_hWnd)
+	{
+		Update(GetParent(m_hWnd));
+		bRet = true;
+	}
+	return bRet;
+}
+
 std::map<HWND, CShadowUI *>& CShadowUI::GetShadowMap()
 {
 	static std::map<HWND, CShadowUI *> s_Shadowmap;

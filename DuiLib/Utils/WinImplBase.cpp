@@ -240,7 +240,12 @@ LRESULT WindowImplBase::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			pbtnMax->SetVisible(TRUE == bZoomed);       // 此处用表达式是为了避免编译器BOOL转换的警告
 			pbtnRestore->SetVisible(FALSE == bZoomed);
 		}
-		
+		// Fixed: Bug::20180512 修复从WindowImplBase派生的子类窗体，开启阴影显示。
+    // 最小化 ---》点击任务栏显示--》点击最大化 ----》点击任务栏，最小化---》点击任务栏显示。这个时候就会发现阴影窗体显示异常。
+		if (m_PaintManager.GetShadow())
+		{
+			m_PaintManager.GetShadow()->UpdateNow();
+		}
 	}
 #else
 	LRESULT lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
