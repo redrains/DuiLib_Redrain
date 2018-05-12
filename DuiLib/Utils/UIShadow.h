@@ -72,6 +72,9 @@ public:
 
 	//	创建阴影窗体，由CPaintManagerUI自动调用,除非自己要单独创建阴影
 	void Create(CPaintManagerUI* pPaintManager);
+	
+	// 手动调用刷新，重新生成阴影
+	bool UpdateNow();
 protected:
 
 	//	初始化并注册阴影类

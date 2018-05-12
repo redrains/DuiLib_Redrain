@@ -76,35 +76,33 @@ LRESULT WindowImplBase::OnNcActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lPar
 	return (wParam == 0) ? TRUE : FALSE;
 }
 
+//Fixed Bug::20180512 双屏下面副屏分辨率大于主屏时，最大化软件，点击任务栏切换最大/最小化不正确的问题
 LRESULT WindowImplBase::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	return 0;
-}
+	LPRECT pRect = NULL;
 
-LRESULT WindowImplBase::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	bHandled = FALSE;
-	if (IsZoomed(m_hWnd))
+	if (wParam == TRUE)
 	{
-		LPWINDOWPOS lpPos = (LPWINDOWPOS)lParam;
-		if (lpPos->flags & SWP_FRAMECHANGED) // 第一次最大化，而不是最大化之后所触发的WINDOWPOSCHANGE
-		{
-			POINT pt = { 0, 0 };
-			HMONITOR hMontorPrimary = MonitorFromPoint(pt, MONITOR_DEFAULTTOPRIMARY);
-			HMONITOR hMonitorTo = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTOPRIMARY);
+		LPNCCALCSIZE_PARAMS pParam = (LPNCCALCSIZE_PARAMS)lParam;
+		pRect = &pParam->rgrc[0];
+	}
+	else
+	{
+		pRect = (LPRECT)lParam;
+	}
 
-			if (hMonitorTo != hMontorPrimary)
-			{
-				// 解决无边框窗口在双屏下面（副屏分辨率大于主屏）时，最大化不正确的问题
-				MONITORINFO  miTo = { sizeof(miTo), 0 };
-				GetMonitorInfo(hMonitorTo, &miTo);
+	if (::IsZoomed(m_hWnd))
+	{	// 最大化时，计算当前显示器最适合宽高度
+		MONITORINFO oMonitor = {};
+		oMonitor.cbSize = sizeof(oMonitor);
+		::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTONEAREST), &oMonitor);
+		CDuiRect rcWork = oMonitor.rcWork;
+		CDuiRect rcMonitor = oMonitor.rcMonitor;
+		rcWork.Offset(-oMonitor.rcMonitor.left, -oMonitor.rcMonitor.top);
 
-				lpPos->x = miTo.rcWork.left;
-				lpPos->y = miTo.rcWork.top;
-				lpPos->cx = miTo.rcWork.right - miTo.rcWork.left;
-				lpPos->cy = miTo.rcWork.bottom - miTo.rcWork.top;
-			}
-		}
+		pRect->right = pRect->left + rcWork.GetWidth();
+		pRect->bottom = pRect->top + rcWork.GetHeight();
+		return WVR_REDRAW;
 	}
 	return 0;
 }
@@ -158,24 +156,17 @@ LRESULT WindowImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
 LRESULT WindowImplBase::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	LPMINMAXINFO lpMMI = (LPMINMAXINFO) lParam;
-
 	MONITORINFO oMonitor = {};
 	oMonitor.cbSize = sizeof(oMonitor);
-	::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTONEAREST), &oMonitor);
+	::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
 	CDuiRect rcWork = oMonitor.rcWork;
-	CDuiRect rcMonitor = oMonitor.rcMonitor;
 	rcWork.Offset(-oMonitor.rcMonitor.left, -oMonitor.rcMonitor.top);
 
-	// 计算最大化时，正确的原点坐标
-	lpMMI->ptMaxPosition.x	= rcWork.left;
-	lpMMI->ptMaxPosition.y	= rcWork.top;
-
-	lpMMI->ptMaxTrackSize.x =rcWork.GetWidth();
-	lpMMI->ptMaxTrackSize.y =rcWork.GetHeight();
-
-	lpMMI->ptMinTrackSize.x =m_PaintManager.GetMinInfo().cx;
-	lpMMI->ptMinTrackSize.y =m_PaintManager.GetMinInfo().cy;
+	LPMINMAXINFO lpMMI = (LPMINMAXINFO)lParam;
+	lpMMI->ptMaxPosition.x = rcWork.left;
+	lpMMI->ptMaxPosition.y = rcWork.top;
+	lpMMI->ptMaxSize.x = rcWork.right;
+	lpMMI->ptMaxSize.y = rcWork.bottom;
 
 	bHandled = FALSE;
 	return 0;
@@ -240,7 +231,12 @@ LRESULT WindowImplBase::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			pbtnMax->SetVisible(TRUE == bZoomed);       // 此处用表达式是为了避免编译器BOOL转换的警告
 			pbtnRestore->SetVisible(FALSE == bZoomed);
 		}
-		
+		// Fixed: Bug::20180512 修复从WindowImplBase派生的子类窗体，开启阴影显示。
+    // 最小化 ---》点击任务栏显示--》点击最大化 ----》点击任务栏，最小化---》点击任务栏显示。这个时候就会发现阴影窗体显示异常。
+		if (m_PaintManager.GetShadow())
+		{
+			m_PaintManager.GetShadow()->UpdateNow();
+		}
 	}
 #else
 	LRESULT lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
@@ -331,7 +327,6 @@ LRESULT WindowImplBase::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:		lRes = OnDestroy(uMsg, wParam, lParam, bHandled); break;
 	case WM_NCACTIVATE:		lRes = OnNcActivate(uMsg, wParam, lParam, bHandled); break;
 	case WM_NCCALCSIZE:		lRes = OnNcCalcSize(uMsg, wParam, lParam, bHandled); break;
-	case WM_WINDOWPOSCHANGING: lRes = OnWindowPosChanging(uMsg, wParam, lParam, bHandled); break;
 	case WM_NCPAINT:		lRes = OnNcPaint(uMsg, wParam, lParam, bHandled); break;
 	case WM_NCHITTEST:		lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
 	case WM_GETMINMAXINFO:	lRes = OnGetMinMaxInfo(uMsg, wParam, lParam, bHandled); break;
